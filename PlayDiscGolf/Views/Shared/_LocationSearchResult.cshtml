@@ -12,7 +12,8 @@
     <ul>
         @foreach (var item in Model)
         {
-            <li>@item.Name</li>
+            
+            <li><a class="nav-link text-black-50" asp-area="" asp-controller="AdminCourse" asp-action="SelectedLocation" asp-route-id="@item.LocationID">@item.Name</a></li>
         }
     </ul>
 }
