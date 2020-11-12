@@ -10,7 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlayDiscGolf.Models;
+using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Services.SaveLocationData;
 
 namespace PlayDiscGolf
 {
@@ -25,8 +26,10 @@ namespace PlayDiscGolf
             var configurationSection = Configuration.GetSection("ConnectionStrings:DefaultConnection");
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders();
+
+            services.AddTransient<ILocationDataService, LocationDataService>();
 
             services.AddControllersWithViews();
         }

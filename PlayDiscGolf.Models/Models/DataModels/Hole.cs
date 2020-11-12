@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Models.DataBaseModels
+namespace PlayDiscGolf.Models.DataModels
 {
     public class Hole
     {

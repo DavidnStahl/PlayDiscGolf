@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Models.DataBaseModels
+namespace PlayDiscGolf.Models.DataModels
 {
     public class Location
     {

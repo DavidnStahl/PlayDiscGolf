@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using PlayDiscGolf.Models.DataBaseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Models
+namespace PlayDiscGolf.Models.DataModels
 {
     public class DataBaseContext : IdentityDbContext
     {
+        public DataBaseContext()
+        {
+        }
+
         public DataBaseContext(DbContextOptions<DataBaseContext> options)
             : base(options)
         { }
@@ -22,14 +25,18 @@ namespace PlayDiscGolf.Models
         public DbSet<PlayerCard> PlayerCards { get; set; }
         public DbSet<HoleCard> HoleCards { get; set; }
 
+        /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+         {
+             IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+             IConfigurationRoot configuration = builder.Build();
+             if (!optionsBuilder.IsConfigured)
+             {
+                 optionsBuilder.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
+             }
+         }*/
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
-            IConfigurationRoot configuration = builder.Build();
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
-            }
+            optionsBuilder.UseSqlServer("Server=.;Database=PlayDiscGolfDB;Trusted_Connection=True;MultipleActiveResultSets=true;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

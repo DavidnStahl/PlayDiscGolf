@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Models
+namespace PlayDiscGolf.Models.DataModels
 {
     public class Root
     {

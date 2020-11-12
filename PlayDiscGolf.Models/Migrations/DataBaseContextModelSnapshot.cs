@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayDiscGolf.Models;
+using PlayDiscGolf.Models.DataModels;
 
 namespace PlayDiscGolf.Migrations
 {
