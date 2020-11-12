@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PlayDiscGolf.Models.DataBaseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace PlayDiscGolf.Models
             : base(options)
         { }
 
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Hole> Holes { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<ScoreCard> ScoreCards { get; set; }
         public DbSet<PlayerCard> PlayerCards { get; set; }

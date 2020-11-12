@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Models
+namespace PlayDiscGolf.Models.DataBaseModels
 {
     public class PlayerCard
     {

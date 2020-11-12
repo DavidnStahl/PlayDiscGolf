@@ -219,24 +219,67 @@ namespace PlayDiscGolf.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.Course", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.Course", b =>
                 {
                     b.Property<int>("CourseID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int>("HolesTotal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LocationID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Main")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("TotalDistance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalParValue")
+                        .HasColumnType("int");
+
                     b.HasKey("CourseID");
+
+                    b.HasIndex("LocationID");
 
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.HoleCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.Hole", b =>
+                {
+                    b.Property<int>("HoleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Distance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HoleNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParValue")
+                        .HasColumnType("int");
+
+                    b.HasKey("HoleID");
+
+                    b.HasIndex("CourseID");
+
+                    b.ToTable("Holes");
+                });
+
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.HoleCard", b =>
                 {
                     b.Property<int>("HoleCardID")
                         .ValueGeneratedOnAdd()
@@ -259,7 +302,30 @@ namespace PlayDiscGolf.Migrations
                     b.ToTable("HoleCards");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.PlayerCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.Location", b =>
+                {
+                    b.Property<int>("LocationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("LocationID");
+
+                    b.ToTable("Locations");
+                });
+
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.PlayerCard", b =>
                 {
                     b.Property<int>("PlayerCardID")
                         .ValueGeneratedOnAdd()
@@ -281,7 +347,7 @@ namespace PlayDiscGolf.Migrations
                     b.ToTable("PlayerCards");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.ScoreCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.ScoreCard", b =>
                 {
                     b.Property<int>("ScoreCardID")
                         .ValueGeneratedOnAdd()
@@ -360,9 +426,31 @@ namespace PlayDiscGolf.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.HoleCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.Course", b =>
                 {
-                    b.HasOne("PlayDiscGolf.Models.PlayerCard", "PlayerCard")
+                    b.HasOne("PlayDiscGolf.Models.DataBaseModels.Location", "Location")
+                        .WithMany("Courses")
+                        .HasForeignKey("LocationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.Hole", b =>
+                {
+                    b.HasOne("PlayDiscGolf.Models.DataBaseModels.Course", "Course")
+                        .WithMany("Holes")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.HoleCard", b =>
+                {
+                    b.HasOne("PlayDiscGolf.Models.DataBaseModels.PlayerCard", "PlayerCard")
                         .WithMany("HoleCards")
                         .HasForeignKey("PlayerCardID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -371,9 +459,9 @@ namespace PlayDiscGolf.Migrations
                     b.Navigation("PlayerCard");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.PlayerCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.PlayerCard", b =>
                 {
-                    b.HasOne("PlayDiscGolf.Models.ScoreCard", "Scorecard")
+                    b.HasOne("PlayDiscGolf.Models.DataBaseModels.ScoreCard", "Scorecard")
                         .WithMany("PlayerCards")
                         .HasForeignKey("ScoreCardID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,9 +470,9 @@ namespace PlayDiscGolf.Migrations
                     b.Navigation("Scorecard");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.ScoreCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.ScoreCard", b =>
                 {
-                    b.HasOne("PlayDiscGolf.Models.Course", "Course")
+                    b.HasOne("PlayDiscGolf.Models.DataBaseModels.Course", "Course")
                         .WithMany("ScoreCards")
                         .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -393,17 +481,24 @@ namespace PlayDiscGolf.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.Course", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.Course", b =>
                 {
+                    b.Navigation("Holes");
+
                     b.Navigation("ScoreCards");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.PlayerCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.Location", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.PlayerCard", b =>
                 {
                     b.Navigation("HoleCards");
                 });
 
-            modelBuilder.Entity("PlayDiscGolf.Models.ScoreCard", b =>
+            modelBuilder.Entity("PlayDiscGolf.Models.DataBaseModels.ScoreCard", b =>
                 {
                     b.Navigation("PlayerCards");
                 });

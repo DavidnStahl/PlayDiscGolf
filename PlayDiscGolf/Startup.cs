@@ -26,7 +26,7 @@ namespace PlayDiscGolf
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<DataBaseContext>();
+                    .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
         }
