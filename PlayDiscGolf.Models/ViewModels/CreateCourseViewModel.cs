@@ -1,24 +1,33 @@
-﻿using PlayDiscGolf.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace PlayDiscGolf.Models
+namespace PlayDiscGolf.Models.ViewModels
 {
     public class CreateCourseViewModel
     {
-        public string CourseName { get; set; }
+        public int LocationID { get; set; }
 
-        public string CountryCode { get; set; }
+        [Required]
+        [Display(Name = "Is this the main course")]
+        public bool Main { get; set; }
 
-        public string City { get; set; }
-        public string County { get; set; }
+        [Required]
+        [Display(Name = "Course name")]
+        [StringLength(maximumLength: 100)]
+        public string Name { get; set; }
 
-        public string Latitude { get; set; }
+        [Required]
+        [Display(Name = "Total number of holes")]
+        public int HolesTotal { get; set; }
 
-        public string Longitude { get; set; }
+        [Required]
+        [Display(Name = "Total par value")]
+        public int TotalParValue { get; set; }
 
-      
+        [Required]
+        [Display(Name = "Total course distance")]
+        public int TotalDistance { get; set; }
     }
 }

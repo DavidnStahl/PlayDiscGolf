@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace PlayDiscGolf.SaveLocationData.Services
 {
@@ -30,6 +29,7 @@ namespace PlayDiscGolf.SaveLocationData.Services
                         Latitude = Convert.ToDecimal(course.X),
                         Longitude = Convert.ToDecimal(course.Y)
                     };
+
                     locations.Add(validLocaction);
                 }
             }
@@ -53,7 +53,6 @@ namespace PlayDiscGolf.SaveLocationData.Services
         {
             _context.Locations.AddRange(locations);
             _context.SaveChanges();
-            var x = 1;
         }
     }
 }

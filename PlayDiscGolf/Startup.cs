@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlayDiscGolf.Models.DataModels;
-using PlayDiscGolf.Services.SaveLocationData;
 
 namespace PlayDiscGolf
 {
@@ -28,8 +27,6 @@ namespace PlayDiscGolf
 
             services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders();
-
-            services.AddTransient<ILocationDataService, LocationDataService>();
 
             services.AddControllersWithViews();
         }
