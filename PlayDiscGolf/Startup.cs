@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,7 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PlayDiscGolf.Data;
+using PlayDiscGolf.Data.Courses;
+using PlayDiscGolf.Data.Holes;
+using PlayDiscGolf.Data.Locations;
 using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Services.Admin;
 
 namespace PlayDiscGolf
 {
@@ -27,6 +33,13 @@ namespace PlayDiscGolf
 
             services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders();
+
+            services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<ICourseRepository, CourseRepository>();
+            services.AddTransient<IHoleRepository,HoleRepository>();
+            services.AddTransient<ILocationRepository, LocationRepository>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllersWithViews();
         }

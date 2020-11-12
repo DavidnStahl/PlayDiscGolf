@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Data.Cards.Players
 {
-    public class IPlayerCardRepository
+    public interface IPlayerCardRepository
     {
     }
 }

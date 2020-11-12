@@ -1,11 +1,21 @@
-﻿using System;
+﻿using PlayDiscGolf.Models.DataModels;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Data.Locations
 {
-    interface ILocationRepository
+    public interface ILocationRepository
     {
+        public Task SaveChangesAsync();
+        public Task<Location> CreateLocationAsync(Location location);
+
+        public Location EditLocationAsync(Location location);
+
+        public void DeleteLocationAsync(Location location);
+
+        public Task<Location> GetLocationByIDAsync(int locationID);
+
+        public Task<List<Location>> GetLocationsByQueryAsync(string query);
     }
 }

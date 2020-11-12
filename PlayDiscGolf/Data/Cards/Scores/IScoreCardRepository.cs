@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Data.Cards.Scores
 {
-    interface IScoreCardRepository
+    public interface IScoreCardRepository
     {
     }
 }
