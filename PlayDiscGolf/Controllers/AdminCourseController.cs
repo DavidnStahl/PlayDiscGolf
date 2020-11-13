@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using PlayDiscGolf.Models.ViewModels;
 using PlayDiscGolf.Services.Admin;
 using Newtonsoft.Json;
+using PlayDiscGolf.Models.DataModels;
 
 namespace PlayDiscGolf.Controllers
 {
@@ -25,10 +26,7 @@ namespace PlayDiscGolf.Controllers
 
         public IActionResult Index()
         {
-            var model = new AdminSearchViewModel
-            {
-                SearchLocationItemViewModels = new List<SearchLocationItemViewModel>()
-            };
+            var model = new AdminSearchViewModel();
 
             return View(model);
         }
@@ -44,12 +42,43 @@ namespace PlayDiscGolf.Controllers
             return PartialView("_LocationSearchResult", model);
         }
 
-        public async Task<IActionResult> SelectedLocation(string id)
+        public async Task<PartialViewResult> SelectedLocation(string id)
         {
-            var x = await _adminService.GetLocationCourses(id);
-            var y = 1;
+            var model = _mapper.Map<List<CourseFormViewModel>>(await _adminService.GetLocationCourses(id));
 
-            return View();
+            return PartialView("_CourseForm", model);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> EditCourse(CourseFormViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return PartialView("_CourseFormPartial", model);
+            }
+
+            await _adminService.SaveUpdatedCourse(_mapper.Map<Course>(model));
+
+            return RedirectToAction("Index");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> AddCourse(CreateCourseViewModel model)
+        {
+
+        }
+
+        [HttpGet]
+        public IActionResult AddCourse(string id)
+        {
+            var model = new CreateCourseViewModel
+            {
+                LocationID = Convert.ToInt32(id)
+            };
+
+            return View(model);
         }
     }
 }

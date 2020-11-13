@@ -1,0 +1,46 @@
+﻿@model PlayDiscGolf.Models.ViewModels.CourseFormViewModel
+
+@{
+    Layout = null;
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<div class="container mb-4">
+    <form method="post" asp-action="EditCourse" asp-controller="AdminCourse">
+        @Html.AntiForgeryToken()
+        <input type="number" hidden asp-for="@Model.CourseID" value="@Model.CourseID">
+        <input type="number" hidden asp-for="@Model.LocationID" value="@Model.LocationID">
+
+        <div class="form-group">
+            <span class="text-warning" asp-validation-for="@Model.Name"></span>
+            <label asp-for="@Model.Name"></label>
+            <input asp-for="@Model.Name" type="text" class="form-control" id="nameInput" aria-describedby="nameInput" placeholder="">
+        </div>
+        <div class="form-check">
+            <input asp-for="@Model.Main" type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label asp-for="@Model.Main" class="form-check-label"></label>
+        </div>
+        <div class="form-group mt-4">
+            <span class="text-warning" asp-validation-for="@Model.HolesTotal"></span>
+            <label asp-for="@Model.HolesTotal"></label>
+            <input asp-for="@Model.HolesTotal" type="number" class="form-control" id="holesInput" aria-describedby="holesInput" placeholder="">
+        </div>
+        <div class="form-group">
+            <span class="text-warning" asp-validation-for="@Model.TotalParValue"></span>
+            <label asp-for="@Model.TotalParValue"></label>
+            <input asp-for="@Model.TotalParValue" type="number" class="form-control" id="parvalueInput" aria-describedby="parvalueInput" placeholder="">
+        </div>
+        <div class="form-group">
+            <span class="text-warning" asp-validation-for="@Model.TotalDistance"></span>
+            <label asp-for="@Model.TotalDistance"></label>
+            <input asp-for="@Model.TotalDistance" type="number" class="form-control" id="distanceInput" aria-describedby="distanceInput" placeholder="">
+        </div>
+        <input type="submit" class="btn btn-primary" value="Submit" />
+    </form>
+</div>

@@ -28,5 +28,11 @@ namespace PlayDiscGolf.Services.Admin
         {
             return await _courseRepository.GetCoursesByLocationID(Convert.ToInt32(id));
         }
+
+        public async Task SaveUpdatedCourse(Course course)
+        {
+            _courseRepository.EditCourseAsync(course);
+            await _courseRepository.SaveChangesAsync();
+        }
     }
 }

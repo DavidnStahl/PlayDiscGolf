@@ -11,7 +11,7 @@ namespace PlayDiscGolf.Models.ViewModels
         [Display(Name = "Search location")]
         public string Query { get; set; }
 
-        public List<CreateCourseViewModel> Courses = new List<CreateCourseViewModel>();
+        public List<CourseFormViewModel> Courses = new List<CourseFormViewModel>();
 
         public Course Course { get; set; }
 

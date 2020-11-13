@@ -11,9 +11,29 @@
         });
     }
 
+    function GetCourses(value) {
+        $.ajax({
+            url: "/AdminCourse/SelectedLocation",
+            data: {
+                id: value
+            },
+            success: function (result) {
+                $("#courseform").empty().append(result);
+            }
+        });
+    }
+
+
     $("#submit").click(function () {
         GetSearchOptions();
     });
+
+
+    $(".locationButton").click(function (event) {
+        var location = event.target.id
+        GetCourses(location)
+    });
+
 
 });
 

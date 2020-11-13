@@ -11,5 +11,6 @@ namespace PlayDiscGolf.Services.Admin
     {
         public Task<List<Location>> GetLocationsByQuery(string query);
         public Task<List<Course>> GetLocationCourses(string id);
+        public Task SaveUpdatedCourse(Course course);
     }
 }

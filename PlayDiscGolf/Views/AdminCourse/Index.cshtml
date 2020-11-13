@@ -1,18 +1,23 @@
 ﻿@model PlayDiscGolf.Models.ViewModels.AdminSearchViewModel
 
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
-    <div class="form-group row">
-        <label asp-for="@Model.Query" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-7">
-            <input id="searchText" class="form-control">
-        </div>
+<div class="form-group row">
+    <label asp-for="@Model.Query" class="col-sm-3 col-form-label"></label>
+    <div class="col-sm-7">
+        <input id="searchText" class="form-control">
     </div>
-    <div class="form-group row">
+</div>
+<div class="form-group row">
 
-        <div class="col-sm-7 offset-sm-3">
-            <button class="btn btn-primary" id="submit">Submit</button>
-        </div>
+    <div class="col-sm-7 offset-sm-3">
+        <button class="btn btn-primary" id="submit">Submit</button>
     </div>
+</div>
 
 
 
@@ -21,7 +26,8 @@
 </div>
 
 <div id="courseform">
-    @await Html.PartialAsync("_CourseForm", Model)
+    @await Html.PartialAsync("_CourseForm", Model.Courses)
 </div>
+
 
 
