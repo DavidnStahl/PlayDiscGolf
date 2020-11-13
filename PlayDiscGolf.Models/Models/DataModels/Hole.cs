@@ -9,8 +9,8 @@ namespace PlayDiscGolf.Models.DataModels
 {
     public class Hole
     {
-        [Key]
-        public int HoleID { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid HoleID { get; set; }
         [Required]
         public int HoleNumber { get; set; }
         [Required]
@@ -18,10 +18,10 @@ namespace PlayDiscGolf.Models.DataModels
         [Required]
         public int Distance { get; set; }
 
-        [Display(Name = "Course")]
-        public int CourseID { get; set; }
-
         [ForeignKey("CourseID")]
+        public Guid CourseID { get; set; }
+
+        
         public virtual Course Course { get; set; }
     }
 }

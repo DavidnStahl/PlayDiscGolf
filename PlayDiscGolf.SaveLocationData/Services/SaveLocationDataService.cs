@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.SaveLocationData.Services
 {
     class SaveLocationDataService : ISaveLocationDataService
     {
-        private readonly DataBaseContext _context = new DataBaseContext();
         public List<Location> AddValidLocationFromRoot(Root root)
         {
             var locations = new List<Location>();
@@ -25,6 +25,7 @@ namespace PlayDiscGolf.SaveLocationData.Services
                 {
                     var validLocaction = new Location
                     {
+                        LocationID = Guid.NewGuid(),
                         Name = course.Fullname,
                         Latitude = Convert.ToDecimal(course.X),
                         Longitude = Convert.ToDecimal(course.Y)
@@ -49,10 +50,11 @@ namespace PlayDiscGolf.SaveLocationData.Services
             return root;
         }
 
-        public void SaveLocationsToDataBase(List<Location> locations)
-        {
-            _context.Locations.AddRange(locations);
-            _context.SaveChanges();
+        public async Task SaveLocationsToDataBase(List<Location> locations)
+        {           
+            var _context = new DataBaseContext();
+            await _context.AddRangeAsync(locations);
+            await _context.SaveChangesAsync();
         }
     }
 }

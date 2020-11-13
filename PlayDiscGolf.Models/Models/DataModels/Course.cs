@@ -10,8 +10,9 @@ namespace PlayDiscGolf.Models.DataModels
 {
     public class Course
     {
-        [Key]
-        public int CourseID { get; set; }
+        
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid CourseID { get; set; }
         
         public bool Main { get; set; }
 
@@ -27,10 +28,10 @@ namespace PlayDiscGolf.Models.DataModels
 
         public int TotalDistance { get; set; }
 
-        [Display(Name = "Location")]
-        public int LocationID { get; set; }
-
         [ForeignKey("LocationID")]
+        public Guid LocationID { get; set; }
+
+        
         public virtual Location Location { get; set; }
 
         public virtual ICollection<ScoreCard> ScoreCards { get; set; }

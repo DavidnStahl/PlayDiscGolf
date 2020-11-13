@@ -7,7 +7,7 @@ namespace PlayDiscGolf.Models.ViewModels
 {
     public class CreateCourseViewModel
     {
-        public int LocationID { get; set; }
+        public Guid LocationID { get; set; }
 
         [Required]
         [Display(Name = "Is this the main course")]

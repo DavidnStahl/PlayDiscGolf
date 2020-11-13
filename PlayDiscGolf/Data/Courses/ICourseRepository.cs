@@ -15,8 +15,8 @@ namespace PlayDiscGolf.Data.Courses
 
         public void DeleteCourseAsync(Course course);
 
-        public Task<Course> GetCourseByIDAsync(int course);
+        public Task<Course> GetCourseByIDAsync(Guid courseID);
 
-        public Task<List<Course>> GetCoursesByLocationID(int locationID);
+        public Task<List<Course>> GetCoursesByLocationID(Guid locationID);
     }
 }

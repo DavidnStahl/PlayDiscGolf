@@ -25,15 +25,6 @@ namespace PlayDiscGolf.Models.DataModels
         public DbSet<PlayerCard> PlayerCards { get; set; }
         public DbSet<HoleCard> HoleCards { get; set; }
 
-        /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-         {
-             IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
-             IConfigurationRoot configuration = builder.Build();
-             if (!optionsBuilder.IsConfigured)
-             {
-                 optionsBuilder.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
-             }
-         }*/
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=.;Database=PlayDiscGolfDB;Trusted_Connection=True;MultipleActiveResultSets=true;");

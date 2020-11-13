@@ -1,4 +1,5 @@
 ﻿using PlayDiscGolf.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,8 +14,10 @@ namespace PlayDiscGolf.Data.Holes
 
         public void DeleteHoleAsync(Hole hole);
 
-        public Task<Hole> GetHoleByIDAsync(int holeID);
+        public Task<Hole> GetHoleByIDAsync(Guid holeID);
 
-        public Task<List<Hole>> GetHolesByCourseID(int courseID);
+        public Task<List<Hole>> GetHolesByCourseID(Guid courseID);
+
+        public void UpdateHoles(List<Hole> Holes);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace PlayDiscGolf.Data
             return location;
         }
 
-        public async Task<Location> GetLocationByIDAsync(int locationID)
+        public async Task<Location> GetLocationByIDAsync(Guid locationID)
         {
             return await _context.Locations.FirstOrDefaultAsync(location => location.LocationID == locationID);
         }

@@ -9,8 +9,8 @@ namespace PlayDiscGolf.Models.DataModels
 {
     public class ScoreCard
     {
-        [Key]
-        public int ScoreCardID { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid ScoreCardID { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
@@ -19,10 +19,10 @@ namespace PlayDiscGolf.Models.DataModels
         [StringLength(maximumLength:100)]
         public string UserName { get; set; }
 
-        [Display(Name = "Course")]
-        public virtual int CourseID { get; set; }
-
         [ForeignKey("CourseID")]
+        public virtual Guid CourseID { get; set; }
+
+        
         public virtual Course Course { get; set; }
 
         public virtual ICollection<PlayerCard> PlayerCards { get; set; }

@@ -14,7 +14,7 @@ namespace PlayDiscGolf.Data.Locations
 
         public void DeleteLocationAsync(Location location);
 
-        public Task<Location> GetLocationByIDAsync(int locationID);
+        public Task<Location> GetLocationByIDAsync(Guid locationID);
 
         public Task<List<Location>> GetLocationsByQueryAsync(string query);
     }

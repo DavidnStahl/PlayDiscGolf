@@ -42,9 +42,15 @@ namespace PlayDiscGolf.Controllers
             return PartialView("_LocationSearchResult", model);
         }
 
-        public async Task<PartialViewResult> SelectedLocation(string id)
+        public async Task<PartialViewResult> SelectedLocation(Guid id)
         {
             var model = _mapper.Map<List<CourseFormViewModel>>(await _adminService.GetLocationCourses(id));
+
+            foreach (var course in model)
+            {
+
+                course.Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminService.GetCoursesHoles(course.CourseID));
+            }
 
             return PartialView("_CourseForm", model);
         }
@@ -55,27 +61,30 @@ namespace PlayDiscGolf.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return PartialView("_CourseFormPartial", model);
+                var parentModel = new AdminSearchViewModel();
+                parentModel.Courses.Add(model);
+                return View("Index", parentModel);
             }
 
             await _adminService.SaveUpdatedCourse(_mapper.Map<Course>(model));
+            await _adminService.SaveUpdatedHoles(_mapper.Map<List<Hole>>(model.Holes));
 
             return RedirectToAction("Index");
         }
 
-        [ValidateAntiForgeryToken]
+        /*[ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> AddCourse(CreateCourseViewModel model)
         {
 
-        }
+        }*/
 
         [HttpGet]
-        public IActionResult AddCourse(string id)
+        public IActionResult AddCourse(Guid id)
         {
             var model = new CreateCourseViewModel
             {
-                LocationID = Convert.ToInt32(id)
+                LocationID = id
             };
 
             return View(model);

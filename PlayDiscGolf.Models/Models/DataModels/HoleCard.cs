@@ -9,17 +9,17 @@ namespace PlayDiscGolf.Models.DataModels
 {
     public class HoleCard
     {
-        [Key]
-        public int HoleCardID { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid HoleCardID { get; set; }
         [Required]
         public int HoleNumber { get; set; }
         [Required]
         public int Score { get; set; }
 
-        [Display(Name = "PlayerCard")]
-        public int PlayerCardID { get; set; }
-
         [ForeignKey("PlayerCardID")]
+        public Guid PlayerCardID { get; set; }
+
+        
         public virtual PlayerCard PlayerCard { get; set; }
     }
 }

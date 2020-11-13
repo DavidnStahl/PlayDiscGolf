@@ -8,7 +8,7 @@ namespace PlayDiscGolf.Models.ViewModels
 {
     public class CourseFormViewModel
     {
-        public int CourseID { get; set; }
+        public Guid CourseID { get; set; }
 
         [Display(Name = "Is this the main course")]
         public bool Main { get; set; }
@@ -32,6 +32,24 @@ namespace PlayDiscGolf.Models.ViewModels
         [Display(Name = "Total course distance")]
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public int TotalDistance { get; set; }
-        public int LocationID { get; set; }
+        public Guid LocationID { get; set; }
+
+        public List<CourseHolesViewModel> Holes { get; set; }
+
+        public class CourseHolesViewModel
+        {
+            public Guid CourseID { get; set; }
+            public Guid HoleID { get; set; }
+            [Display(Name = "Hole")]
+            public int HoleNumber { get; set; }
+            [Required]
+            [Display(Name = "Value")]
+            [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
+            public int ParValue { get; set; }
+            [Required]
+            [Display(Name = "Distance")]
+            [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
+            public int Distance { get; set; }
+        }
     }
 }

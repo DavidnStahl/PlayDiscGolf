@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PlayDiscGolf.Migrations
+namespace PlayDiscGolf.Models.Migrations
 {
-    public partial class addingIdentity : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,20 @@ namespace PlayDiscGolf.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    LocationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.LocationID);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,8 +106,8 @@ namespace PlayDiscGolf.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -137,8 +151,8 @@ namespace PlayDiscGolf.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -149,6 +163,110 @@ namespace PlayDiscGolf.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    CourseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Main = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    HolesTotal = table.Column<int>(type: "int", nullable: false),
+                    TotalParValue = table.Column<int>(type: "int", nullable: false),
+                    TotalDistance = table.Column<int>(type: "int", nullable: false),
+                    LocationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.CourseID);
+                    table.ForeignKey(
+                        name: "FK_Courses_Locations_LocationID",
+                        column: x => x.LocationID,
+                        principalTable: "Locations",
+                        principalColumn: "LocationID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Holes",
+                columns: table => new
+                {
+                    HoleID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HoleNumber = table.Column<int>(type: "int", nullable: false),
+                    ParValue = table.Column<int>(type: "int", nullable: false),
+                    Distance = table.Column<int>(type: "int", nullable: false),
+                    CourseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Holes", x => x.HoleID);
+                    table.ForeignKey(
+                        name: "FK_Holes_Courses_CourseID",
+                        column: x => x.CourseID,
+                        principalTable: "Courses",
+                        principalColumn: "CourseID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScoreCards",
+                columns: table => new
+                {
+                    ScoreCardID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CourseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScoreCards", x => x.ScoreCardID);
+                    table.ForeignKey(
+                        name: "FK_ScoreCards_Courses_CourseID",
+                        column: x => x.CourseID,
+                        principalTable: "Courses",
+                        principalColumn: "CourseID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerCards",
+                columns: table => new
+                {
+                    PlayerCardID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ScoreCardID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerCards", x => x.PlayerCardID);
+                    table.ForeignKey(
+                        name: "FK_PlayerCards_ScoreCards_ScoreCardID",
+                        column: x => x.ScoreCardID,
+                        principalTable: "ScoreCards",
+                        principalColumn: "ScoreCardID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HoleCards",
+                columns: table => new
+                {
+                    HoleCardID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HoleNumber = table.Column<int>(type: "int", nullable: false),
+                    Score = table.Column<int>(type: "int", nullable: false),
+                    PlayerCardID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HoleCards", x => x.HoleCardID);
+                    table.ForeignKey(
+                        name: "FK_HoleCards_PlayerCards_PlayerCardID",
+                        column: x => x.PlayerCardID,
+                        principalTable: "PlayerCards",
+                        principalColumn: "PlayerCardID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -190,6 +308,31 @@ namespace PlayDiscGolf.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_LocationID",
+                table: "Courses",
+                column: "LocationID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HoleCards_PlayerCardID",
+                table: "HoleCards",
+                column: "PlayerCardID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Holes_CourseID",
+                table: "Holes",
+                column: "CourseID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerCards_ScoreCardID",
+                table: "PlayerCards",
+                column: "ScoreCardID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoreCards_CourseID",
+                table: "ScoreCards",
+                column: "CourseID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -210,10 +353,28 @@ namespace PlayDiscGolf.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "HoleCards");
+
+            migrationBuilder.DropTable(
+                name: "Holes");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "PlayerCards");
+
+            migrationBuilder.DropTable(
+                name: "ScoreCards");
+
+            migrationBuilder.DropTable(
+                name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
         }
     }
 }

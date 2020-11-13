@@ -34,10 +34,10 @@ namespace PlayDiscGolf
             services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders();
 
-            services.AddTransient<IAdminService, AdminService>();
-            services.AddTransient<ICourseRepository, CourseRepository>();
-            services.AddTransient<IHoleRepository,HoleRepository>();
-            services.AddTransient<ILocationRepository, LocationRepository>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IHoleRepository,HoleRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -33,12 +33,12 @@ namespace PlayDiscGolf.Data
             return course;
         }
 
-        public async Task<Course> GetCourseByIDAsync(int course)
+        public async Task<Course> GetCourseByIDAsync(Guid courseId)
         {
             return await _context.Courses.FirstOrDefaultAsync(course => course.CourseID == course.CourseID);
         }
 
-        public async Task<List<Course>> GetCoursesByLocationID(int locationID)
+        public async Task<List<Course>> GetCoursesByLocationID(Guid locationID)
         {
             return await _context.Courses.Where(course => course.LocationID == locationID).ToListAsync();
         }
