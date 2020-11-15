@@ -47,17 +47,26 @@ namespace PlayDiscGolf.Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Locations",
+                name: "Courses",
                 columns: table => new
                 {
-                    LocationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    CourseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApiParentID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Main = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Area = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    HolesTotal = table.Column<int>(type: "int", nullable: false),
+                    TotalParValue = table.Column<int>(type: "int", nullable: false),
+                    TotalDistance = table.Column<int>(type: "int", nullable: false),
+                    Latitude = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Longitude = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Locations", x => x.LocationID);
+                    table.PrimaryKey("PK_Courses", x => x.CourseID);
                 });
 
             migrationBuilder.CreateTable(
@@ -163,29 +172,6 @@ namespace PlayDiscGolf.Models.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    CourseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Main = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    HolesTotal = table.Column<int>(type: "int", nullable: false),
-                    TotalParValue = table.Column<int>(type: "int", nullable: false),
-                    TotalDistance = table.Column<int>(type: "int", nullable: false),
-                    LocationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.CourseID);
-                    table.ForeignKey(
-                        name: "FK_Courses_Locations_LocationID",
-                        column: x => x.LocationID,
-                        principalTable: "Locations",
-                        principalColumn: "LocationID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -310,11 +296,6 @@ namespace PlayDiscGolf.Models.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_LocationID",
-                table: "Courses",
-                column: "LocationID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_HoleCards_PlayerCardID",
                 table: "HoleCards",
                 column: "PlayerCardID");
@@ -372,9 +353,6 @@ namespace PlayDiscGolf.Models.Migrations
 
             migrationBuilder.DropTable(
                 name: "Courses");
-
-            migrationBuilder.DropTable(
-                name: "Locations");
         }
     }
 }

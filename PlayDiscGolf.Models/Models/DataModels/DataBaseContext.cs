@@ -18,7 +18,6 @@ namespace PlayDiscGolf.Models.DataModels
             : base(options)
         { }
 
-        public DbSet<Location> Locations { get; set; }
         public DbSet<Hole> Holes { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<ScoreCard> ScoreCards { get; set; }

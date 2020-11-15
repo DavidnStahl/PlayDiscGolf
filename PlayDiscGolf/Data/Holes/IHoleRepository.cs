@@ -10,6 +10,8 @@ namespace PlayDiscGolf.Data.Holes
         public Task SaveChangesAsync();
         public Task<Hole> CreateHoleAsync(Hole hole);
 
+        public Task CreateHolesAsync(List<Hole> holes);
+
         public Hole EditHoleAsync(Hole hole);
 
         public void DeleteHoleAsync(Hole hole);
@@ -18,6 +20,6 @@ namespace PlayDiscGolf.Data.Holes
 
         public Task<List<Hole>> GetHolesByCourseID(Guid courseID);
 
-        public void UpdateHoles(List<Hole> Holes);
+        public Task UpdateHoles(List<Hole> holes);
     }
 }

@@ -1,0 +1,45 @@
+﻿@model PlayDiscGolf.Models.ViewModels.CreateHolesViewModel
+
+
+<div class="container mb-4">
+    <form method="post" asp-action="CreateHoles" asp-controller="AdminCourse">
+        @for (int i = 0; i < Model.NumberOfHoles; i++)
+        {
+
+        <div class="card card-body">
+            <input hidden class="form-control" maxlength="5" asp-for="@Model.NumberOfHoles" />
+            <input hidden class="form-control" maxlength="5" asp-for="@Model.CourseID" />
+            <input hidden class="form-control" maxlength="5" asp-for="@Model.Holes[i].HoleID" />
+            <input hidden class="form-control" maxlength="5" asp-for="@Model.Holes[i].CourseID" />
+            <div class="bg-light border">
+                <div class="form-group mt-4 ml-4 mr-4 ">
+                    <div class="form-group row mt-2">
+                        <span class="text-warning" asp-validation-for="@Model.Holes[i].HoleNumber"></span>
+                        <label class="col-sm-2 col-form-label" asp-for="@Model.Holes[i].HoleNumber"></label>
+                        <div class="col-sm-7">
+                            <input readonly type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].HoleNumber" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-2">
+                        <span class="text-warning" asp-validation-for="@Model.Holes[i].ParValue"></span>
+                        <label class="col-sm-2 col-form-label" type="number" asp-for="@Model.Holes[i].ParValue"></label>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].ParValue" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row mt-2">
+                        <span class="text-warning" asp-validation-for="@Model.Holes[i].Distance"></span>
+                        <label class="col-sm-2 col-form-label" asp-for="@Model.Holes[i].Distance"></label>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].Distance" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <input type="submit" class="btn btn-primary" value="Submit" />
+
+        }
+    </form>
+</div>

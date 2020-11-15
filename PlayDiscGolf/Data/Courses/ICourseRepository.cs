@@ -13,10 +13,12 @@ namespace PlayDiscGolf.Data.Courses
 
         public Course EditCourseAsync(Course course);
 
+        public Task<List<Course>> GetCoursesByAreaQueryAsync(string query);
+
+        public Task<List<Course>> GetCoursesByFullNameQueryAsync(string query);
+        
         public void DeleteCourseAsync(Course course);
 
         public Task<Course> GetCourseByIDAsync(Guid courseID);
-
-        public Task<List<Course>> GetCoursesByLocationID(Guid locationID);
     }
 }

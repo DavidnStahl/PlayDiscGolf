@@ -10,25 +10,33 @@ namespace PlayDiscGolf.SaveLocationData.Services
 {
     class SaveLocationDataService : ISaveLocationDataService
     {
-        public List<Location> AddValidLocationFromRoot(Root root)
+        public List<Course> AddValidLocationFromRoot(Root root)
         {
-            var locations = new List<Location>();
+            var locations = new List<Course>();
 
             foreach (var course in root.Courses)
             {
-                if (!string.IsNullOrWhiteSpace(course.Fullname) &&
-                    !string.IsNullOrWhiteSpace(course.X) &&
-                    !string.IsNullOrWhiteSpace(course.Y) &&
+                if (!string.IsNullOrWhiteSpace(course.Fullname) && 
+                    !string.IsNullOrWhiteSpace(course.X) && 
+                    !string.IsNullOrWhiteSpace(course.Y) && 
+                    !string.IsNullOrWhiteSpace(course.ID) && 
+                    !string.IsNullOrWhiteSpace(course.Name) &&
+                    !string.IsNullOrWhiteSpace(course.Area) &&
                     !string.IsNullOrWhiteSpace(course.ID) &&
-                    course.ParentID == null && course.Enddate == null &&
-                    !locations.Select(c => c.Latitude).Contains(Convert.ToDecimal(course.X)))
+                    course.Enddate == null)
                 {
-                    var validLocaction = new Location
+                    var validLocaction = new Course
                     {
-                        LocationID = Guid.NewGuid(),
-                        Name = course.Fullname,
-                        Latitude = Convert.ToDecimal(course.X),
-                        Longitude = Convert.ToDecimal(course.Y)
+                        CourseID = Guid.NewGuid(),
+                        Name = course.Name,
+                        ApiID = course.ID,
+                        ApiParentID = (string)course.ParentID,
+                        CountryCode = course.CountryCode,
+                        Area = course.Area,
+                        FullName = course.Fullname,
+                        Main = course.ParentID == null ? true : false,
+                        Latitude = course.X,
+                        Longitude = course.Y
                     };
 
                     locations.Add(validLocaction);
@@ -50,10 +58,10 @@ namespace PlayDiscGolf.SaveLocationData.Services
             return root;
         }
 
-        public async Task SaveLocationsToDataBase(List<Location> locations)
+        public async Task SaveLocationsToDataBase(List<Course> courses)
         {           
             var _context = new DataBaseContext();
-            await _context.AddRangeAsync(locations);
+            await _context.Courses.AddRangeAsync(courses);
             await _context.SaveChangesAsync();
         }
     }

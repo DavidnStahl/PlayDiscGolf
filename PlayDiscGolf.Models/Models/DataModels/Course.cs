@@ -13,7 +13,13 @@ namespace PlayDiscGolf.Models.DataModels
         
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid CourseID { get; set; }
-        
+        [Required]
+        public string ApiID { get; set; }
+
+        public string ApiParentID { get; set; }
+        [Required]
+        public string CountryCode{ get; set; }
+        [Required]
         public bool Main { get; set; }
 
         [Required]
@@ -21,19 +27,24 @@ namespace PlayDiscGolf.Models.DataModels
         public string Name { get; set; }
 
         [Required]
-        public int HolesTotal { get; set; }
+        [StringLength(maximumLength: 100)]
+        public string FullName { get; set; }
 
         [Required]
+        [StringLength(maximumLength: 100)]
+        public string Area { get; set; }
+
+
+        public int HolesTotal { get; set; }
+
+
         public int TotalParValue { get; set; }
 
         public int TotalDistance { get; set; }
-
-        [ForeignKey("LocationID")]
-        public Guid LocationID { get; set; }
-
-        
-        public virtual Location Location { get; set; }
-
+        [Required]
+        public string Latitude { get; set; }
+        [Required]
+        public string Longitude { get; set; }
         public virtual ICollection<ScoreCard> ScoreCards { get; set; }
 
         public virtual ICollection<Hole> Holes { get; set; }

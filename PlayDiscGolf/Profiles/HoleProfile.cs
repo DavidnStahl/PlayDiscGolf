@@ -15,6 +15,8 @@ namespace PlayDiscGolf.Profiles
             //Source -> Target
             CreateMap<Hole, CourseFormViewModel.CourseHolesViewModel>();
             CreateMap<CourseFormViewModel.CourseHolesViewModel, Hole>();
+            CreateMap<CreateHolesViewModel, Hole>();
+            CreateMap<Hole, CreateHolesViewModel>();
         }
     }
 }

@@ -6,8 +6,8 @@ namespace PlayDiscGolf.SaveLocationData.Services
 {
     public interface ISaveLocationDataService
     {
-        public List<Location> AddValidLocationFromRoot(Root root);
+        public List<Course> AddValidLocationFromRoot(Root root);
         public Root ReadLocationDataToRoot();
-        public Task SaveLocationsToDataBase(List<Location> locations);
+        public Task SaveLocationsToDataBase(List<Course> locations);
     }
 }

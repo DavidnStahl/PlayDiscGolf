@@ -13,10 +13,21 @@ namespace PlayDiscGolf.Models.ViewModels
         [Display(Name = "Is this the main course")]
         public bool Main { get; set; }
 
+        public string ApiParentID { get; set; }
+
+        public string CountryCode { get; set; }
+
+        [StringLength(maximumLength: 100, ErrorMessage = "Maximum 100 character")]
+        [Display(Name = "Area")]
+        public string Area { get; set; }
+        public string ApiID { get; set; }
+
         [Required(ErrorMessage = "Required")]
         [StringLength(maximumLength: 100, ErrorMessage = "Maximum 100 character")]
         [Display(Name = "Course name")]
         public string Name { get; set; }
+
+        public string FullName { get; set; }
 
         [Required(ErrorMessage = "Required")]
         [Display(Name = "Total number of holes")]
@@ -32,9 +43,17 @@ namespace PlayDiscGolf.Models.ViewModels
         [Display(Name = "Total course distance")]
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public int TotalDistance { get; set; }
-        public Guid LocationID { get; set; }
+
+        [Required]
+        public string Latitude { get; set; }
+        [Required]
+        public string Longitude { get; set; }
+
+        public int NumberOfHoles { get; set; }
 
         public List<CourseHolesViewModel> Holes { get; set; }
+
+        public CreateHolesViewModel CreateHolesViewModel { get; set; }
 
         public class CourseHolesViewModel
         {

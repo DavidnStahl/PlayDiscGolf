@@ -32,25 +32,27 @@ namespace PlayDiscGolf.Controllers
         }
 
 
-        public async Task<IActionResult> Search(string query)
+        public async Task<IActionResult> Search(string query, string searchType)
         {
-            var model = new List<SearchLocationItemViewModel>();
+            var model = new List<SearchCourseItemViewModel>();
 
-            if (!string.IsNullOrWhiteSpace(query))
-               model = _mapper.Map<List<SearchLocationItemViewModel>>(await _adminService.GetLocationsByQuery(query));
+            if (!string.IsNullOrWhiteSpace(query) && searchType == "1")
+            {
+                model = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByLocationQuery(query));
+            }
+            else if(!string.IsNullOrWhiteSpace(query) && searchType == "2")
+            {
+                model = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByCourseNameQuery(query));
+            }
+               
 
-            return PartialView("_LocationSearchResult", model);
+            return PartialView("_CourseSearchResult", model);
         }
 
         public async Task<PartialViewResult> SelectedLocation(Guid id)
         {
-            var model = _mapper.Map<List<CourseFormViewModel>>(await _adminService.GetLocationCourses(id));
-
-            foreach (var course in model)
-            {
-
-                course.Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminService.GetCoursesHoles(course.CourseID));
-            }
+            var model = _mapper.Map<CourseFormViewModel>(await _adminService.GetCourseByID(id));
+            model.Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminService.GetCoursesHoles(model.CourseID));
 
             return PartialView("_CourseForm", model);
         }
@@ -62,32 +64,58 @@ namespace PlayDiscGolf.Controllers
             if(!ModelState.IsValid)
             {
                 var parentModel = new AdminSearchViewModel();
-                parentModel.Courses.Add(model);
+                parentModel.Course = model;
                 return View("Index", parentModel);
             }
 
             await _adminService.SaveUpdatedCourse(_mapper.Map<Course>(model));
-            await _adminService.SaveUpdatedHoles(_mapper.Map<List<Hole>>(model.Holes));
+            if(model.Holes != null)
+            {
+                await _adminService.SaveUpdatedHoles(_mapper.Map<List<Hole>>(model.Holes));
+            }
+
+           /* if(model.Holes != null)
+            {
+                await _adminService.AddHolesToCourse(_mapper.Map<List<Hole>>(model.Holes));
+            }*/
 
             return RedirectToAction("Index");
         }
 
-        /*[ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> AddCourse(CreateCourseViewModel model)
+        public IActionResult CreateHoles(string holes, string courseID)
         {
-
-        }*/
-
-        [HttpGet]
-        public IActionResult AddCourse(Guid id)
-        {
-            var model = new CreateCourseViewModel
+            var model = new CreateHolesViewModel
             {
-                LocationID = id
+                NumberOfHoles = Convert.ToInt32(holes),
+                CourseID = Guid.Parse(courseID)               
             };
 
-            return View(model);
+
+            for (int i = 0; i < model.NumberOfHoles; i++)
+            {
+                model.Holes.Add(new CourseFormViewModel.CourseHolesViewModel
+                {
+                    CourseID = model.CourseID,
+                    HoleNumber = i + 1,
+                    HoleID = Guid.NewGuid()
+                });
+            }
+
+            return PartialView("_CreateHoles",model);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> CreateHoles(CreateHolesViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await _adminService.AddHolesToCourse(_mapper.Map<List<Hole>>(model.Holes));
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -14,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 using PlayDiscGolf.Data;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
-using PlayDiscGolf.Data.Locations;
 using PlayDiscGolf.Models.DataModels;
 using PlayDiscGolf.Services.Admin;
 
@@ -37,7 +36,6 @@ namespace PlayDiscGolf
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();
-            services.AddScoped<ILocationRepository, LocationRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

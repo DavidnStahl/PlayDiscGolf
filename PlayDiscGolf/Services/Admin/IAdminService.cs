@@ -9,10 +9,14 @@ namespace PlayDiscGolf.Services.Admin
 {
     public interface IAdminService
     {
-        public Task<List<Location>> GetLocationsByQuery(string query);
-        public Task<List<Course>> GetLocationCourses(Guid id);
+        public Task<List<Course>> GetCoursesByLocationQuery(string query);
+
+        public Task<List<Course>> GetCoursesByCourseNameQuery(string query);
+        public Task<Course> GetCourseByID(Guid id);
         public Task SaveUpdatedCourse(Course course);
         public Task<List<Hole>> GetCoursesHoles(Guid id);
+
+        public Task AddHolesToCourse(List<Hole> holes);
 
         public Task SaveUpdatedHoles(List<Hole> holes);
     }

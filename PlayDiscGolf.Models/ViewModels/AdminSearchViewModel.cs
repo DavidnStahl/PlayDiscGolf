@@ -11,11 +11,10 @@ namespace PlayDiscGolf.Models.ViewModels
         [Display(Name = "Search location")]
         public string Query { get; set; }
 
-        public List<CourseFormViewModel> Courses = new List<CourseFormViewModel>();
+        public CourseFormViewModel Course = new CourseFormViewModel();
 
-        public Course Course { get; set; }
 
-        public List<SearchLocationItemViewModel> SearchLocationItemViewModels = new List<SearchLocationItemViewModel>();
+        public List<SearchCourseItemViewModel> SearchCourseItemViewModels = new List<SearchCourseItemViewModel>();
 
     }
 }

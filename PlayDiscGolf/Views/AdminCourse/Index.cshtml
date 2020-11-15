@@ -1,9 +1,14 @@
 ﻿@model PlayDiscGolf.Models.ViewModels.AdminSearchViewModel
 
 
+
 <div class="form-group row">
     <label asp-for="@Model.Query" class="col-sm-3 col-form-label"></label>
-    <div class="col-sm-7">
+    <select id="mySelectedSearch" class="col-sm-3 custom-select">>
+        <option value="1">Location</option>
+        <option selected value="2">Course name</option>
+    </select>
+    <div class="col-sm-6">
         <input id="searchText" class="form-control">
     </div>
 </div>
@@ -17,11 +22,11 @@
 
 
 <div id="partial">
-    @await Html.PartialAsync("_LocationSearchResult", Model.SearchLocationItemViewModels)
+    @await Html.PartialAsync("_CourseSearchResult", Model.SearchCourseItemViewModels)
 </div>
 
 <div id="courseform">
-    @await Html.PartialAsync("_CourseForm", Model.Courses)
+    @await Html.PartialAsync("_CourseForm", Model.Course)
 </div>
 
 

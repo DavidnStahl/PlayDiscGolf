@@ -22,6 +22,11 @@ namespace PlayDiscGolf.Data
             return hole;
         }
 
+        public async Task CreateHolesAsync(List<Hole> holes)
+        {
+            await _context.Holes.AddRangeAsync(holes);
+        }
+
         public void DeleteHoleAsync(Hole hole)
         {
             _context.Holes.Remove(hole);
@@ -48,9 +53,18 @@ namespace PlayDiscGolf.Data
             await _context.SaveChangesAsync();
         }
 
-        public void UpdateHoles(List<Hole> Holes)
+        public async Task UpdateHoles(List<Hole> holes)
         {
-            _context.Holes.UpdateRange(Holes);
+            var getholes = _context.Holes.Where(h => h.CourseID == holes[0].CourseID);
+            if(getholes != null)
+            {
+                _context.Holes.UpdateRange(holes);
+            }
+            else
+            {
+                await CreateHolesAsync(holes);
+            }
+            
         }
     }
 }
