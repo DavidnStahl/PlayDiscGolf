@@ -37,9 +37,13 @@ namespace PlayDiscGolf.Services.Admin
             oldcourse.Main = course.Main;
             oldcourse.TotalDistance = course.TotalDistance;
             oldcourse.TotalParValue = course.TotalParValue;
+            oldcourse.HolesTotal = course.HolesTotal;
+            oldcourse.Holes = course.Holes;
+            _courseRepository.EditCourseAsync(oldcourse);
+            await _courseRepository.SaveChangesAsync();
 
 
-            if (oldcourse.Holes.Count == 0)
+            /*if (oldcourse.Holes.Count == course.HolesTotal)
             {
                 oldcourse.HolesTotal = course.HolesTotal;
                 oldcourse.Holes = course.Holes;
@@ -48,18 +52,19 @@ namespace PlayDiscGolf.Services.Admin
             }
             else if(oldcourse.Holes.Equals(course.Holes) && oldcourse.HolesTotal == course.HolesTotal)
             {
+                oldcourse.Holes = course.Holes;
                 _courseRepository.EditCourseAsync(oldcourse);
                 await _courseRepository.SaveChangesAsync();
             }
             else if(oldcourse.HolesTotal < course.HolesTotal || oldcourse.HolesTotal > course.HolesTotal)
             {
-                
 
+                /*
                     if(oldcourse.HolesTotal < course.HolesTotal)
                     {
                     oldcourse.Holes = course.Holes;
 
-                    for (int i = oldcourse.HolesTotal; i < course.HolesTotal; i++)
+                    for (int i = 0; i < course.HolesTotal; i++)
                         {
                             var newHole = new Hole
                             {
@@ -76,12 +81,12 @@ namespace PlayDiscGolf.Services.Admin
                     {
                        oldcourse.Holes = course.Holes;
                     }
-                
 
-                    oldcourse.HolesTotal = course.HolesTotal;
-                    _courseRepository.EditCourseAsync(oldcourse);
-                    await _courseRepository.SaveChangesAsync();
-            }
+                oldcourse.Holes = course.Holes;
+                oldcourse.HolesTotal = course.HolesTotal;
+                _courseRepository.EditCourseAsync(oldcourse);
+                await _courseRepository.SaveChangesAsync();
+            }*/
         }
 
         public async Task SaveNewHoles(List<Hole> holes)

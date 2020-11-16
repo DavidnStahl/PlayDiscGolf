@@ -70,32 +70,42 @@ namespace PlayDiscGolf.Controllers
 
             await _adminService.SaveUpdatedCourse(_mapper.Map<Course>(model));
 
-            /*if(model.Holes != null)
-            {
-                await _adminService.SaveNewHoles(_mapper.Map<List<Hole>>(model.Holes));
-            }*/
-
             return RedirectToAction("Index");
         }
 
-        public IActionResult CreateHoles(string holes, string courseID)
+        public async Task<IActionResult> GetHoles(string holes, string courseID)
         {
             var model = new CreateHolesViewModel
             {
                 NumberOfHoles = Convert.ToInt32(holes),
-                CourseID = Guid.Parse(courseID)               
+                CourseID = Guid.Parse(courseID),
+                Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminService.GetCoursesHoles(Guid.Parse(courseID)))
             };
 
-
-            for (int i = 0; i < model.NumberOfHoles; i++)
+            if(model.Holes.Count < model.NumberOfHoles)
             {
-                model.Holes.Add(new CourseFormViewModel.CourseHolesViewModel
+                for (int i = model.Holes.Count; i < model.NumberOfHoles; i++)
                 {
-                    CourseID = model.CourseID,
-                    HoleNumber = i + 1,
-                    HoleID = Guid.NewGuid()
-                });
+                    model.Holes.Add(new CourseFormViewModel.CourseHolesViewModel
+                    {
+                        CourseID = model.CourseID,
+                        HoleNumber = i + 1,
+                        HoleID = Guid.NewGuid(),
+                        ParValue = 1,
+                        Distance = 1
+                    });
+                }
             }
+            else if(model.Holes.Count > model.NumberOfHoles)
+            {
+                var newHolesList = model.Holes;
+                for (int i = model.NumberOfHoles; i < model.Holes.Count; i++)
+                {
+                    newHolesList.RemoveAt(i);
+                }
+                model.Holes = newHolesList;
+            }
+            
 
             return PartialView("_CreateHoles",model);
         }

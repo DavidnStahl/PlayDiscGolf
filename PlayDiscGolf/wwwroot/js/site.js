@@ -12,11 +12,13 @@
         });
     }
 
+    
+
     function CreateHoles() {
         $.ajax({
-            url: "/AdminCourse/CreateHoles",
+            url: "/AdminCourse/GetHoles",
             data: {
-                holes: $("#selectedNumberOfHoles").val(),
+                holes: $("#editHoles").val(),
                 courseID: $("#courseID").val()
             },
             success: function (result) {
@@ -33,12 +35,13 @@
             },
             success: function (result) {
                 $("#courseform").empty().append(result);
+                CreateHoles();
             }
         });
     }
     
 
-    $("#submitHoles").click(function () {
+    $("#editHoles").on('keyup change',function () {
         CreateHoles();
     });
 
