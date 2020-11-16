@@ -16,10 +16,12 @@ namespace PlayDiscGolf.Data.Holes
 
         public void DeleteHoleAsync(Hole hole);
 
+        public void DeleteHoles(List<Hole> holes);
+
         public Task<Hole> GetHoleByIDAsync(Guid holeID);
 
         public Task<List<Hole>> GetHolesByCourseID(Guid courseID);
 
-        public Task UpdateHoles(List<Hole> holes);
+        public void UpdateHoles(List<Hole> holes);
     }
 }

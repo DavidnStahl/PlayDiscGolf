@@ -23,7 +23,7 @@
     <form method="post" asp-action="EditCourse" asp-controller="AdminCourse">
         @Html.AntiForgeryToken()
         <input hidden asp-for="@Model.CreateHolesViewModel" value="@Model.CreateHolesViewModel">
-        @if (@Model.CreateHolesViewModel != null)
+        @if (Model.CreateHolesViewModel != null)
         {
             <input hidden asp-for="@Model.CreateHolesViewModel.CourseID" value="@Model.CreateHolesViewModel.CourseID">
             <input hidden asp-for="@Model.CreateHolesViewModel.Holes" value="@Model.CreateHolesViewModel.Holes">
@@ -106,8 +106,8 @@
             {
                 <div class="card card-body">
                     <input hidden type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].HoleNumber" />
-                    <input hidden type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].HoleID" />
-                    <input hidden type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].CourseID" />
+                    <input hidden  class="form-control" maxlength="5" asp-for="@Model.Holes[i].HoleID" />
+                    <input hidden  class="form-control" maxlength="5" asp-for="@Model.Holes[i].CourseID" />
                     <div class="bg-light border">
                         <div class="form-group mt-4 ml-4 mr-4 ">
                             <div class="form-group row mt-2">

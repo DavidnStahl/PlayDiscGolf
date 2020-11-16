@@ -10,7 +10,7 @@ using PlayDiscGolf.Models.DataModels;
 namespace PlayDiscGolf.Models.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20201115143648_init")]
+    [Migration("20201116090654_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

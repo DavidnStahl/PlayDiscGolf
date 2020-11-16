@@ -16,8 +16,10 @@ namespace PlayDiscGolf.Services.Admin
         public Task SaveUpdatedCourse(Course course);
         public Task<List<Hole>> GetCoursesHoles(Guid id);
 
-        public Task AddHolesToCourse(List<Hole> holes);
+        public Task SaveNewHoles(List<Hole> holes);
 
-        public Task SaveUpdatedHoles(List<Hole> holes);
+        public Task DeleteHoles(List<Hole> holes);
+
+        public Task CheckAndRemoveOrAddHole(Course course);
     }
 }

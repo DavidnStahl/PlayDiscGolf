@@ -35,7 +35,7 @@ namespace PlayDiscGolf.Data
 
         public async Task<Course> GetCourseByIDAsync(Guid courseID)
         {
-            return await _context.Courses.FirstOrDefaultAsync(course => course.CourseID == courseID);
+            return await _context.Courses.Include(c => c.Holes).FirstOrDefaultAsync(course => course.CourseID == courseID);
         }
 
         public async Task<List<Course>> GetCoursesByAreaQueryAsync(string query)

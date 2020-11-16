@@ -23,7 +23,9 @@ namespace PlayDiscGolf.SaveLocationData.Services
                     !string.IsNullOrWhiteSpace(course.Name) &&
                     !string.IsNullOrWhiteSpace(course.Area) &&
                     !string.IsNullOrWhiteSpace(course.ID) &&
-                    course.Enddate == null)
+                    course.Enddate == null &&
+                    !string.IsNullOrWhiteSpace(course.X) &&
+                    !string.IsNullOrWhiteSpace(course.Y))
                 {
                     var validLocaction = new Course
                     {

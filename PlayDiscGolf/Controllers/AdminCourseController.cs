@@ -69,14 +69,10 @@ namespace PlayDiscGolf.Controllers
             }
 
             await _adminService.SaveUpdatedCourse(_mapper.Map<Course>(model));
-            if(model.Holes != null)
-            {
-                await _adminService.SaveUpdatedHoles(_mapper.Map<List<Hole>>(model.Holes));
-            }
 
-           /* if(model.Holes != null)
+            /*if(model.Holes != null)
             {
-                await _adminService.AddHolesToCourse(_mapper.Map<List<Hole>>(model.Holes));
+                await _adminService.SaveNewHoles(_mapper.Map<List<Hole>>(model.Holes));
             }*/
 
             return RedirectToAction("Index");
@@ -102,20 +98,6 @@ namespace PlayDiscGolf.Controllers
             }
 
             return PartialView("_CreateHoles",model);
-        }
-
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> CreateHoles(CreateHolesViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            await _adminService.AddHolesToCourse(_mapper.Map<List<Hole>>(model.Holes));
-
-            return RedirectToAction("Index");
         }
     }
 }
