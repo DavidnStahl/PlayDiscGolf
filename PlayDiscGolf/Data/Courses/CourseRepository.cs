@@ -33,6 +33,11 @@ namespace PlayDiscGolf.Data
             return course;
         }
 
+        public async Task<List<string>> GetAllCoursesCountryCodes()
+        {
+            return await _context.Courses.Select(course => course.CountryCode).ToListAsync();
+        }
+
         public async Task<Course> GetCourseByIDAsync(Guid courseID)
         {
             return await _context.Courses.Include(c => c.Holes).FirstOrDefaultAsync(course => course.CourseID == courseID);

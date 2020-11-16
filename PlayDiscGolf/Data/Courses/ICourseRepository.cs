@@ -20,5 +20,7 @@ namespace PlayDiscGolf.Data.Courses
         public void DeleteCourseAsync(Course course);
 
         public Task<Course> GetCourseByIDAsync(Guid courseID);
+
+        public Task<List<string>> GetAllCoursesCountryCodes();
     }
 }

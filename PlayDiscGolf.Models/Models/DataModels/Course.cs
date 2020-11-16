@@ -13,6 +13,7 @@ namespace PlayDiscGolf.Models.DataModels
         
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid CourseID { get; set; }
+
         [Required]
         public string ApiID { get; set; }
 

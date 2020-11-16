@@ -15,10 +15,10 @@ namespace PlayDiscGolf.Controllers
 {
     public class AdminCourseController : Controller
     {
-        private readonly IAdminService _adminService;
+        private readonly IAdminCourseService _adminService;
         private readonly IMapper _mapper;
 
-        public AdminCourseController(IAdminService adminService, IMapper mapper)
+        public AdminCourseController(IAdminCourseService adminService, IMapper mapper)
         {
             _adminService = adminService;
             _mapper = mapper;
@@ -38,7 +38,7 @@ namespace PlayDiscGolf.Controllers
 
             if (!string.IsNullOrWhiteSpace(query) && searchType == "1")
             {
-                model = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByLocationQuery(query));
+                model = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByAreaQuery(query));
             }
             else if(!string.IsNullOrWhiteSpace(query) && searchType == "2")
             {
@@ -63,8 +63,11 @@ namespace PlayDiscGolf.Controllers
         {
             if(!ModelState.IsValid)
             {
-                var parentModel = new AdminSearchViewModel();
-                parentModel.Course = model;
+                var parentModel = new AdminSearchViewModel
+                {
+                    Course = model
+                };
+
                 return View("Index", parentModel);
             }
 
@@ -82,30 +85,7 @@ namespace PlayDiscGolf.Controllers
                 Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminService.GetCoursesHoles(Guid.Parse(courseID)))
             };
 
-            if(model.Holes.Count < model.NumberOfHoles)
-            {
-                for (int i = model.Holes.Count; i < model.NumberOfHoles; i++)
-                {
-                    model.Holes.Add(new CourseFormViewModel.CourseHolesViewModel
-                    {
-                        CourseID = model.CourseID,
-                        HoleNumber = i + 1,
-                        HoleID = Guid.NewGuid(),
-                        ParValue = 1,
-                        Distance = 1
-                    });
-                }
-            }
-            else if(model.Holes.Count > model.NumberOfHoles)
-            {
-                var newHolesList = model.Holes;
-                for (int i = model.NumberOfHoles; i < model.Holes.Count; i++)
-                {
-                    newHolesList.RemoveAt(i);
-                }
-                model.Holes = newHolesList;
-            }
-            
+            model = _adminService.ManageNumberOfHolesFromForm(model);
 
             return PartialView("_CreateHoles",model);
         }

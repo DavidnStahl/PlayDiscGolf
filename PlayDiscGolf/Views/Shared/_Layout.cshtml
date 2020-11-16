@@ -32,14 +32,14 @@
                             <button class="dropbtn">Admin</button>
                             <div class="dropdown-content">
                                 <a asp-area="" asp-controller="AdminCourse" asp-action="Index">Edit Courses</a>
-                                <a href="#">Link 3</a>
+                                <a asp-area="" asp-controller="AdminNewCountryCourses" asp-action="Index">Add New Country Courses</a>
                             </div>
                         </li>
                         <li class="nav-item ml-lg-2">
-                            <a class="nav-link text-black-50" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-black-50" asp-area="" asp-controller="AccountController" asp-action="Login">Login</a>
                         </li>
                         <li class="nav-item ml-lg-2">
-                            <a class="nav-link text-black-50" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-black-50" asp-area="" asp-controller="AccountController" asp-action="Register">Register</a>
                         </li>
                     </ul>
 

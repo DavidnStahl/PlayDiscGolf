@@ -15,6 +15,7 @@ using PlayDiscGolf.Data;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
 using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Services;
 using PlayDiscGolf.Services.Admin;
 
 namespace PlayDiscGolf
@@ -30,12 +31,25 @@ namespace PlayDiscGolf
             var configurationSection = Configuration.GetSection("ConnectionStrings:DefaultConnection");
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));
 
-            services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders();
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
 
-            services.AddScoped<IAdminService, AdminService>();
+            })
+            .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders()
+            .AddRoles<IdentityRole>();
+
+            services.AddScoped<IAdminCourseService, AdminCourseService>();
+            services.AddScoped<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();
+            
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
