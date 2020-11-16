@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using PlayDiscGolf.Models.ViewModels;
 using PlayDiscGolf.Services.Admin;
-using Newtonsoft.Json;
 using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Models.ViewModels.PostModels;
+using System.Linq;
 
 namespace PlayDiscGolf.Controllers
 {
@@ -31,22 +29,26 @@ namespace PlayDiscGolf.Controllers
             return View(model);
         }
 
-
-        public async Task<IActionResult> Search(string query, string searchType)
+        public async Task<IActionResult> Search([FromQuery]SearchViewModel model)
         {
-            var model = new List<SearchCourseItemViewModel>();
-
-            if (!string.IsNullOrWhiteSpace(query) && searchType == "1")
+            /*if(!ModelState.IsValid)
             {
-                model = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByAreaQuery(query));
-            }
-            else if(!string.IsNullOrWhiteSpace(query) && searchType == "2")
-            {
-                model = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByCourseNameQuery(query));
-            }
-               
+                //HttpContext.Response.StatusCode = 400;
+                PartialView("_ErrorSearch", model);
+                //return Json(new { success = false, issue = model, errors = ModelState.Values.Where(i => i.Errors.Count > 0) });
+            }*/
+            var searchCourseViewModel = new List<SearchCourseItemViewModel>();
 
-            return PartialView("_CourseSearchResult", model);
+            if (!string.IsNullOrWhiteSpace(model.Query) && model.Type == "Location")
+            {
+                searchCourseViewModel = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByAreaQuery(model.Query));
+            }
+            else
+            {
+                searchCourseViewModel = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByCourseNameQuery(model.Query));
+            }
+      
+            return PartialView("_CourseSearchResult", searchCourseViewModel);
         }
 
         public async Task<PartialViewResult> SelectedLocation(Guid id)

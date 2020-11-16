@@ -7,9 +7,6 @@ namespace PlayDiscGolf.Models.ViewModels
     public class SearchCourseItemViewModel
     {       
         public Guid CourseID { get; set; }
-        public string StringCourseID { get; set; }
-
-
         public string FullName { get; set; }  
     }
 }

@@ -4,11 +4,16 @@
             url: "/AdminCourse/Search",
             data: {
                 query: $("#searchText").val(),
-                searchType: $("#mySelectedSearch").val()
+                type: $("#mySelectedSearch").val()
             },
             success: function (result) {
                 $("#partial").empty().append(result);
-            }
+            },
+            error: function (result) {
+                $("#partialError").empty().append(result);
+                console.log(result);
+             }
+
         });
     }
 
