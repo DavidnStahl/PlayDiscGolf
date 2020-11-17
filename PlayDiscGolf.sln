@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayDiscGolf", "PlayDiscGolf\PlayDiscGolf.csproj", "{AF53FF93-2DCE-4E5E-947C-FA6D7CB939E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayDiscGolf", "PlayDiscGolf\PlayDiscGolf.csproj", "{AF53FF93-2DCE-4E5E-947C-FA6D7CB939E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayDiscGolf.Models", "PlayDiscGolf.Models\PlayDiscGolf.Models.csproj", "{E02D1211-98E3-4BED-9030-B287A89A951D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayDiscGolf.SaveLocationData", "PlayDiscGolf.SaveLocationData\PlayDiscGolf.SaveLocationData.csproj", "{51DC073C-45EA-4439-B9D6-746F81CCA3DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{AF53FF93-2DCE-4E5E-947C-FA6D7CB939E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF53FF93-2DCE-4E5E-947C-FA6D7CB939E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF53FF93-2DCE-4E5E-947C-FA6D7CB939E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E02D1211-98E3-4BED-9030-B287A89A951D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E02D1211-98E3-4BED-9030-B287A89A951D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E02D1211-98E3-4BED-9030-B287A89A951D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E02D1211-98E3-4BED-9030-B287A89A951D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51DC073C-45EA-4439-B9D6-746F81CCA3DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51DC073C-45EA-4439-B9D6-746F81CCA3DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51DC073C-45EA-4439-B9D6-746F81CCA3DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51DC073C-45EA-4439-B9D6-746F81CCA3DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
