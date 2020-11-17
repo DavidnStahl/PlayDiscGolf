@@ -1,0 +1,17 @@
+﻿@model PlayDiscGolf.Models.ViewModels.CourseFormViewModel
+
+
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+
+        @await Html.PartialAsync("_CourseFormPartial", Model)
+
+}
+
+
+
+

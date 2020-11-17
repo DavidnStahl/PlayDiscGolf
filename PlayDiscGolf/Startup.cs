@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,7 +12,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlayDiscGolf.Models;
+using PlayDiscGolf.Data;
+using PlayDiscGolf.Data.Courses;
+using PlayDiscGolf.Data.Holes;
+using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Services;
+using PlayDiscGolf.Services.Admin;
 
 namespace PlayDiscGolf
 {
@@ -25,8 +32,30 @@ namespace PlayDiscGolf
             var configurationSection = Configuration.GetSection("ConnectionStrings:DefaultConnection");
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<DataBaseContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+            })
+            .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders()
+            .AddRoles<IdentityRole>();
+
+            services.AddScoped<IAdminCourseService, AdminCourseService>();
+            services.AddScoped<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IHoleRepository,HoleRepository>();
+            
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddResponseCaching();
+            services.AddHttpContextAccessor();
 
             services.AddControllersWithViews();
         }
@@ -46,9 +75,10 @@ namespace PlayDiscGolf
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseResponseCaching();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
