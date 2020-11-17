@@ -232,6 +232,10 @@ namespace PlayDiscGolf.Models.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CountryCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

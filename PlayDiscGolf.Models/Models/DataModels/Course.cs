@@ -20,6 +20,9 @@ namespace PlayDiscGolf.Models.DataModels
         public string ApiParentID { get; set; }
         [Required]
         public string CountryCode{ get; set; }
+
+        [Required]
+        public string Country { get; set; }
         [Required]
         public bool Main { get; set; }
 

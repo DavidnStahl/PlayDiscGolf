@@ -5,10 +5,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Models.ViewModels;
 using PlayDiscGolf.Services.Admin;
-using PlayDiscGolf.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.PostModels;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using PlayDiscGolf.Enums;
 
 namespace PlayDiscGolf.Controllers
 {
@@ -34,15 +33,9 @@ namespace PlayDiscGolf.Controllers
 
         public async Task<IActionResult> Search([FromQuery]SearchViewModel model)
         {
-            /*if(!ModelState.IsValid)
-            {
-                //HttpContext.Response.StatusCode = 400;
-                PartialView("_ErrorSearch", model);
-                //return Json(new { success = false, issue = model, errors = ModelState.Values.Where(i => i.Errors.Count > 0) });
-            }*/
             var searchCourseViewModel = new List<SearchCourseItemViewModel>();
 
-            if (!string.IsNullOrWhiteSpace(model.Query) && model.Type == "Location")
+            if (!string.IsNullOrWhiteSpace(model.Query) && model.Type == EnumHelper.SearchType.Area.ToString())
             {
                 searchCourseViewModel = _mapper.Map<List<SearchCourseItemViewModel>>(await _adminService.GetCoursesByAreaQuery(model.Query));
             }
@@ -76,7 +69,7 @@ namespace PlayDiscGolf.Controllers
                 return View("Index", parentModel);
             }
 
-            await _adminService.SaveUpdatedCourse(_mapper.Map<Course>(model));
+            await _adminService.SaveUpdatedCourse(_mapper.Map<Models.DataModels.Course>(model));
 
             return RedirectToAction("Index");
         }

@@ -54,6 +54,7 @@ namespace PlayDiscGolf.Models.Migrations
                     ApiID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApiParentID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Main = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -204,6 +205,7 @@ namespace PlayDiscGolf.Models.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     CourseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -222,7 +224,8 @@ namespace PlayDiscGolf.Models.Migrations
                 columns: table => new
                 {
                     PlayerCardID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
                     ScoreCardID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

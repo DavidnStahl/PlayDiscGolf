@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +13,7 @@ using PlayDiscGolf.Data.Holes;
 using PlayDiscGolf.Models.DataModels;
 using PlayDiscGolf.Services;
 using PlayDiscGolf.Services.Admin;
+using PlayDiscGolf.Services.Home;
 
 namespace PlayDiscGolf
 {
@@ -48,6 +44,7 @@ namespace PlayDiscGolf
             services.AddScoped<IAdminCourseService, AdminCourseService>();
             services.AddScoped<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IHomeService, HomeService>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();
             

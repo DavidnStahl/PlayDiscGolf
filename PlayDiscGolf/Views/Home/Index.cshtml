@@ -1,6 +1,14 @@
-﻿@{
+﻿@model PlayDiscGolf.Models.ViewModels.HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
+
+
+<div id="searchFormHome">
+    @await Html.PartialAsync("_SearchFormHomePage",Model.SearchFormHomePageViewModel)
+</div>
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>

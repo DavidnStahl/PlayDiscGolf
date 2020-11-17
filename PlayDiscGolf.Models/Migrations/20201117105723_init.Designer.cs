@@ -10,8 +10,8 @@ using PlayDiscGolf.Models.DataModels;
 namespace PlayDiscGolf.Models.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20201117055836_modifiedAndAddedUserIdToScorecardAndPlayerCard")]
-    partial class modifiedAndAddedUserIdToScorecardAndPlayerCard
+    [Migration("20201117105723_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -233,6 +233,10 @@ namespace PlayDiscGolf.Models.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CountryCode")
                         .IsRequired()

@@ -34,6 +34,7 @@ namespace PlayDiscGolf.SaveLocationData.Services
                         ApiID = course.ID,
                         ApiParentID = (string)course.ParentID,
                         CountryCode = course.CountryCode,
+                        Country = "Sweden",
                         Area = course.Area,
                         FullName = course.Fullname,
                         Main = course.ParentID == null ? true : false,

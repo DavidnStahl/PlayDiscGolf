@@ -21,6 +21,10 @@ namespace PlayDiscGolf.Data.Courses
 
         public Task<Course> GetCourseByIDAsync(Guid courseID);
 
-        public Task<List<string>> GetAllCoursesCountryCodes();
+        public Task<List<string>> GetAllCoursesCountriesAsync();
+
+        public Task<List<Course>> GetCoursesByCountryAreaAndQueryAsync(string country, string query);
+
+        public Task<List<Course>> GetCoursesByCountryFullNameAndQueryAsync(string country,string query);
     }
 }

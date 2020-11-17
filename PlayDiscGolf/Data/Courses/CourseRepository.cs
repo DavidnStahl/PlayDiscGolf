@@ -33,9 +33,9 @@ namespace PlayDiscGolf.Data
             return course;
         }
 
-        public async Task<List<string>> GetAllCoursesCountryCodes()
+        public async Task<List<string>> GetAllCoursesCountriesAsync()
         {
-            return await _context.Courses.Select(course => course.CountryCode).ToListAsync();
+            return await _context.Courses.Select(course => course.Country).Distinct().ToListAsync();
         }
 
         public async Task<Course> GetCourseByIDAsync(Guid courseID)
@@ -46,6 +46,16 @@ namespace PlayDiscGolf.Data
         public async Task<List<Course>> GetCoursesByAreaQueryAsync(string query)
         {
             return await _context.Courses.Where(course => course.Area.StartsWith(query)).OrderBy(c => c.Area).ToListAsync();
+        }
+
+        public async Task<List<Course>> GetCoursesByCountryAreaAndQueryAsync(string country, string query)
+        {
+            return await _context.Courses.Where(course => course.Country == country && course.Area == query).ToListAsync();
+        }
+
+        public async Task<List<Course>> GetCoursesByCountryFullNameAndQueryAsync(string country, string query)
+        {
+            return await _context.Courses.Where(course => course.Country == country && course.FullName == query).ToListAsync();
         }
 
         public async Task<List<Course>> GetCoursesByFullNameQueryAsync(string query)

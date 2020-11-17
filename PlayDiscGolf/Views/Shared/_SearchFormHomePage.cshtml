@@ -1,0 +1,40 @@
+﻿@model PlayDiscGolf.ViewModels.Home.SearchFormHomePageViewModel
+
+@{
+    Layout = null;
+}
+<form asp-action="SearchFormAjax" onsubmit="return jQueryAjaxPost(this);">
+    <div class="form-group row">
+        <input hidden asp-for="@Model.Countries" />
+        <input hidden asp-for="@Model.Types" />
+        <div class="col-sm-2 ml-xl-2 pb-4">
+            <span class="text-danger" asp-validation-for="@Model.Country"></span>
+            <select class=" form-control" asp-for="@Model.Country" asp-items="@Model.Countries">
+            </select>
+        </div>
+        <div class="col-sm-2 ml-xl-2 pb-4">
+            <span class="text-danger" asp-validation-for="@Model.Type"></span>
+            <select class="form-control" asp-for="@Model.Type" asp-items="@Model.Types">
+            </select>
+        </div>
+        <div class="col-sm-4 ml-xl-2 pb-4">
+            <span class="text-danger" asp-validation-for="@Model.Query"></span>
+            <input placeholder="Search here.." class="form-control" id="searchCourse" asp-for="@Model.Query">
+        </div>
+        <div class="col-sm-2 ml-xl-2 pb-4">
+            <input type="submit" class="btn btn-primary mb-2 form-control" value="Search" />
+        </div>
+    </div>
+</form>
+<div id="searchFormResultHomePage">
+    @await Html.PartialAsync("_SearchFormResultHomePage", Model.SearchResultAjaxFormViewModel)
+</div>
+
+<script src="~/jquery/jquery.min.js"></script>
+<script src="~/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+
