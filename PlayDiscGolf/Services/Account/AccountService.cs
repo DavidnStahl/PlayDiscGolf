@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
 using System.Linq;
+using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Services
@@ -10,17 +13,20 @@ namespace PlayDiscGolf.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AccountService(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<bool> UserLoggingIn(LoginViewModel model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password,true, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password,model.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
+
                 return true;
             }
 

@@ -19,6 +19,10 @@ namespace PlayDiscGolf.Models.DataModels
         [StringLength(maximumLength:100)]
         public string UserName { get; set; }
 
+        [Required]
+        [StringLength(maximumLength: 450)]
+        public string UserID { get; set; }
+
         [ForeignKey("CourseID")]
         public virtual Guid CourseID { get; set; }
 

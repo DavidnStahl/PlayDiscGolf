@@ -8,9 +8,11 @@ using PlayDiscGolf.Services.Admin;
 using PlayDiscGolf.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.PostModels;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PlayDiscGolf.Controllers
 {
+    
     public class AdminCourseController : Controller
     {
         private readonly IAdminCourseService _adminService;
@@ -22,6 +24,7 @@ namespace PlayDiscGolf.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var model = new AdminSearchViewModel();

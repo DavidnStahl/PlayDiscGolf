@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Models.ViewModels.AdminNewCountryCourses;
 using PlayDiscGolf.Services.Admin;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminNewCountryCoursesController : Controller
     {
         private readonly IAdminNewCountryCourseService _adminNewCountryCourseService;

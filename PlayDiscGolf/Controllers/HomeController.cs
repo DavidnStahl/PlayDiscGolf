@@ -5,12 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace PlayDiscGolf.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         

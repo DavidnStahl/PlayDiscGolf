@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,12 +34,12 @@ namespace PlayDiscGolf
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 1;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 1;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
 
             })
             .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders()
@@ -52,6 +53,9 @@ namespace PlayDiscGolf
             
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddResponseCaching();
+            services.AddHttpContextAccessor();
 
             services.AddControllersWithViews();
         }
@@ -71,9 +75,10 @@ namespace PlayDiscGolf
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseResponseCaching();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
