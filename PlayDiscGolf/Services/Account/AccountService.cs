@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Models.Dtos;
 using PlayDiscGolf.Models.ViewModels.Account;
 using System.Linq;
 using System.Security.Principal;
@@ -21,34 +22,61 @@ namespace PlayDiscGolf.Services
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<bool> UserLoggingIn(LoginViewModel model)
+
+        public async Task<RegisterUserDtos> UserRegister(RegisterViewModel model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password,model.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded)
+            var registerUserDtos = new RegisterUserDtos();
+
+            registerUserDtos = await CheckIfEmailIsTaken(model, registerUserDtos);
+            registerUserDtos = await CheckIfUsernameIsTaken(model, registerUserDtos);
+
+            if (registerUserDtos.CreateUserSucceded == true)
             {
+                var user = new IdentityUser { UserName = model.Username, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
 
-                return true;
-            }
+                if (result.Succeeded)
+                    return await CreateUserAsync(registerUserDtos, user);
+            }            
 
-            return false;
+            return registerUserDtos;
         }
 
-        public async Task<bool> UserRegister(RegisterViewModel model)
+        public async Task<RegisterUserDtos> CreateUserAsync(RegisterUserDtos registerUserDtos, IdentityUser user)
         {
-            var user = new IdentityUser { UserName = model.Username, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            await _signInManager.SignInAsync(user, isPersistent: true);
+            var allRoles = (new DataBaseContext()).Roles.OrderBy(r => r.Name).ToList();
+            var role = allRoles.FirstOrDefault(r => r.Name == "User");
+            _userManager.AddToRoleAsync(user, role.Name.ToString()).Wait();
+            registerUserDtos.CreateUserSucceded = true;
 
-            if (result.Succeeded)
+            return registerUserDtos;
+        }
+
+        public async Task<RegisterUserDtos> CheckIfEmailIsTaken(RegisterViewModel model,RegisterUserDtos registerUserDtos)
+        {
+            var checkEmail = await _userManager.FindByEmailAsync(model.Email);
+
+            if (checkEmail != null)
             {
-                await _signInManager.SignInAsync(user, isPersistent: true);
-                var allRoles = (new DataBaseContext()).Roles.OrderBy(r => r.Name).ToList();
-                var role = allRoles.FirstOrDefault(r => r.Name == "User");
-                _userManager.AddToRoleAsync(user, role.Name.ToString()).Wait();
-
-                return true;
+                registerUserDtos.ErrorMessegeEmail = true;
+                return registerUserDtos;
             }
 
-            return false;
+            return registerUserDtos;
+        }
+
+        public async Task<RegisterUserDtos> CheckIfUsernameIsTaken(RegisterViewModel model, RegisterUserDtos registerUserDtos)
+        {
+            var checkUserName = await _userManager.FindByNameAsync(model.Username);
+
+            if (checkUserName != null)
+            {
+                registerUserDtos.ErrorMessegeUsername = true;
+                return registerUserDtos;
+            }
+
+            return registerUserDtos;
         }
     }
 }

@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+
+@inject SignInManager<IdentityUser> signInManager;
+@inject RoleManager<IdentityRole> roleManager;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,7 +11,7 @@
     <title>@ViewData["Title"] - PlayDiscGolf</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    
+
 </head>
 <body>
     <header>
@@ -28,19 +33,36 @@
                         <li class="nav-item ml-lg-2">
                             <a class="nav-link text-black-50" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item ml-lg-2 dropdown">
-                            <button class="dropbtn">Admin</button>
-                            <div class="dropdown-content">
-                                <a asp-area="" asp-controller="AdminCourse" asp-action="Index">Edit Courses</a>
-                                <a asp-area="" asp-controller="AdminNewCountryCourses" asp-action="Index">Add New Country Courses</a>
-                            </div>
-                        </li>
-                        <li class="nav-item ml-lg-2">
-                            <a class="nav-link text-black-50" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item ml-lg-2">
-                            <a class="nav-link text-black-50" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                        </li>
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item ml-lg-2 dropdown">
+                                <button class="dropbtn">Admin</button>
+                                <div class="dropdown-content">
+                                    <a asp-area="" asp-controller="AdminCourse" asp-action="Index">Edit Courses</a>
+                                    <a asp-area="" asp-controller="AdminNewCountryCourses" asp-action="Index">Add New Country Courses</a>
+                                </div>
+                            </li>
+                        }
+
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item ml-lg-2">
+                                <a class="nav-link text-black-50" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                            <li class="nav-item ml-lg-2">
+                                <a class="nav-link text-black-50" href="#">@User.Identity.Name</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item ml-lg-2">
+                                <a class="nav-link text-black-50" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item ml-lg-2">
+                                <a class="nav-link text-black-50" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+
                     </ul>
 
 

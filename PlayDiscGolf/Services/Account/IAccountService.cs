@@ -1,4 +1,5 @@
-﻿using PlayDiscGolf.Models.ViewModels.Account;
+﻿using PlayDiscGolf.Models.Dtos;
+using PlayDiscGolf.Models.ViewModels.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,6 @@ namespace PlayDiscGolf.Services
 {
     public interface IAccountService
     {
-        public Task<bool> UserLoggingIn(LoginViewModel model);
-
-        public Task<bool> UserRegister(RegisterViewModel model);
+        public Task<RegisterUserDtos> UserRegister(RegisterViewModel model);
     }
 }

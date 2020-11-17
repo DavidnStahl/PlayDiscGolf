@@ -12,76 +12,42 @@ namespace PlayDiscGolf.Controllers.Account
 {
     public class AccountController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IAccountService _accountService;
 
-
-            private readonly UserManager<IdentityUser> _userManager;
-            private readonly SignInManager<IdentityUser> _signInManager;
-
-
-            public AccountController(SignInManager<IdentityUser> signInManager,
-                UserManager<IdentityUser> userManager)
-            {
-                _userManager = userManager;
-                _signInManager = signInManager;
-
-            }
-            [HttpGet]
-            public IActionResult Login()
-            {
-                return View();
-            }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> Login(LoginViewModel model)
-            {
-
-                if (!ModelState.IsValid) { return View(model); }
-
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("index", "home");
-                }
-                else
-                {
-
-                    ModelState.AddModelError("Password", "Invalid login attempt.");
-                    return View(model);
-                }
-
-            }
-            public async Task<IActionResult> Logout()
-            {
-                await _signInManager.SignOutAsync();
-                return RedirectToAction("Login");
-            }
-    }
-
-        /*public IActionResult Login()
+        public AccountController(SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,IAccountService accountService)
         {
-            var model = new LoginViewModel();
-
-            return View(model);
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _accountService = accountService;
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid) { return View(model); }
+
+            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+            if (result.Succeeded)
             {
-                return View(model);
+                return RedirectToAction("index", "home");
             }
 
-            var result = await _accountService.UserLoggingIn(model);
+            return View(model);            
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
 
-            if(result == true)
-                return RedirectToAction("Index", "Home");
-
-            ModelState.AddModelError("Password", "Invalid login attempt");
-
-            return View(model);
+            return RedirectToAction("Login");
         }
         public IActionResult Register()
         {
@@ -89,7 +55,6 @@ namespace PlayDiscGolf.Controllers.Account
 
             return View(model);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,14 +65,24 @@ namespace PlayDiscGolf.Controllers.Account
                 return View(model);
             }
 
-            var result = await _accountService.UserRegister(model);
+            var registerUserDtos = await _accountService.UserRegister(model);
 
-            if (result == true)
-                return RedirectToAction("Index", "Home");
-
-            ModelState.AddModelError("Password", "Invalid Register attempt");
+            if (registerUserDtos.CreateUserSucceded == true)
+                 return RedirectToAction("Index", "Home");
+            
+            if(registerUserDtos.ErrorMessegeEmail == true)
+            {
+                ModelState.AddModelError("Email", "Email is taken");
+            }
+                
+            if(registerUserDtos.ErrorMessegeUsername == true)
+            {
+                ModelState.AddModelError("Username", "Username is taken");
+            }           
 
             return View(model);
-        }*/
+        }
+    }
+        
     
 }

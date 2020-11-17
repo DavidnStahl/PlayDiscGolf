@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using PlayDiscGolf.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Models.ViewModels.Account
 {
