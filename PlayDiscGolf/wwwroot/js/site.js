@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
 
+
+
     jQueryAjaxPost = form => {
         try {
             $.ajax({
@@ -56,6 +58,38 @@
         });
     }
 
+
+    
+    function AddPlayerToPlayerCard() {
+        $.ajax({
+            url: "/ScoreCard/AddPlayer",
+            data: {
+                newName: $("#nameInputPlayAjax").val()
+            },
+            success: function (result) {
+                console.log(result)
+                $("#playersInScoreCard").empty().append(result);
+
+            }
+        });
+        
+    }
+
+    function RemovePlayerToPlayerCard(val) {
+        $.ajax({
+            url: "/ScoreCard/RemovePlayer",
+            data: {
+                removePlayer: val
+            },
+            success: function (result) {
+                console.log(result)
+                $("#playersInScoreCard").empty().append(result);
+
+            }
+        });
+
+    }
+
     function GetCourses(value) {
         $.ajax({
             url: "/AdminCourse/SelectedLocation",
@@ -78,6 +112,15 @@
         GetSearchOptions();
     });
 
+    $("#addPlayerAjax").click(function () {
+        AddPlayerToPlayerCard();
+    });
+
+    $(".tryThis").on('click', function () {
+        var value = $(this).prev().val();
+        RemovePlayerToPlayerCard(value);
+        
+    });
 
     $(".locationButton").click(function (event) {
         var location = event.target.id

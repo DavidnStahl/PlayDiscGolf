@@ -13,13 +13,13 @@ namespace PlayDiscGolf.Profiles
     {
         public HoleProfile()
         {
-            //Source -> Target
             CreateMap<Hole, CourseFormViewModel.CourseHolesViewModel>();
             CreateMap<CourseFormViewModel.CourseHolesViewModel, Hole>();
+
             CreateMap<CreateHolesViewModel, Hole>();
             CreateMap<Hole, CreateHolesViewModel>();
 
-            CreateMap<HoleInfoDto, Hole>();
+            CreateMap<List<HoleInfoDto>, List<Hole>>();
         }
     }
 }

@@ -1,0 +1,82 @@
+﻿@model PlayDiscGolf.ViewModels.Course.CoursePageViewModel
+
+@{ 
+    var bestRound = "None";
+    var averageRound = "None";
+
+    if (Model.BestRound == null)
+    {
+
+    }
+    else
+    {
+        bestRound = Model.BestRound;
+        averageRound = Model.AverageRound;
+    }
+
+
+}
+<div id="courseInfo">
+    <ul class="list-group">
+        <li class="list-group-item">Name: @Model.FullName</li>
+        <li class="list-group-item">Holes: @Model.TotalHoles</li>
+        <li class="list-group-item">Par: @Model.TotalParValue</li>
+        <li class="list-group-item">Distance: @Model.TotalDistance</li>
+        <li class="list-group-item">Played: @Model.NumberOfRounds.ToString()</li>
+        <li class="list-group-item">Best Round: @bestRound</li>
+        <li class="list-group-item">Average Round: @averageRound</li>
+        
+    </ul>
+    <ul class="list-group">
+        <li class="list-group-item">Scorecards: </li>
+        @if (Model.ScoreCards.Count > 0)
+        {
+            @foreach (var scoreCard in Model.ScoreCards)
+            {
+                <li class="card">
+                    <ul class="list-group">
+                        <li>
+                            <ul class="list-group">
+                                <li>Start: @scoreCard.StartDate</li>
+                                <li>
+                                    @foreach (var playerCard in scoreCard.PlayerCards)
+                                     {
+                                        <ul>
+                                            <li>@playerCard.UserName</li>
+                                            @{
+                                                var score = 0;
+                                                var scoreTotal = "";
+                                            }
+
+                                            @foreach (var holeCard in playerCard.HoleCards)
+                                            {
+                                            score += holeCard.Score;
+                                            }
+
+                                            @if (score > 0)
+                                            {
+                                            scoreTotal = "+" + score;
+                                            }
+                                            else if (score < 0)
+                                            {
+                                            scoreTotal = "-" + score;
+                                            }
+                                            else
+                                            {
+                                            scoreTotal = "0";
+                                            }
+
+                                        <li>Score: @scoreTotal</li>
+                                        </ul>                                          
+                                     }
+                                </li>
+                            </ul>
+                             
+                        </li>
+                    </ul>
+                </li>
+            }
+        }
+    </ul>
+    <a type="button" class="btn btn-success" asp-action="CreateScoreCard" asp-controller="ScoreCard" asp-route-courseID="@Model.CourseID.ToString()" >Create Scorecard</a>
+</div>

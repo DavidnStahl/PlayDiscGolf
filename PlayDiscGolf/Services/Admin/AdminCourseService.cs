@@ -1,12 +1,10 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Services.Admin
@@ -22,7 +20,7 @@ namespace PlayDiscGolf.Services.Admin
         {
             _courseRepository = courseRepository;
             _holeRepository = holeRepository;
-            _mapper = mapper;
+            _mapper = mapper;            
         }
 
         public async Task<List<Hole>> GetCoursesHoles(Guid id)
@@ -32,18 +30,7 @@ namespace PlayDiscGolf.Services.Admin
 
         public async Task SaveUpdatedCourse(CourseFormViewModel course)
         {
-            var oldcourse = await _courseRepository.GetCourseByIDAsync(course.CourseID);
-
-            oldcourse.Area = course.Area;
-            oldcourse.Name = course.Name;
-            oldcourse.FullName = course.FullName;                        
-            oldcourse.Main = course.Main;
-            oldcourse.TotalDistance = course.TotalDistance;
-            oldcourse.TotalParValue = course.TotalParValue;
-            oldcourse.HolesTotal = course.HolesTotal;
-            oldcourse.Holes = _mapper.Map<List<Hole>>(course.Holes);
-
-            _courseRepository.EditCourseAsync(oldcourse);
+            _courseRepository.EditCourseAsync(_mapper.Map(course, await _courseRepository.GetCourseByIDAsync(course.CourseID)));
             await _courseRepository.SaveChangesAsync();
         }
         public async Task<Course> GetCourseByID(Guid id)

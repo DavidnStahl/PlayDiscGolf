@@ -42,7 +42,7 @@ namespace PlayDiscGolf.Services.CoursePage
                 TotalDistance = course.TotalDistance,
                 ScoreCards = scoreCard,
                 FullName = course.FullName,
-                Holes = _mapper.Map<List<HoleInfoDto>>(await _holeRepository.GetHoleByIDAsync(courseID)),
+                Holes = await _holeRepository.GetHolesByCourseID(courseID),
                 TotalHoles = course.HolesTotal,
                 Name = course.Name,
                 TotalParValue = course.TotalParValue,

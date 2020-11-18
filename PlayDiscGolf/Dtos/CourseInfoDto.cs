@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlayDiscGolf.Models.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace PlayDiscGolf.Dtos
 
         public string BestRound { get; set; }
 
-        public List<HoleInfoDto> Holes { get; set; }
+        public List<Hole> Holes { get; set; }
 
         public List<ScoreCardDto> ScoreCards { get; set; }
     }

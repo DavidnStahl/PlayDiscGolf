@@ -33,6 +33,7 @@ namespace PlayDiscGolf.Services
             if (registerUserDtos.CreateUserSucceded == true)
             {
                 var user = new IdentityUser { UserName = model.Username, Email = model.Email };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
@@ -45,9 +46,13 @@ namespace PlayDiscGolf.Services
         public async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDtos, IdentityUser user)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
+
             var allRoles = (new DataBaseContext()).Roles.OrderBy(r => r.Name).ToList();
+
             var role = allRoles.FirstOrDefault(r => r.Name == "User");
+
             _userManager.AddToRoleAsync(user, role.Name.ToString()).Wait();
+
             registerUserDtos.CreateUserSucceded = true;
 
             return registerUserDtos;
@@ -60,6 +65,7 @@ namespace PlayDiscGolf.Services
             if (checkEmail != null)
             {
                 registerUserDtos.ErrorMessegeEmail = true;
+
                 return registerUserDtos;
             }
 
@@ -73,6 +79,7 @@ namespace PlayDiscGolf.Services
             if (checkUserName != null)
             {
                 registerUserDtos.ErrorMessegeUsername = true;
+
                 return registerUserDtos;
             }
 

@@ -50,7 +50,9 @@ namespace PlayDiscGolf.Data
 
         public async Task<List<Hole>> GetHolesByCourseID(Guid courseID)
         {
-            return await _context.Holes.Where(hole => hole.CourseID == courseID).OrderBy(o => o.HoleNumber).ToListAsync();
+            return await _context.Holes.Where(hole => hole.CourseID == courseID)
+                                       .OrderBy(o => o.HoleNumber)
+                                       .ToListAsync();
         }
 
         public async Task SaveChangesAsync()

@@ -18,8 +18,8 @@ namespace PlayDiscGolf.Data
 
         public async Task<Course> CreateCourseAsync(Course course)
         {
-            await _context.Courses.AddAsync(course);
-            return course;
+            var updatedCourse = await _context.Courses.AddAsync(course);
+            return updatedCourse.Entity;
         }
 
         public void DeleteCourseAsync(Course course)
@@ -29,38 +29,49 @@ namespace PlayDiscGolf.Data
 
         public Course EditCourseAsync(Course course)
         {
-            _context.Courses.Update(course);
-            return course;
+            return _context.Courses.Update(course).Entity;
         }
 
         public async Task<List<string>> GetAllCoursesCountriesAsync()
         {
-            return await _context.Courses.Select(course => course.Country).Distinct().ToListAsync();
+            return await _context.Courses.Select(course => course.Country)
+                                         .Distinct()
+                                         .ToListAsync();
         }
 
         public async Task<Course> GetCourseByIDAsync(Guid courseID)
         {
-            return await _context.Courses.Include(c => c.Holes).FirstOrDefaultAsync(course => course.CourseID == courseID);
+            return await _context.Courses.Include(c => c.Holes)
+                                         .FirstOrDefaultAsync(course => course.CourseID == courseID);
         }
 
         public async Task<List<Course>> GetCoursesByAreaQueryAsync(string query)
         {
-            return await _context.Courses.Where(course => course.Area.StartsWith(query)).OrderBy(c => c.Area).ToListAsync();
+            return await _context.Courses.Where(course => course.Area
+                                         .StartsWith(query))
+                                         .OrderBy(c => c.Area)
+                                         .ToListAsync();
         }
 
         public async Task<List<Course>> GetCoursesByCountryAreaAndQueryAsync(string country, string query)
         {
-            return await _context.Courses.Where(course => course.Country == country && course.Area == query).ToListAsync();
+            return await _context.Courses.Where(course => course.Country == country && course.Area
+                                         .StartsWith(query))
+                                         .ToListAsync();
         }
 
         public async Task<List<Course>> GetCoursesByCountryFullNameAndQueryAsync(string country, string query)
         {
-            return await _context.Courses.Where(course => course.Country == country && course.FullName == query).ToListAsync();
+            return await _context.Courses.Where(course => course.Country == country && course.FullName
+                                         .StartsWith(query))
+                                         .ToListAsync();
         }
 
         public async Task<List<Course>> GetCoursesByFullNameQueryAsync(string query)
         {
-            return await _context.Courses.Where(course => course.FullName.StartsWith(query)).OrderBy(c => c.FullName).ToListAsync();
+            return await _context.Courses.Where(course => course.FullName
+                                         .StartsWith(query))
+                                         .ToListAsync();
         }
 
         public async Task SaveChangesAsync()
