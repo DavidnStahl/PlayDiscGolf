@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Models.DataModels
+namespace PlayDiscGolf.Models.Models.DataModels
 {
     public class DataBaseContext : IdentityDbContext
     {

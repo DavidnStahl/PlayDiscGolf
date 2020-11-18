@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PlayDiscGolf.Models.Dtos
+namespace PlayDiscGolf.Dtos
 {
-    public class RegisterUserDtos
+    public class RegisterUserDto
     {
         public bool CreateUserSucceded = false;
 

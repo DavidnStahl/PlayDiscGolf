@@ -1,7 +1,8 @@
 ﻿
+using AutoMapper;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
-using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,14 @@ namespace PlayDiscGolf.Services.Admin
     {       
         private readonly ICourseRepository _courseRepository;
         private readonly IHoleRepository _holeRepository;
+        private readonly IMapper _mapper;
 
         public AdminCourseService(ICourseRepository courseRepository,
-                            IHoleRepository holeRepository)
+                            IHoleRepository holeRepository, IMapper mapper)
         {
             _courseRepository = courseRepository;
             _holeRepository = holeRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<Hole>> GetCoursesHoles(Guid id)
@@ -27,9 +30,8 @@ namespace PlayDiscGolf.Services.Admin
             return await _holeRepository.GetHolesByCourseID(id);
         }
 
-        public async Task SaveUpdatedCourse(Course course)
+        public async Task SaveUpdatedCourse(CourseFormViewModel course)
         {
-
             var oldcourse = await _courseRepository.GetCourseByIDAsync(course.CourseID);
 
             oldcourse.Area = course.Area;
@@ -39,7 +41,7 @@ namespace PlayDiscGolf.Services.Admin
             oldcourse.TotalDistance = course.TotalDistance;
             oldcourse.TotalParValue = course.TotalParValue;
             oldcourse.HolesTotal = course.HolesTotal;
-            oldcourse.Holes = course.Holes;
+            oldcourse.Holes = _mapper.Map<List<Hole>>(course.Holes);
 
             _courseRepository.EditCourseAsync(oldcourse);
             await _courseRepository.SaveChangesAsync();

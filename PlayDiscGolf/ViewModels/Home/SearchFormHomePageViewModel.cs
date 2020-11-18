@@ -9,10 +9,8 @@ namespace PlayDiscGolf.ViewModels.Home
 {
     public class SearchFormHomePageViewModel
     {
-        [Required(ErrorMessage = "Required")]
         public string Type { get; set; }
 
-        [Required(ErrorMessage = "Required")]
         public string Country { get; set; }
 
         [Required(ErrorMessage = "Required")]

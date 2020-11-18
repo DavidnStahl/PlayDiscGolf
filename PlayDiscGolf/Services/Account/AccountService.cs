@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using PlayDiscGolf.Models.DataModels;
-using PlayDiscGolf.Models.Dtos;
+using PlayDiscGolf.Dtos;
+using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
 using System.Linq;
 using System.Security.Principal;
@@ -23,9 +23,9 @@ namespace PlayDiscGolf.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<RegisterUserDtos> UserRegister(RegisterViewModel model)
+        public async Task<RegisterUserDto> UserRegister(RegisterViewModel model)
         {
-            var registerUserDtos = new RegisterUserDtos();
+            var registerUserDtos = new RegisterUserDto();
 
             registerUserDtos = await CheckIfEmailIsTaken(model, registerUserDtos);
             registerUserDtos = await CheckIfUsernameIsTaken(model, registerUserDtos);
@@ -42,7 +42,7 @@ namespace PlayDiscGolf.Services
             return registerUserDtos;
         }
 
-        public async Task<RegisterUserDtos> CreateUserAsync(RegisterUserDtos registerUserDtos, IdentityUser user)
+        public async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDtos, IdentityUser user)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
             var allRoles = (new DataBaseContext()).Roles.OrderBy(r => r.Name).ToList();
@@ -53,7 +53,7 @@ namespace PlayDiscGolf.Services
             return registerUserDtos;
         }
 
-        public async Task<RegisterUserDtos> CheckIfEmailIsTaken(RegisterViewModel model,RegisterUserDtos registerUserDtos)
+        public async Task<RegisterUserDto> CheckIfEmailIsTaken(RegisterViewModel model,RegisterUserDto registerUserDtos)
         {
             var checkEmail = await _userManager.FindByEmailAsync(model.Email);
 
@@ -66,7 +66,7 @@ namespace PlayDiscGolf.Services
             return registerUserDtos;
         }
 
-        public async Task<RegisterUserDtos> CheckIfUsernameIsTaken(RegisterViewModel model, RegisterUserDtos registerUserDtos)
+        public async Task<RegisterUserDto> CheckIfUsernameIsTaken(RegisterViewModel model, RegisterUserDto registerUserDtos)
         {
             var checkUserName = await _userManager.FindByNameAsync(model.Username);
 
@@ -77,6 +77,13 @@ namespace PlayDiscGolf.Services
             }
 
             return registerUserDtos;
+        }
+
+        public async Task<string> GetInloggedUserID()
+        {
+            var user =  await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+
+            return user.Id;
         }
     }
 }

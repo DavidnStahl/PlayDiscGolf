@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels;
 using PlayDiscGolf.ViewModels.Home;
 using System;
@@ -15,7 +15,9 @@ namespace PlayDiscGolf.Profiles
         {
             CreateMap<Course, CourseFormViewModel>();
             CreateMap<CourseFormViewModel, Course>();
+
             CreateMap<Course, SearchCourseItemViewModel>();
+
             CreateMap<Course, SearchResultAjaxFormViewModel>();           
             CreateMap<SearchResultAjaxFormViewModel, Course>();
         }

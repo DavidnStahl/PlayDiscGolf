@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Dtos;
+using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace PlayDiscGolf.Profiles
             CreateMap<CourseFormViewModel.CourseHolesViewModel, Hole>();
             CreateMap<CreateHolesViewModel, Hole>();
             CreateMap<Hole, CreateHolesViewModel>();
+
+            CreateMap<HoleInfoDto, Hole>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using PlayDiscGolf.Models.DataModels;
+﻿using PlayDiscGolf.Models.Models;
+using PlayDiscGolf.Models.Models.DataModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

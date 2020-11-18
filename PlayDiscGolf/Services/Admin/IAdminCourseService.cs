@@ -1,5 +1,5 @@
 ﻿
-using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,11 +14,9 @@ namespace PlayDiscGolf.Services.Admin
 
         public Task<List<Course>> GetCoursesByCourseNameQuery(string query);
         public Task<Course> GetCourseByID(Guid id);
-        public Task SaveUpdatedCourse(Course course);
+        public Task SaveUpdatedCourse(CourseFormViewModel course);
         public Task<List<Hole>> GetCoursesHoles(Guid id);
 
         public CreateHolesViewModel ManageNumberOfHolesFromForm(CreateHolesViewModel model);
-
-        
     }
 }

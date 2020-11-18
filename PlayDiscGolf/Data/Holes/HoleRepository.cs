@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlayDiscGolf.Data.Holes;
-using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Models.Models.DataModels;
 
 namespace PlayDiscGolf.Data
 {

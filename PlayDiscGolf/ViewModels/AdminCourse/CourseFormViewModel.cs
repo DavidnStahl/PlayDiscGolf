@@ -1,4 +1,4 @@
-﻿using PlayDiscGolf.Models.DataModels;
+﻿using PlayDiscGolf.Models.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

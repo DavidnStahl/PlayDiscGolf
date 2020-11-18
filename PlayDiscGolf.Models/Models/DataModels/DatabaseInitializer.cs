@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PlayDiscGolf.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PlayDiscGolf.Models.Models
+namespace PlayDiscGolf.Models.Models.DataModels
 {
     public class DatabaseInitializer
     {

@@ -8,11 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlayDiscGolf.Data;
+using PlayDiscGolf.Data.Cards.Scores;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
-using PlayDiscGolf.Models.DataModels;
+using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Services;
 using PlayDiscGolf.Services.Admin;
+using PlayDiscGolf.Services.CoursePage;
 using PlayDiscGolf.Services.Home;
 
 namespace PlayDiscGolf
@@ -45,9 +47,11 @@ namespace PlayDiscGolf
             services.AddScoped<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<ICoursePageService, CoursePageService>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();
-            
+            services.AddScoped<IScoreCardRepository, ScoreCardRepository>();
+
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
