@@ -17,6 +17,6 @@ namespace PlayDiscGolf.ViewModels.ScoreCard
         public string UserName { get; set; }
         public string UserID { get; set; }
         public string CourseID { get; set; }
-        public List<PlayerCardViewModel> PlayerCards { get; set; } = new List<PlayerCardViewModel>();
+        public List<PlayerCardViewModel> PlayerCards { get; set; }
     }
 }

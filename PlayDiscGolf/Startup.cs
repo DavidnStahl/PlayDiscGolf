@@ -11,6 +11,8 @@ using PlayDiscGolf.Business.Calculations.Hole;
 using PlayDiscGolf.Business.Calculations.ScoreCard;
 using PlayDiscGolf.Business.Session;
 using PlayDiscGolf.Data;
+using PlayDiscGolf.Data.Cards.Holes;
+using PlayDiscGolf.Data.Cards.Players;
 using PlayDiscGolf.Data.Cards.Scores;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
@@ -70,6 +72,8 @@ namespace PlayDiscGolf
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();
             services.AddScoped<IScoreCardRepository, ScoreCardRepository>();
+            services.AddScoped<IPlayerCardRepository, PlayerCardRepository>();
+            services.AddScoped<IHoleCardRepository, HoleCardRepository>();
 
             services.AddScoped<IScoreCardCalculation, ScoreCardCalculation>();
             services.AddScoped<ICreateHolesCalculation, CreateHolesCalculation>();

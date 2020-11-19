@@ -1,7 +1,7 @@
 ﻿@model PlayDiscGolf.ViewModels.ScoreCard.ScoreCardViewModel
 
 <div id="refreshForm" class="container">
-    <form>
+
         <input id="ownerIDAjax" hidden asp-for="@Model.UserID">
         <input id="playerCardsListAjax" hidden asp-for="@Model.PlayerCards">
         <input id="courseIDAjax" hidden asp-for="@Model.CourseID">
@@ -23,9 +23,7 @@
                 @await Html.PartialAsync("_PlayersInPlayerCard", Model.PlayerCards)
             </div>
         </div>
-        <input type="submit" class="btn btn-primary" value="Start" />
-
-    </form>
+        <a asp-action="StartScoreCard" asp-controller="ScoreCard" class="btn btn-primary" >Start Game</a>
 </div>
 
 <!-- Modal -->

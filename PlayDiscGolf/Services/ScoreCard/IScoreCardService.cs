@@ -12,13 +12,13 @@ namespace PlayDiscGolf.Services.ScoreCard
         public List<PlayerCardViewModel> AddPlayerToSessionAndReturnUpdatedPlayers(string newName);
 
         public List<PlayerCardViewModel> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer);
-        public Task CreateScoreCardAsync(string courseID);
 
-        public Task EditScoreCardAsync(string scoreCardID);
+        public Task<ScoreCardGameOnViewModel> StartScoreCard();
 
-        public Task DeleteScoreCardAsync(string scoreCardID);
+        public Task<ScoreCardGameOnViewModel> SaveScoreCardTurn(HoleCardViewModel model);
+        public Task<ScoreCardGameOnViewModel> ChangeHole(string activatedNextNumber, string courseID, string scorecardID);
 
-        public Task ClaimScoreCardAsync(string userID);
+        public Task EndScoreCard();
 
     }
 }

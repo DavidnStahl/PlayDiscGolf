@@ -8,12 +8,15 @@ namespace PlayDiscGolf.Business.Calculations.ScoreCard
 {
     public class ScoreCardCalculation : IScoreCardCalculation
     {
-        public int BestRound(List<ScoreCardDto> scoreCards, string userID) => 
-            (scoreCards.Select(playerCard => playerCard.PlayerCards) as IEnumerable<PlayerCardDto>).Where(p => p.UserID == userID)
-            .Select(p => p.TotalScore).Distinct().Max();
+        public int BestRound(List<ScoreCardDto> scoreCards, string userID) =>
+            (scoreCards as IEnumerable<ScoreCardDto>).SelectMany(p => p.PlayerCards).Where(p => p.UserID == userID)
+            .Select(p => p.TotalScore).Max();
+
+
+            
 
         public double AverageRound(List<ScoreCardDto> scoreCards, string userID) =>
-            (scoreCards.Select(playerCard => playerCard.PlayerCards) as IEnumerable<PlayerCardDto>).Where(p => p.UserID == userID)
+            (scoreCards as IEnumerable<ScoreCardDto>).SelectMany(p => p.PlayerCards).Where(p => p.UserID == userID)
             .Select(p => p.TotalScore).Average();
     }
 }

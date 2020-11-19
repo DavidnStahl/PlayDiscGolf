@@ -1,0 +1,17 @@
+﻿@model PlayDiscGolf.ViewModels.ScoreCard.ScoreCardGameOnViewModel
+
+´@{ 
+    var meter = "m";
+}
+<div>Hole: @Model.Hole.HoleNumber</div>
+<div>Par: @Model.Hole.ParValue</div>
+<div>Distance: @Model.Hole.Distance @meter</div>
+
+@foreach (var player in Model.ScoreCardViewModel.PlayerCards)
+{
+    <div>Name: @player.UserName</div>
+    <div>Total Score: @player.TotalScore</div>
+
+}
+
+

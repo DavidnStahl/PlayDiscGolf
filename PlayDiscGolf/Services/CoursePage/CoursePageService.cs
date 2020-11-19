@@ -35,9 +35,10 @@ namespace PlayDiscGolf.Services.CoursePage
         {
             Course course = await _courseRepository.GetCourseByIDAsync(courseID);
             string userID = await _accountService.GetInloggedUserID();
+            
             List<ScoreCardDto> scoreCard = _mapper.Map<List<ScoreCardDto>>(await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(userID));
 
-            return new CourseInfoDto
+            var x = new CourseInfoDto
             {
                 CourseID = courseID,
                 TotalDistance = course.TotalDistance,
@@ -51,6 +52,8 @@ namespace PlayDiscGolf.Services.CoursePage
                 BestRound = scoreCard.Count > 0 ? _scoreCardCalculation.BestRound(scoreCard, userID).ToString() : "None",
                 AverageRound = scoreCard.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCard, userID).ToString() : "None"
             };
+
+            return x;
         }        
     }
 }

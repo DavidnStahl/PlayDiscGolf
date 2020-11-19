@@ -12,11 +12,11 @@ namespace PlayDiscGolf.ViewModels.ScoreCard
 
         [Display(Name = "Player")]
         public string UserName { get; set; }
-
+        public int TotalScore { get; set; }
         public string UserID { get; set; }
 
         public string ScoreCardID { get; set; }
 
-        public List<HoleCardViewModel> HoleCards = new List<HoleCardViewModel>();
+        public List<HoleCardViewModel> HoleCards { get; set; }
     }
 }

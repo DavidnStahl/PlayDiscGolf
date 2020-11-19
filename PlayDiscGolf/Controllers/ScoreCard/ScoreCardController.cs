@@ -30,7 +30,16 @@ namespace PlayDiscGolf.Controllers.ScoreCard
         public IActionResult RemovePlayer(string removePlayer) =>
             PartialView("_PlayersInPlayerCard", _scoreCardService.RemovePlayerFromSessionAndReturnUpdatedPlayers(removePlayer));
 
-        public IActionResult StartScoreCard(string courseID) =>
-            View();
+        public async Task<IActionResult> StartScoreCard() =>
+            View("ScoreCardLive",await _scoreCardService.StartScoreCard());
+
+        public IActionResult SaveScoreCardTurn(HoleCardViewModel model) =>
+            View(_scoreCardService.SaveScoreCardTurn(model));
+
+        public IActionResult ChangeHole(string activatedNextNumber, string courseID, string scorecardID) =>
+            View(_scoreCardService.ChangeHole(activatedNextNumber, courseID, scorecardID));
+
+        public IActionResult EndScoreCard() =>
+            View(_scoreCardService.EndScoreCard());
     }
 }
