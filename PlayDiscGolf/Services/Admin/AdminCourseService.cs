@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using PlayDiscGolf.Business.Calculations.Hole;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
+using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels;
+using PlayDiscGolf.Models.ViewModels.PostModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,69 +17,39 @@ namespace PlayDiscGolf.Services.Admin
         private readonly ICourseRepository _courseRepository;
         private readonly IHoleRepository _holeRepository;
         private readonly IMapper _mapper;
+        private readonly ICreateHolesCalculation _createHolesCalcultion;
 
-        public AdminCourseService(ICourseRepository courseRepository,
-                            IHoleRepository holeRepository, IMapper mapper)
+        public AdminCourseService(ICourseRepository courseRepository,IHoleRepository holeRepository, IMapper mapper,
+            ICreateHolesCalculation createHolesCalcultion)
         {
             _courseRepository = courseRepository;
             _holeRepository = holeRepository;
-            _mapper = mapper;            
+            _mapper = mapper;
+            _createHolesCalcultion = createHolesCalcultion;
         }
 
-        public async Task<List<Hole>> GetCoursesHoles(Guid id)
-        {
-            return await _holeRepository.GetHolesByCourseID(id);
-        }
+        public async Task<List<Hole>> GetCoursesHoles(Guid id) => await _holeRepository.GetHolesByCourseID(id);
 
         public async Task SaveUpdatedCourse(CourseFormViewModel course)
         {
             _courseRepository.EditCourseAsync(_mapper.Map(course, await _courseRepository.GetCourseByIDAsync(course.CourseID)));
             await _courseRepository.SaveChangesAsync();
         }
+
         public async Task<Course> GetCourseByID(Guid id)
         {
-            return await _courseRepository.GetCourseByIDAsync((id));
+            Course course = await _courseRepository.GetCourseByIDAsync((id));
+            course.Holes = await _holeRepository.GetHolesByCourseID(id);
+            return course;
         }
+            
 
-        public async Task<List<Course>> GetCoursesByAreaQuery(string query)
-        {
-            return await _courseRepository.GetCoursesByAreaQueryAsync(query);
-        }
+        public CreateHolesViewModel ManageNumberOfHolesFromForm(CreateHolesViewModel model) => 
+            _createHolesCalcultion.ConfigureHoles(model);
 
-        public async Task<List<Course>> GetCoursesByCourseNameQuery(string query)
-        {
-            return await _courseRepository.GetCoursesByFullNameQueryAsync(query);
-        }
+        public async Task<List<Course>> GetCoursesBySearch(SearchViewModel model) =>
+            !string.IsNullOrWhiteSpace(model.Query) && model.Type == EnumHelper.SearchType.Area.ToString() ?
+            await _courseRepository.GetCoursesByAreaQueryAsync(model.Query) : await _courseRepository.GetCoursesByFullNameQueryAsync(model.Query);
 
-        public CreateHolesViewModel ManageNumberOfHolesFromForm(CreateHolesViewModel model)
-        {
-            if (model.Holes.Count < model.NumberOfHoles)
-            {
-                for (int i = model.Holes.Count; i < model.NumberOfHoles; i++)
-                {
-                    model.Holes.Add(new CourseFormViewModel.CourseHolesViewModel
-                    {
-                        CourseID = model.CourseID,
-                        HoleNumber = i + 1,
-                        HoleID = Guid.NewGuid(),
-                        ParValue = 1,
-                        Distance = 1
-                    });
-                }
-            }
-            else if (model.Holes.Count > model.NumberOfHoles)
-            {
-                var newHolesList = model.Holes;
-                for (int i = model.NumberOfHoles; i < model.Holes.Count; i++)
-                {
-                    newHolesList.RemoveAt(i);
-                }
-                model.Holes = newHolesList;
-            }
-
-            return model;
-        }
-
-        
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayDiscGolf.Models.Models.DataModels;
 
 namespace PlayDiscGolf.Models.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20201119075528_TotalScorePropertyToPlayerCard")]
+    partial class TotalScorePropertyToPlayerCard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,8 +330,8 @@ namespace PlayDiscGolf.Models.Migrations
                     b.Property<Guid>("ScoreCardID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TotalScore")
-                        .HasColumnType("int");
+                    b.Property<string>("TotalScore")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
                         .HasMaxLength(450)

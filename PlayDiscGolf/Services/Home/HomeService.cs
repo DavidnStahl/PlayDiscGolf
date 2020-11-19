@@ -20,37 +20,28 @@ namespace PlayDiscGolf.Services.Home
             _courseRepository = courseRepository;
         }
         
-        public async Task<List<SelectListItem>> GetAllCourseCountriesAsync()
-        {
-            var countries = await _courseRepository.GetAllCoursesCountriesAsync();
+        public async Task<List<SelectListItem>> GetAllCourseCountriesAsync() =>
+            (await _courseRepository.GetAllCoursesCountriesAsync() as IEnumerable<string>).Select(country => 
+            new SelectListItem { Value = country, Text = country}).ToList();
 
-            var selectListItemList = new List<SelectListItem>();
-
-            for (int i = 0; i < countries.Count; i++)
-            {
-                selectListItemList.Add(new SelectListItem(countries[i], countries[i]));
-            }
-
-            return selectListItemList;
-        }
-
-        public List<SelectListItem> SetTypes()
-        {
-            return new List<SelectListItem>
-            {
+        public List<SelectListItem> SetTypes() =>
+            new List<SelectListItem>{
                 new SelectListItem(EnumHelper.SearchType.Area.ToString(), EnumHelper.SearchType.Area.ToString()),
                 new SelectListItem(EnumHelper.SearchType.Course.ToString(), EnumHelper.SearchType.Course.ToString())
             };
-        }
 
-        public async Task<List<Course>> GetCourseBySearchQuery(SearchFormHomePageViewModel model)
+        public async Task<List<Course>> GetCourseBySearchQuery(SearchFormHomePageViewModel model) =>
+            (model.Type == EnumHelper.SearchType.Area.ToString()) ?
+            await _courseRepository.GetCoursesByCountryAreaAndQueryAsync(model.Country, model.Query) :
+            await _courseRepository.GetCoursesByCountryFullNameAndQueryAsync(model.Country, model.Query);
+
+        public async Task<SearchFormHomePageViewModel> ConfigureCountriesAndTypes(SearchFormHomePageViewModel model)
         {
-            if (model.Type == EnumHelper.SearchType.Area.ToString())
-                return await _courseRepository.GetCoursesByCountryAreaAndQueryAsync(model.Country, model.Query);
+            model.Countries = await GetAllCourseCountriesAsync();
 
-            return await _courseRepository.GetCoursesByCountryFullNameAndQueryAsync(model.Country, model.Query);
+            model.Types = SetTypes();
+
+            return model;
         }
-
-        
     }
 }

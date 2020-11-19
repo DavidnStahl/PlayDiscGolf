@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PlayDiscGolf.Business.Calculations.ScoreCard;
 using PlayDiscGolf.Data.Cards.Scores;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
@@ -17,26 +18,26 @@ namespace PlayDiscGolf.Services.CoursePage
         private readonly IScoreCardRepository _scoreCardRepository;
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
+        private readonly IScoreCardCalculation _scoreCardCalculation;
 
-        public CoursePageService(ICourseRepository courseRepository,
-            IHoleRepository holeRepository,
-            IScoreCardRepository scoreCardRepository,
-            IAccountService accountService,
-            IMapper mapper)
+        public CoursePageService(ICourseRepository courseRepository, IHoleRepository holeRepository,
+            IScoreCardRepository scoreCardRepository, IAccountService accountService, IMapper mapper,
+            IScoreCardCalculation scoreCardCalculation)
         {
             _courseRepository = courseRepository;
             _holeRepository = holeRepository;
             _scoreCardRepository = scoreCardRepository;
             _accountService = accountService;
             _mapper = mapper;
+            _scoreCardCalculation = scoreCardCalculation;
         }
         public async Task<CourseInfoDto> GetCoursePageInformationAsync(Guid courseID)
         {
-            var course = await _courseRepository.GetCourseByIDAsync(courseID);
-            var userID = await _accountService.GetInloggedUserID();
-            var scoreCard = _mapper.Map<List<ScoreCardDto>>(await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(userID));
+            Course course = await _courseRepository.GetCourseByIDAsync(courseID);
+            string userID = await _accountService.GetInloggedUserID();
+            List<ScoreCardDto> scoreCard = _mapper.Map<List<ScoreCardDto>>(await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(userID));
 
-            var courseInfoDto = new CourseInfoDto
+            return new CourseInfoDto
             {
                 CourseID = courseID,
                 TotalDistance = course.TotalDistance,
@@ -47,65 +48,9 @@ namespace PlayDiscGolf.Services.CoursePage
                 Name = course.Name,
                 TotalParValue = course.TotalParValue,
                 NumberOfRounds = scoreCard.Count,
-                BestRound = BestScoreCardRound(scoreCard, userID),
-                AverageRound = AverageScoreCardRound(scoreCard, userID)
+                BestRound = scoreCard.Count > 0 ? _scoreCardCalculation.BestRound(scoreCard, userID).ToString() : "None",
+                AverageRound = scoreCard.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCard, userID).ToString() : "None"
             };
-
-            return courseInfoDto;
-        }
-
-        public string AverageScoreCardRound(List<ScoreCardDto> scoreCards, string userID)
-        {
-            if (scoreCards.Count == 0) return null;
-
-            var sumTotal = 0;
-            
-            foreach (var scoreCard in scoreCards)
-            {
-                
-                foreach (var player in scoreCard.PlayerCards)
-                {
-                    if (player.UserID == userID)
-                    {
-                        var sumHoles = 0;
-                        foreach (var holecard in player.HoleCards)
-                        {
-                            sumHoles += holecard.Score;
-                        }
-
-                        sumTotal += sumHoles;
-                    }
-                    
-                }
-            }
-
-            return (sumTotal / scoreCards.Count).ToString();
-        }
-        public string BestScoreCardRound(List<ScoreCardDto> scoreCards, string userID)
-        {
-            if (scoreCards.Count == 0) return null;
-
-            var bestScore = 0;
-            foreach (var scoreCard in scoreCards)
-            {
-                var sumHoles = 0;
-                foreach (var player in scoreCard.PlayerCards)
-                {
-                    if (player.UserID == userID)
-                    {
-                        
-                        foreach (var holecard in player.HoleCards)
-                        {
-                            sumHoles += holecard.Score;
-                        }
-                    }
-                }
-
-                if (bestScore > sumHoles || bestScore < sumHoles)
-                    bestScore = sumHoles;
-            }
-
-            return bestScore.ToString();
-        }
+        }        
     }
 }

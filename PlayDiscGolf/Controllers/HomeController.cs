@@ -21,35 +21,25 @@ namespace PlayDiscGolf.Controllers
             _mapper = mapper;
         }
         
-        public async Task<IActionResult> Index()
-        {
-            var model = new HomeViewModel
-            {
-                SearchFormHomePageViewModel = new SearchFormHomePageViewModel
-                {
-                    Countries = await _homeService.GetAllCourseCountriesAsync(),
-                    Types = _homeService.SetTypes(),
-                }
-            };
-
-            return View(model);
-        }
+        public async Task<IActionResult> Index() =>
+            View(new HomeViewModel { 
+                SearchFormHomePageViewModel = await _homeService.ConfigureCountriesAndTypes(new SearchFormHomePageViewModel())
+            });
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public  async Task<IActionResult> SearchFormAjax([Bind("Type", "Country", "Query", "Types", "Countries")]SearchFormHomePageViewModel model)
         {
-            model.Countries = await _homeService.GetAllCourseCountriesAsync();
-            model.Types = _homeService.SetTypes();
-
             if (ModelState.IsValid)
-            { 
+            {
+                model = await _homeService.ConfigureCountriesAndTypes(model);
+
                 model.SearchResultAjaxFormViewModel = _mapper.Map<List<SearchResultAjaxFormViewModel>>(await _homeService.GetCourseBySearchQuery(model));
 
                 return PartialView("_SearchFormHomePage", model);
             }
             
-            return PartialView("_SearchFormHomePage", model);
+            return PartialView("_SearchFormHomePage", await _homeService.ConfigureCountriesAndTypes(model));
         }
 
         

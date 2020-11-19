@@ -16,53 +16,31 @@ namespace PlayDiscGolf.Data
             _context = context;
         }
 
-        public async Task<Hole> CreateHoleAsync(Hole hole)
-        {
+        public async Task CreateHoleAsync(Hole hole) => 
             await _context.Holes.AddAsync(hole);
-            return hole;
-        }
 
-        public async Task CreateHolesAsync(List<Hole> holes)
-        {
+        public async Task CreateHolesAsync(List<Hole> holes) => 
             await _context.Holes.AddRangeAsync(holes);
-        }
 
-        public void DeleteHoleAsync(Hole hole)
-        {
+        public void DeleteHoleAsync(Hole hole) => 
             _context.Holes.Remove(hole);
-        }
 
-        public void DeleteHoles(List<Hole> holes)
-        {
+        public void DeleteHoles(List<Hole> holes) => 
             _context.Holes.RemoveRange(holes);
-        }
 
-        public Hole EditHoleAsync(Hole hole)
-        {
+        public void EditHoleAsync(Hole hole) => 
             _context.Holes.Update(hole);
-            return hole;
-        }
 
-        public async Task<Hole> GetHoleByIDAsync(Guid holeID)
-        {
-            return  await _context.Holes.FirstOrDefaultAsync(hole => hole.HoleID == holeID);
-        }
+        public async Task<Hole> GetHoleByIDAsync(Guid holeID) => 
+            await _context.Holes.FirstOrDefaultAsync(hole => hole.HoleID == holeID);
 
-        public async Task<List<Hole>> GetHolesByCourseID(Guid courseID)
-        {
-            return await _context.Holes.Where(hole => hole.CourseID == courseID)
-                                       .OrderBy(o => o.HoleNumber)
-                                       .ToListAsync();
-        }
+        public async Task<List<Hole>> GetHolesByCourseID(Guid courseID) => 
+            await _context.Holes.Where(hole => hole.CourseID == courseID).OrderBy(o => o.HoleNumber).ToListAsync();
 
-        public async Task SaveChangesAsync()
-        {
+        public async Task SaveChangesAsync() => 
             await _context.SaveChangesAsync();
-        }
 
-        public void UpdateHoles(List<Hole> holes)
-        {
+        public void UpdateHoles(List<Hole> holes) => 
             _context.Holes.UpdateRange(holes);
-        }
     }
 }

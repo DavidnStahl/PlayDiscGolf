@@ -18,9 +18,10 @@ namespace PlayDiscGolf.Models.Models.DataModels
         [StringLength(maximumLength: 450)]
         public string UserID { get; set; }
 
+        public int TotalScore { get; set; }
+
         [ForeignKey("ScoreCardID")]
         public Guid ScoreCardID { get; set; }
-
         
         public ScoreCard Scorecard { get; set; }
 

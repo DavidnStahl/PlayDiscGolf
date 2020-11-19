@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PlayDiscGolf.Business.Calculations.Hole;
+using PlayDiscGolf.Business.Calculations.ScoreCard;
+using PlayDiscGolf.Business.Session;
 using PlayDiscGolf.Data;
 using PlayDiscGolf.Data.Cards.Scores;
 using PlayDiscGolf.Data.Courses;
@@ -16,6 +19,8 @@ using PlayDiscGolf.Services;
 using PlayDiscGolf.Services.Admin;
 using PlayDiscGolf.Services.CoursePage;
 using PlayDiscGolf.Services.Home;
+using PlayDiscGolf.Services.ScoreCard;
+using PlayDiscGolf.ViewModels.ScoreCard;
 
 namespace PlayDiscGolf
 {
@@ -27,7 +32,7 @@ namespace PlayDiscGolf
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var configurationSection = Configuration.GetSection("ConnectionStrings:DefaultConnection");
+            IConfigurationSection  configurationSection = Configuration.GetSection("ConnectionStrings:DefaultConnection");
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));
 
             services.AddDistributedMemoryCache();
@@ -55,11 +60,19 @@ namespace PlayDiscGolf
             services.AddScoped<IAdminCourseService, AdminCourseService>();
             services.AddScoped<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IHomeService, HomeService>();            
             services.AddScoped<ICoursePageService, CoursePageService>();
+            services.AddScoped<IScoreCardService, ScoreCardService>();
+
+            services.AddScoped<ISessionStorage<ScoreCardViewModel>, SessionStorageScoreCardViewModel>();
+
+
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();
             services.AddScoped<IScoreCardRepository, ScoreCardRepository>();
+
+            services.AddScoped<IScoreCardCalculation, ScoreCardCalculation>();
+            services.AddScoped<ICreateHolesCalculation, CreateHolesCalculation>();
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

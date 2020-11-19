@@ -15,12 +15,8 @@ namespace PlayDiscGolf.Data
         {
             _context = context;
         }
-        public async Task<List<ScoreCard>> GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(string userID)
-        {
-            return await _context.ScoreCards.Include(players => players.PlayerCards)
-                                            .ThenInclude(holes => holes.HoleCards)
-                                            .Where(scorecards => scorecards.UserID == userID)
-                                            .ToListAsync();
-        }
+        public async Task<List<ScoreCard>> GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(string userID) =>
+            await _context.ScoreCards.Include(players => players.PlayerCards).ThenInclude(holes => holes.HoleCards)
+            .Where(scorecards => scorecards.UserID == userID).ToListAsync();
     }
 }

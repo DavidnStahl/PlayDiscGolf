@@ -9,9 +9,9 @@ namespace PlayDiscGolf.Data.Courses
     public interface ICourseRepository
     {
         public Task SaveChangesAsync();
-        public Task<Course> CreateCourseAsync(Course course);
+        public Task CreateCourseAsync(Course course);
 
-        public Course EditCourseAsync(Course course);
+        public void EditCourseAsync(Course course);
 
         public Task<List<Course>> GetCoursesByAreaQueryAsync(string query);
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
@@ -25,72 +26,51 @@ namespace PlayDiscGolf.Services
 
         public async Task<RegisterUserDto> UserRegister(RegisterViewModel model)
         {
-            var registerUserDtos = new RegisterUserDto();
+            RegisterUserDto registerUserDtos = await CheckIfEmailIsTaken(model, new RegisterUserDto());
 
-            registerUserDtos = await CheckIfEmailIsTaken(model, registerUserDtos);
             registerUserDtos = await CheckIfUsernameIsTaken(model, registerUserDtos);
 
-            if (registerUserDtos.CreateUserSucceded == true)
-            {
-                var user = new IdentityUser { UserName = model.Username, Email = model.Email };
+            return registerUserDtos.CreateUserSucceded == true ? await CreateUserAsync(registerUserDtos, model) : registerUserDtos;
+        }
+        public async Task<string> GetInloggedUserID()
+        {
+            var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
 
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                    return await CreateUserAsync(registerUserDtos, user);
-            }            
-
-            return registerUserDtos;
+            return user.Id;
         }
 
-        public async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDtos, IdentityUser user)
+        private async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDtos, RegisterViewModel model)
+        {
+            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
+
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
+            return (result.Succeeded)? await SignInUserAfterRegister(user, registerUserDtos) : registerUserDtos;
+        }
+
+        private async Task<RegisterUserDto> SignInUserAfterRegister(IdentityUser user, RegisterUserDto registerUserDtos)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
 
-            var allRoles = (new DataBaseContext()).Roles.OrderBy(r => r.Name).ToList();
-
-            var role = allRoles.FirstOrDefault(r => r.Name == "User");
-
-            _userManager.AddToRoleAsync(user, role.Name.ToString()).Wait();
+            _userManager.AddToRoleAsync(user, (new DataBaseContext()).Roles.OrderBy(r => r.Name).FirstOrDefault(r => r.Name == "User").Name.ToString()).Wait();
 
             registerUserDtos.CreateUserSucceded = true;
 
             return registerUserDtos;
         }
 
-        public async Task<RegisterUserDto> CheckIfEmailIsTaken(RegisterViewModel model,RegisterUserDto registerUserDtos)
+        private async Task<RegisterUserDto> CheckIfEmailIsTaken(RegisterViewModel model,RegisterUserDto registerUserDtos)
         {
-            var checkEmail = await _userManager.FindByEmailAsync(model.Email);
-
-            if (checkEmail != null)
-            {
-                registerUserDtos.ErrorMessegeEmail = true;
-
-                return registerUserDtos;
-            }
+            if (await _userManager.FindByEmailAsync(model.Email) != null) registerUserDtos.ErrorMessegeEmail = true;
 
             return registerUserDtos;
         }
 
-        public async Task<RegisterUserDto> CheckIfUsernameIsTaken(RegisterViewModel model, RegisterUserDto registerUserDtos)
+        private async Task<RegisterUserDto> CheckIfUsernameIsTaken(RegisterViewModel model, RegisterUserDto registerUserDtos)
         {
-            var checkUserName = await _userManager.FindByNameAsync(model.Username);
-
-            if (checkUserName != null)
-            {
-                registerUserDtos.ErrorMessegeUsername = true;
-
-                return registerUserDtos;
-            }
+            if (await _userManager.FindByNameAsync(model.Username) != null) registerUserDtos.ErrorMessegeUsername = true;
 
             return registerUserDtos;
-        }
-
-        public async Task<string> GetInloggedUserID()
-        {
-            var user =  await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
-
-            return user.Id;
-        }
+        }     
     }
 }

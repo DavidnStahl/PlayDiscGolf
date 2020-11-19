@@ -13,5 +13,10 @@ namespace PlayDiscGolf.Enums
             Area,
             Course
         }
+
+        public enum ScoreCardViewModelSessionKey
+        {
+            ScoreCardViewModel
+        }
     }
 }

@@ -8,11 +8,11 @@ namespace PlayDiscGolf.Data.Holes
     public interface IHoleRepository
     {
         public Task SaveChangesAsync();
-        public Task<Hole> CreateHoleAsync(Hole hole);
+        public Task CreateHoleAsync(Hole hole);
 
         public Task CreateHolesAsync(List<Hole> holes);
 
-        public Hole EditHoleAsync(Hole hole);
+        public void EditHoleAsync(Hole hole);
 
         public void DeleteHoleAsync(Hole hole);
 

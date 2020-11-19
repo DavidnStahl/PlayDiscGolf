@@ -15,6 +15,8 @@ namespace PlayDiscGolf.Dtos
 
         public Guid ScoreCardID { get; set; }
 
+        public int TotalScore { get; set; }
+
         public List<HoleCard> HoleCards { get; set; }
     }
 }

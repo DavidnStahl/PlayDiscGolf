@@ -19,12 +19,8 @@ namespace PlayDiscGolf.Controllers.CoursePage
             _coursePageService = coursePageService;
             _mapper = mapper;
         }
-        public async Task<IActionResult> Index(string courseID)
-        {
-            var model = _mapper.Map<CoursePageViewModel>(await _coursePageService.GetCoursePageInformationAsync(new Guid(courseID)));
-
-            return View(model);
-        }
-       
+        public async Task<IActionResult> Index(string courseID) =>
+            View(_mapper.Map<CoursePageViewModel>(await _coursePageService.GetCoursePageInformationAsync(new Guid(courseID))));
+      
     }
 }

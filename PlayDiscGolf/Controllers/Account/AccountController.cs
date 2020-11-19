@@ -1,33 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using PlayDiscGolf.Models.ViewModels.Account;
 using PlayDiscGolf.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using PlayDiscGolf.Dtos;
 
 namespace PlayDiscGolf.Controllers.Account
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IAccountService _accountService;
 
-        public AccountController(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,IAccountService accountService)
+        public AccountController(SignInManager<IdentityUser> signInManager, IAccountService accountService)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _accountService = accountService;
         }
+
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => 
+            View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -35,11 +28,9 @@ namespace PlayDiscGolf.Controllers.Account
         {
             if (!ModelState.IsValid) { return View(model); }
 
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("index", "home");
-            }
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+
+            if (result.Succeeded) return RedirectToAction("index", "home");
 
             return View(model);            
         }
@@ -49,36 +40,22 @@ namespace PlayDiscGolf.Controllers.Account
 
             return RedirectToAction("Login");
         }
-        public IActionResult Register()
-        {
-            var model = new RegisterViewModel();
-
-            return View(model);
-        }
-
+        public IActionResult Register() =>
+            View(new RegisterViewModel());
+ 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
-            var registerUserDtos = await _accountService.UserRegister(model);
+            RegisterUserDto registerUserDtos = await _accountService.UserRegister(model);
 
-            if (registerUserDtos.CreateUserSucceded == true)
-                 return RedirectToAction("Index", "Home");
+            if (registerUserDtos.CreateUserSucceded == true) return RedirectToAction("Index", "Home");
             
-            if(registerUserDtos.ErrorMessegeEmail == true)
-            {
-                ModelState.AddModelError("Email", "Email is taken");
-            }
+            if(registerUserDtos.ErrorMessegeEmail == true) ModelState.AddModelError("Email", "Email is taken");
                 
-            if(registerUserDtos.ErrorMessegeUsername == true)
-            {
-                ModelState.AddModelError("Username", "Username is taken");
-            }           
+            if(registerUserDtos.ErrorMessegeUsername == true) ModelState.AddModelError("Username", "Username is taken");           
 
             return View(model);
         }
