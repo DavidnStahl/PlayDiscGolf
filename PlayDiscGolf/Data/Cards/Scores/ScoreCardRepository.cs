@@ -25,5 +25,10 @@ namespace PlayDiscGolf.Data
 
         public async Task SaveChangesAsync() =>
             await _context.SaveChangesAsync();
+
+        public void UpdateScoreCard(ScoreCard scoreCard)
+        {
+            _context.ScoreCards.Update(scoreCard);
+        }
     }
 }

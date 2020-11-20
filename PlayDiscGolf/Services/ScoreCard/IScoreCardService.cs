@@ -15,10 +15,6 @@ namespace PlayDiscGolf.Services.ScoreCard
 
         public Task<ScoreCardGameOnViewModel> StartScoreCard();
 
-        public Task<ScoreCardGameOnViewModel> SaveScoreCardTurn(HoleCardViewModel model);
-        public Task<ScoreCardGameOnViewModel> ChangeHole(string activatedNextNumber, string courseID, string scorecardID);
-
-        public Task EndScoreCard();
-
+        public Task<ScoreCardGameOnViewModel> UpdateScoreCard(string scoreCardID, string holeNumber, string addOrRemove, string userName);
     }
 }

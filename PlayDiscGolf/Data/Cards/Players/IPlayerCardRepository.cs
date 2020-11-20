@@ -9,5 +9,9 @@ namespace PlayDiscGolf.Data.Cards.Players
     public interface IPlayerCardRepository
     {
         public Task<List<PlayerCard>> GetPlayerCardsByScoreCardID(Guid scorecardID);
+
+        public void UpdatePlayerCard(PlayerCard playerCard);
+
+        public Task SaveChangesAsync();
     }
 }

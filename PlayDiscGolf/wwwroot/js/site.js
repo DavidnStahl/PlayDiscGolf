@@ -91,21 +91,6 @@
     }
 
 
-    function changeUserScore(val) {
-        $.ajax({
-            url: "/ScoreCard/UpdateScoreCard",
-            data: {
-                value : val
-            },
-            success: function (result) {
-                console.log(result)
-                $("#playersInScoreCard").empty().append(result);
-
-            }
-        });
-    }
-
-
     function GetCourses(value) {
         $.ajax({
             url: "/AdminCourse/SelectedLocation",
@@ -130,10 +115,6 @@
 
     $("#addPlayerAjax").click(function () {
         AddPlayerToPlayerCard();
-    });
-
-    $(".changeUserScore").click(function () {
-        changeUserScore($(this).attr("id"))
     });
 
     $(".tryThis").on('click', function () {

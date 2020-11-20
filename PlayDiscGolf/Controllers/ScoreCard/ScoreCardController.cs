@@ -33,16 +33,7 @@ namespace PlayDiscGolf.Controllers.ScoreCard
         public async Task<IActionResult> StartScoreCard() =>
             View("ScoreCardLive",await _scoreCardService.StartScoreCard());
 
-        public IActionResult SaveScoreCardTurn(HoleCardViewModel model) =>
-            View(_scoreCardService.SaveScoreCardTurn(model));
-
-        public IActionResult UpdateScoreCard() =>
-            View();
-
-        public IActionResult ChangeHole(string activatedNextNumber, string courseID, string scorecardID) =>
-            View(_scoreCardService.ChangeHole(activatedNextNumber, courseID, scorecardID));
-
-        public IActionResult EndScoreCard() =>
-            View(_scoreCardService.EndScoreCard());
+        public async Task<IActionResult> UpdateScoreCard(string scoreCardID, string holeNumber, string addOrRemove, string userName) =>
+            PartialView("_ScoreCardLive", await _scoreCardService.UpdateScoreCard(scoreCardID, holeNumber, addOrRemove, userName));
     }
 }

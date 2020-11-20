@@ -15,9 +15,20 @@ namespace PlayDiscGolf.Data
         {
             _context = context;
         }
-        public async Task<List<PlayerCard>> GetPlayerCardsByScoreCardID(Guid scorecardID)
+
+        public Task<List<PlayerCard>> GetPlayerCardsByScoreCardID(Guid scorecardID)
         {
-            return await _context.PlayerCards.Where(playerCard => playerCard.ScoreCardID == scorecardID).ToListAsync();
+            throw new NotImplementedException();
+        }
+
+        public Task SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePlayerCard(PlayerCard playerCard)
+        {
+            throw new NotImplementedException();
         }
     }
 }

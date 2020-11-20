@@ -10,6 +10,9 @@ using Microsoft.Extensions.Hosting;
 using PlayDiscGolf.Business.Calculations.Hole;
 using PlayDiscGolf.Business.Calculations.ScoreCard;
 using PlayDiscGolf.Business.Session;
+using PlayDiscGolf.Business.ViewModelBuilder.HoleCard;
+using PlayDiscGolf.Business.ViewModelBuilder.PlayerCard;
+using PlayDiscGolf.Business.ViewModelBuilder.ScoreCard;
 using PlayDiscGolf.Data;
 using PlayDiscGolf.Data.Cards.Holes;
 using PlayDiscGolf.Data.Cards.Players;
@@ -68,6 +71,9 @@ namespace PlayDiscGolf
 
             services.AddScoped<ISessionStorage<ScoreCardViewModel>, SessionStorageScoreCardViewModel>();
 
+            services.AddScoped<IScoreCardViewModelBuilder, ScoreCardViewModelBuilder>();
+            services.AddScoped<IHoleCardViewModelBuilder, HoleCardViewModelBuilder>();
+            services.AddScoped<IPlayerCardViewModelBuilder, PlayerCardViewModelBuilder>();
 
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();

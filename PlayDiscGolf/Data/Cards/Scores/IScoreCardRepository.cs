@@ -10,6 +10,8 @@ namespace PlayDiscGolf.Data.Cards.Scores
     {
         public Task<List<ScoreCard>> GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(string userID);
 
+        public void UpdateScoreCard(ScoreCard scoreCard);
+
         public Task SaveChangesAsync();
 
         public Task CreateScoreCardIncludePlayerCardAsync(ScoreCard scoreCard);
