@@ -10,9 +10,9 @@ namespace PlayDiscGolf.Services.Home
 {
     public interface IHomeService
     {
-        public Task<List<Course>> GetCourseBySearchQuery(SearchFormHomePageViewModel model);
+        public Task<List<Course>> GetCourseBySearchQueryAsync(SearchFormHomePageViewModel model);
 
-        public Task<SearchFormHomePageViewModel> ConfigureCountriesAndTypes(SearchFormHomePageViewModel model);
+        public Task<SearchFormHomePageViewModel> ConfigureCountriesAndTypesAsync(SearchFormHomePageViewModel model);
         
     }
 }

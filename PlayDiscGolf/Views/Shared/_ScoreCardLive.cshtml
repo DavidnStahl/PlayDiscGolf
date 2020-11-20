@@ -37,7 +37,7 @@
             <div class="form-group float-right" style="width:auto;">
 
                 <a type="button" id="@player.UserName" class="btn text-success form-group text-right" style="width:auto;margin-left:50px" asp-action="UpdateScoreCard" asp-controller="ScoreCard"
-                   asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="-"
+                   asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="Minus"
                    asp-route-userName="@player.UserName" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">-</a>
 
                 @if (holeCard.Score == 0)
@@ -50,7 +50,7 @@
                 }
 
                 <a type="button" id="@player.PlayerCardID" class="btn text-success form-group text-right" style="width:auto;" asp-action="UpdateScoreCard" asp-controller="ScoreCard"
-                   asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="+"
+                   asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="Plus"
                    asp-route-userName="@player.UserName" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">+</a>
             </div>
         </div>

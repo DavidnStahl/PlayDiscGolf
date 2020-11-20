@@ -30,12 +30,12 @@ namespace PlayDiscGolf.Services.Home
                 new SelectListItem(EnumHelper.SearchType.Course.ToString(), EnumHelper.SearchType.Course.ToString())
             };
 
-        public async Task<List<Course>> GetCourseBySearchQuery(SearchFormHomePageViewModel model) =>
+        public async Task<List<Course>> GetCourseBySearchQueryAsync(SearchFormHomePageViewModel model) =>
             (model.Type == EnumHelper.SearchType.Area.ToString()) ?
             await _courseRepository.GetCoursesByCountryAreaAndQueryAsync(model.Country, model.Query) :
             await _courseRepository.GetCoursesByCountryFullNameAndQueryAsync(model.Country, model.Query);
 
-        public async Task<SearchFormHomePageViewModel> ConfigureCountriesAndTypes(SearchFormHomePageViewModel model)
+        public async Task<SearchFormHomePageViewModel> ConfigureCountriesAndTypesAsync(SearchFormHomePageViewModel model)
         {
             model.Countries = await GetAllCourseCountriesAsync();
 

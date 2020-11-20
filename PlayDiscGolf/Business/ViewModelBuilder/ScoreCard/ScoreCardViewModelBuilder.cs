@@ -33,7 +33,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
             _holeCardViewModelBuilder = holeCardViewModelBuilder;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<ScoreCardViewModel> BuildScoreCardCreateInformation(string courseID)
+        public async Task<ScoreCardViewModel> BuildScoreCardCreateInformationAsync(string courseID)
         {
             Guid scoreCardID = Guid.NewGuid();
             Guid playerCardID = Guid.NewGuid();
@@ -50,12 +50,12 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
                         UserName = _httpContextAccessor.HttpContext.User.Identity.Name,
                         PlayerCardID = playerCardID,
                         ScoreCardID =  scoreCardID,
-                        HoleCards = await _holeCardViewModelBuilder.CreateHoleCardsForCourse(Guid.Parse(courseID), playerCardID)
+                        HoleCards = await _holeCardViewModelBuilder.CreateHoleCardsForCourseAsync(Guid.Parse(courseID), playerCardID)
                     }}
             };
         }
 
-        public async Task<ScoreCardViewModel> BuildUpdatedScoreCardWithUpdatedPlayers(ScoreCardViewModel sessionModel, string newName)
+        public async Task<ScoreCardViewModel> BuildUpdatedScoreCardWithUpdatedPlayersAsync(ScoreCardViewModel sessionModel, string newName)
         {
             Guid playerCardID = Guid.NewGuid();
 
@@ -66,7 +66,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
                     UserName = newName,
                     ScoreCardID = sessionModel.ScoreCardID,
                     PlayerCardID = playerCardID,
-                    HoleCards = await _holeCardViewModelBuilder.CreateHoleCardsForCourse(sessionModel.CourseID, playerCardID)
+                    HoleCards = await _holeCardViewModelBuilder.CreateHoleCardsForCourseAsync(sessionModel.CourseID, playerCardID)
                 }).ToList();
 
             return sessionModel;

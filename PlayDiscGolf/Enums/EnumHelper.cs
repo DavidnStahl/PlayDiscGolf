@@ -18,5 +18,11 @@ namespace PlayDiscGolf.Enums
         {
             ScoreCardViewModel
         }
+
+        public enum PlusAndMinus
+        {
+            Plus,
+            Minus
+        }
     }
 }

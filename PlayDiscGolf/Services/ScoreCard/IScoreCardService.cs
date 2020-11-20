@@ -8,13 +8,13 @@ namespace PlayDiscGolf.Services.ScoreCard
 {
     public interface IScoreCardService
     {
-        public Task<ScoreCardViewModel> GetScoreCardCreateInformation(string courseID);
-        public Task<List<PlayerCardViewModel>> AddPlayerToSessionAndReturnUpdatedPlayers(string newName);
+        public Task<ScoreCardViewModel> GetScoreCardCreateInformationAsync(string courseID);
+        public Task<List<PlayerCardViewModel>> AddPlayerToSessionAndReturnUpdatedPlayersAsync(string newName);
 
         public List<PlayerCardViewModel> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer);
 
-        public Task<ScoreCardGameOnViewModel> StartScoreCard();
+        public Task<ScoreCardGameOnViewModel> StartScoreCardAsync();
 
-        public Task<ScoreCardGameOnViewModel> UpdateScoreCard(string scoreCardID, string holeNumber, string addOrRemove, string userName);
+        public Task<ScoreCardGameOnViewModel> UpdateScoreCardAsync(string scoreCardID, string holeNumber, string addOrRemove, string userName);
     }
 }

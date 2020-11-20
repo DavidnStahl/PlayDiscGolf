@@ -27,11 +27,11 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.HoleCard
         {
             _holeRepository = holeRepository;
         }
-        public async Task<List<HoleCardViewModel>> CreateHoleCardsForCourse(Guid courseID, Guid playerCardID)
+        public async Task<List<HoleCardViewModel>> CreateHoleCardsForCourseAsync(Guid courseID, Guid playerCardID)
         {
             List<HoleCardViewModel> holeCardViewModelList = new List<HoleCardViewModel>();
 
-            List<Hole> holes = await _holeRepository.GetHolesByCourseID(courseID);
+            List<Hole> holes = await _holeRepository.GetHolesByCourseIDAsync(courseID);
 
             for (int i = 0; i < holes.Count; i++)
             {

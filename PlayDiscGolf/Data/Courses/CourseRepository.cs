@@ -19,10 +19,10 @@ namespace PlayDiscGolf.Data
         public async Task CreateCourseAsync(Course course) =>
             await _context.Courses.AddAsync(course);
 
-        public void DeleteCourseAsync(Course course) =>
+        public void DeleteCourse(Course course) =>
             _context.Remove(course);
 
-        public void EditCourseAsync(Course course) =>
+        public void EditCourse(Course course) =>
             _context.Courses.Update(course);
 
         public async Task<List<string>> GetAllCoursesCountriesAsync() => 

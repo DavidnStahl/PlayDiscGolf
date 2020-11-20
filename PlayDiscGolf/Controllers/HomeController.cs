@@ -23,7 +23,7 @@ namespace PlayDiscGolf.Controllers
         
         public async Task<IActionResult> Index() =>
             View(new HomeViewModel { 
-                SearchFormHomePageViewModel = await _homeService.ConfigureCountriesAndTypes(new SearchFormHomePageViewModel())
+                SearchFormHomePageViewModel = await _homeService.ConfigureCountriesAndTypesAsync(new SearchFormHomePageViewModel())
             });
 
         [HttpPost]
@@ -32,14 +32,14 @@ namespace PlayDiscGolf.Controllers
         {
             if (ModelState.IsValid)
             {
-                model = await _homeService.ConfigureCountriesAndTypes(model);
+                model = await _homeService.ConfigureCountriesAndTypesAsync(model);
 
-                model.SearchResultAjaxFormViewModel = _mapper.Map<List<SearchResultAjaxFormViewModel>>(await _homeService.GetCourseBySearchQuery(model));
+                model.SearchResultAjaxFormViewModel = _mapper.Map<List<SearchResultAjaxFormViewModel>>(await _homeService.GetCourseBySearchQueryAsync(model));
 
                 return PartialView("_SearchFormHomePage", model);
             }
             
-            return PartialView("_SearchFormHomePage", await _homeService.ConfigureCountriesAndTypes(model));
+            return PartialView("_SearchFormHomePage", await _homeService.ConfigureCountriesAndTypesAsync(model));
         }
 
         

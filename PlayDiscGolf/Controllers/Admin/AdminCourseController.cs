@@ -27,10 +27,10 @@ namespace PlayDiscGolf.Controllers
             View(new AdminSearchViewModel());
 
         public async Task<IActionResult> Search([FromQuery] SearchViewModel model) =>
-            PartialView("_CourseSearchResult", _mapper.Map<List<SearchCourseItemViewModel>>(await _adminCourseService.GetCoursesBySearch(model)));
+            PartialView("_CourseSearchResult", _mapper.Map<List<SearchCourseItemViewModel>>(await _adminCourseService.GetCoursesBySearchAsync(model)));
 
         public async Task<PartialViewResult> SelectedLocation(Guid id) =>
-            PartialView("_CourseForm", _mapper.Map<CourseFormViewModel>(await _adminCourseService.GetCourseByID(id)));
+            PartialView("_CourseForm", _mapper.Map<CourseFormViewModel>(await _adminCourseService.GetCourseByIDAsync(id)));
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -38,7 +38,7 @@ namespace PlayDiscGolf.Controllers
         {
             if(!ModelState.IsValid) View("Index", new AdminSearchViewModel { Course = model });
 
-            await _adminCourseService.SaveUpdatedCourse(model);
+            await _adminCourseService.SaveUpdatedCourseAsync(model);
 
             return RedirectToAction("Index");
         }
@@ -47,7 +47,7 @@ namespace PlayDiscGolf.Controllers
             PartialView("_CreateHoles", _adminCourseService.ManageNumberOfHolesFromForm(new CreateHolesViewModel {
                 NumberOfHoles = Convert.ToInt32(holes),
                 CourseID = Guid.Parse(courseID),
-                Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminCourseService.GetCoursesHoles(Guid.Parse(courseID)))
+                Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminCourseService.GetCoursesHolesAsync(Guid.Parse(courseID)))
             }));
     }
 }

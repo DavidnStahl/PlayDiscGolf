@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Services
@@ -24,11 +21,11 @@ namespace PlayDiscGolf.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<RegisterUserDto> UserRegister(RegisterViewModel model)
+        public async Task<RegisterUserDto> UserRegisterAsync(RegisterViewModel model)
         {
-            RegisterUserDto registerUserDtos = await CheckIfEmailIsTaken(model, new RegisterUserDto());
+            RegisterUserDto registerUserDtos = await CheckIfEmailIsTakenAsync(model, new RegisterUserDto());
 
-            registerUserDtos = await CheckIfUsernameIsTaken(model, registerUserDtos);
+            registerUserDtos = await CheckIfUsernameIsTakenAsync(model, registerUserDtos);
 
             return registerUserDtos.CreateUserSucceded == true ? await CreateUserAsync(registerUserDtos, model) : registerUserDtos;
         }
@@ -45,10 +42,10 @@ namespace PlayDiscGolf.Services
 
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
-            return (result.Succeeded)? await SignInUserAfterRegister(user, registerUserDtos) : registerUserDtos;
+            return (result.Succeeded)? await SignInUserAfterRegisterAsync(user, registerUserDtos) : registerUserDtos;
         }
 
-        private async Task<RegisterUserDto> SignInUserAfterRegister(IdentityUser user, RegisterUserDto registerUserDtos)
+        private async Task<RegisterUserDto> SignInUserAfterRegisterAsync(IdentityUser user, RegisterUserDto registerUserDtos)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
 
@@ -59,14 +56,14 @@ namespace PlayDiscGolf.Services
             return registerUserDtos;
         }
 
-        private async Task<RegisterUserDto> CheckIfEmailIsTaken(RegisterViewModel model,RegisterUserDto registerUserDtos)
+        private async Task<RegisterUserDto> CheckIfEmailIsTakenAsync(RegisterViewModel model,RegisterUserDto registerUserDtos)
         {
             if (await _userManager.FindByEmailAsync(model.Email) != null) registerUserDtos.ErrorMessegeEmail = true;
 
             return registerUserDtos;
         }
 
-        private async Task<RegisterUserDto> CheckIfUsernameIsTaken(RegisterViewModel model, RegisterUserDto registerUserDtos)
+        private async Task<RegisterUserDto> CheckIfUsernameIsTakenAsync(RegisterViewModel model, RegisterUserDto registerUserDtos)
         {
             if (await _userManager.FindByNameAsync(model.Username) != null) registerUserDtos.ErrorMessegeUsername = true;
 

@@ -7,6 +7,6 @@ namespace PlayDiscGolf.Services.Admin
 {
     public interface IAdminNewCountryCourseService
     {
-        public Task<List<string>> GetAddedCountryCodesInCourses();
+        public Task<List<string>> GetAddedCountryCodesInCoursesAsync();
     }
 }

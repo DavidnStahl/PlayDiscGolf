@@ -6,7 +6,7 @@ namespace PlayDiscGolf.Services
 {
     public interface IAccountService
     {
-        public Task<RegisterUserDto> UserRegister(RegisterViewModel model);
+        public Task<RegisterUserDto> UserRegisterAsync(RegisterViewModel model);
 
         public Task<string> GetInloggedUserID();
     }

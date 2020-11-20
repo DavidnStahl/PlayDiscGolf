@@ -16,7 +16,7 @@ namespace PlayDiscGolf.Data
             _context = context;
         }
 
-        public Task<List<PlayerCard>> GetPlayerCardsByScoreCardID(Guid scorecardID)
+        public Task<List<PlayerCard>> GetPlayerCardsByScoreCardIDAsync(Guid scorecardID)
         {
             throw new NotImplementedException();
         }

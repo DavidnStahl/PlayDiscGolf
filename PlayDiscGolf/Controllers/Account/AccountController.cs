@@ -49,7 +49,7 @@ namespace PlayDiscGolf.Controllers.Account
         {
             if (!ModelState.IsValid) return View(model);
 
-            RegisterUserDto registerUserDtos = await _accountService.UserRegister(model);
+            RegisterUserDto registerUserDtos = await _accountService.UserRegisterAsync(model);
 
             if (registerUserDtos.CreateUserSucceded == true) return RedirectToAction("Index", "Home");
             

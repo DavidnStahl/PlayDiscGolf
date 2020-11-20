@@ -22,19 +22,19 @@ namespace PlayDiscGolf.Data
         public async Task CreateHolesAsync(List<Hole> holes) => 
             await _context.Holes.AddRangeAsync(holes);
 
-        public void DeleteHoleAsync(Hole hole) => 
+        public void DeleteHole(Hole hole) => 
             _context.Holes.Remove(hole);
 
         public void DeleteHoles(List<Hole> holes) => 
             _context.Holes.RemoveRange(holes);
 
-        public void EditHoleAsync(Hole hole) => 
+        public void EditHole(Hole hole) => 
             _context.Holes.Update(hole);
 
         public async Task<Hole> GetHoleByIDAsync(Guid holeID) => 
             await _context.Holes.FirstOrDefaultAsync(hole => hole.HoleID == holeID);
 
-        public async Task<List<Hole>> GetHolesByCourseID(Guid courseID) => 
+        public async Task<List<Hole>> GetHolesByCourseIDAsync(Guid courseID) => 
             await _context.Holes.Where(hole => hole.CourseID == courseID).OrderBy(o => o.HoleNumber).ToListAsync();
 
         public async Task SaveChangesAsync() => 

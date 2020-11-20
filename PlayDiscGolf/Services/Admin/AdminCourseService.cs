@@ -28,18 +28,18 @@ namespace PlayDiscGolf.Services.Admin
             _createHolesCalcultion = createHolesCalcultion;
         }
 
-        public async Task<List<Hole>> GetCoursesHoles(Guid id) => await _holeRepository.GetHolesByCourseID(id);
+        public async Task<List<Hole>> GetCoursesHolesAsync(Guid id) => await _holeRepository.GetHolesByCourseIDAsync(id);
 
-        public async Task SaveUpdatedCourse(CourseFormViewModel course)
+        public async Task SaveUpdatedCourseAsync(CourseFormViewModel course)
         {
-            _courseRepository.EditCourseAsync(_mapper.Map(course, await _courseRepository.GetCourseByIDAsync(course.CourseID)));
+            _courseRepository.EditCourse(_mapper.Map(course, await _courseRepository.GetCourseByIDAsync(course.CourseID)));
             await _courseRepository.SaveChangesAsync();
         }
 
-        public async Task<Course> GetCourseByID(Guid id)
+        public async Task<Course> GetCourseByIDAsync(Guid id)
         {
             Course course = await _courseRepository.GetCourseByIDAsync((id));
-            course.Holes = await _holeRepository.GetHolesByCourseID(id);
+            course.Holes = await _holeRepository.GetHolesByCourseIDAsync(id);
             return course;
         }
             
@@ -47,7 +47,7 @@ namespace PlayDiscGolf.Services.Admin
         public CreateHolesViewModel ManageNumberOfHolesFromForm(CreateHolesViewModel model) => 
             _createHolesCalcultion.ConfigureHoles(model);
 
-        public async Task<List<Course>> GetCoursesBySearch(SearchViewModel model) =>
+        public async Task<List<Course>> GetCoursesBySearchAsync(SearchViewModel model) =>
             !string.IsNullOrWhiteSpace(model.Query) && model.Type == EnumHelper.SearchType.Area.ToString() ?
             await _courseRepository.GetCoursesByAreaQueryAsync(model.Query) : await _courseRepository.GetCoursesByFullNameQueryAsync(model.Query);
 

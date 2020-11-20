@@ -11,11 +11,11 @@ namespace PlayDiscGolf.Services.Admin
 {
     public interface IAdminCourseService
     {
-        public Task<Course> GetCourseByID(Guid id);
-        public Task SaveUpdatedCourse(CourseFormViewModel course);
-        public Task<List<Hole>> GetCoursesHoles(Guid id);
+        public Task<Course> GetCourseByIDAsync(Guid id);
+        public Task SaveUpdatedCourseAsync(CourseFormViewModel course);
+        public Task<List<Hole>> GetCoursesHolesAsync(Guid id);
         public CreateHolesViewModel ManageNumberOfHolesFromForm(CreateHolesViewModel model);
 
-        public Task<List<Course>> GetCoursesBySearch(SearchViewModel model);
+        public Task<List<Course>> GetCoursesBySearchAsync(SearchViewModel model);
     }
 }
