@@ -2,10 +2,7 @@
 using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Profiles
 {

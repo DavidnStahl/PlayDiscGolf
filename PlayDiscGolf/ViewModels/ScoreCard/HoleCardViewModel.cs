@@ -7,9 +7,9 @@ namespace PlayDiscGolf.ViewModels.ScoreCard
 {
     public class HoleCardViewModel
     {
-        public string HoleCardID { get; set; }
+        public Guid HoleCardID { get; set; }
         public int HoleNumber { get; set; }
         public int Score { get; set; }
-        public string PlayerCardID { get; set; }
+        public Guid PlayerCardID { get; set; }
     }
 }

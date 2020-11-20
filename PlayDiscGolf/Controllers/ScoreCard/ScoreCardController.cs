@@ -21,11 +21,11 @@ namespace PlayDiscGolf.Controllers.ScoreCard
             _scoreCardService = scoreCardService;
         }
 
-        public IActionResult CreateScoreCard(string courseID) =>
-            View(_scoreCardService.GetScoreCardCreateInformation(courseID));
+        public async Task<IActionResult> CreateScoreCard(string courseID) =>
+            View(await _scoreCardService.GetScoreCardCreateInformation(courseID));
 
-        public IActionResult AddPlayer(string newName) =>
-            PartialView("_PlayersInPlayerCard", _scoreCardService.AddPlayerToSessionAndReturnUpdatedPlayers(newName));
+        public async Task<IActionResult> AddPlayer(string newName) =>
+            PartialView("_PlayersInPlayerCard", await _scoreCardService.AddPlayerToSessionAndReturnUpdatedPlayers(newName));
 
         public IActionResult RemovePlayer(string removePlayer) =>
             PartialView("_PlayersInPlayerCard", _scoreCardService.RemovePlayerFromSessionAndReturnUpdatedPlayers(removePlayer));
@@ -35,6 +35,9 @@ namespace PlayDiscGolf.Controllers.ScoreCard
 
         public IActionResult SaveScoreCardTurn(HoleCardViewModel model) =>
             View(_scoreCardService.SaveScoreCardTurn(model));
+
+        public IActionResult UpdateScoreCard() =>
+            View();
 
         public IActionResult ChangeHole(string activatedNextNumber, string courseID, string scorecardID) =>
             View(_scoreCardService.ChangeHole(activatedNextNumber, courseID, scorecardID));

@@ -8,14 +8,14 @@ namespace PlayDiscGolf.ViewModels.ScoreCard
 {
     public class PlayerCardViewModel
     {
-        public string PlayerCardID { get; set; }
+        public Guid PlayerCardID { get; set; }
 
         [Display(Name = "Player")]
         public string UserName { get; set; }
         public int TotalScore { get; set; }
         public string UserID { get; set; }
 
-        public string ScoreCardID { get; set; }
+        public Guid ScoreCardID { get; set; }
 
         public List<HoleCardViewModel> HoleCards { get; set; }
     }

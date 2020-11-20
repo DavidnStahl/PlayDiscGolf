@@ -8,8 +8,8 @@ namespace PlayDiscGolf.Services.ScoreCard
 {
     public interface IScoreCardService
     {
-        public ScoreCardViewModel GetScoreCardCreateInformation(string courseID);
-        public List<PlayerCardViewModel> AddPlayerToSessionAndReturnUpdatedPlayers(string newName);
+        public Task<ScoreCardViewModel> GetScoreCardCreateInformation(string courseID);
+        public Task<List<PlayerCardViewModel>> AddPlayerToSessionAndReturnUpdatedPlayers(string newName);
 
         public List<PlayerCardViewModel> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer);
 
