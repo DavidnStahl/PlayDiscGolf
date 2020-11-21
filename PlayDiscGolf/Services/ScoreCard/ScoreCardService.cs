@@ -136,8 +136,13 @@ namespace PlayDiscGolf.Services.ScoreCard
         }
 
         private async Task<int> UpdatePlayerTotalScoreAsync(Models.Models.DataModels.ScoreCard scoreCard, PlayerCard playerCard) =>
-            playerCard.TotalScore = (playerCard.HoleCards as IEnumerable<HoleCard>).Where(holeCard => holeCard.Score > 0).Select(holeCard => holeCard.Score)
-            .Sum() - ((await _courseRepository.GetCourseByIDAsync(scoreCard.CourseID)).Holes as IEnumerable<Hole>).Where(course => (playerCard.HoleCards as IEnumerable<HoleCard>)
+            playerCard.TotalScore = GetPlayerTotalThrowsFromStartedHoles(playerCard) - await GetTotalParValueFromStartedHolesAsync(scoreCard, playerCard);
+
+        private int GetPlayerTotalThrowsFromStartedHoles(PlayerCard playerCard) =>
+            (playerCard.HoleCards as IEnumerable<HoleCard>).Where(holeCard => holeCard.Score > 0).Select(holeCard => holeCard.Score).Sum();
+
+        private async Task<int> GetTotalParValueFromStartedHolesAsync(Models.Models.DataModels.ScoreCard scoreCard, PlayerCard playerCard) =>
+            ((await _courseRepository.GetCourseByIDAsync(scoreCard.CourseID)).Holes as IEnumerable<Hole>).Where(course => (playerCard.HoleCards as IEnumerable<HoleCard>)
             .Where(r => r.Score > 0).Select(holeCard => holeCard.HoleNumber).ToList().Contains(course.HoleNumber)).Select(hole => hole.ParValue).Sum();
 
         private async Task DecreaseScoreOnHoleCardAsync(HoleCard holeCard, Models.Models.DataModels.ScoreCard scoreCard, PlayerCard playerCard)
