@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Dtos;
+using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
 using System.Linq;
@@ -24,14 +25,13 @@ namespace PlayDiscGolf.Services
         public async Task<RegisterUserDto> UserRegisterAsync(RegisterViewModel model)
         {
             RegisterUserDto registerUserDtos = await CheckIfEmailIsTakenAsync(model, new RegisterUserDto());
-
             registerUserDtos = await CheckIfUsernameIsTakenAsync(model, registerUserDtos);
 
             return registerUserDtos.CreateUserSucceded == true ? await CreateUserAsync(registerUserDtos, model) : registerUserDtos;
         }
         public async Task<string> GetInloggedUserID()
         {
-            var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+            IdentityUser user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
 
             return user.Id;
         }
@@ -39,7 +39,6 @@ namespace PlayDiscGolf.Services
         private async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDtos, RegisterViewModel model)
         {
             IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
-
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
             return (result.Succeeded)? await SignInUserAfterRegisterAsync(user, registerUserDtos) : registerUserDtos;
@@ -48,9 +47,7 @@ namespace PlayDiscGolf.Services
         private async Task<RegisterUserDto> SignInUserAfterRegisterAsync(IdentityUser user, RegisterUserDto registerUserDtos)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
-
-            _userManager.AddToRoleAsync(user, (new DataBaseContext()).Roles.OrderBy(r => r.Name).FirstOrDefault(r => r.Name == "User").Name.ToString()).Wait();
-
+            _userManager.AddToRoleAsync(user, (new DataBaseContext()).Roles.OrderBy(r => r.Name).FirstOrDefault(r => r.Name == EnumHelper.UserManager.User.ToString()).Name.ToString()).Wait();
             registerUserDtos.CreateUserSucceded = true;
 
             return registerUserDtos;

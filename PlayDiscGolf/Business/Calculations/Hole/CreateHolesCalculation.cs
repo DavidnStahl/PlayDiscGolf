@@ -1,5 +1,6 @@
 ﻿using PlayDiscGolf.Models.ViewModels;
 using System;
+using System.Collections.Generic;
 
 namespace PlayDiscGolf.Business.Calculations.Hole
 {
@@ -8,11 +9,7 @@ namespace PlayDiscGolf.Business.Calculations.Hole
         public CreateHolesViewModel ConfigureHoles(CreateHolesViewModel model)
         {
             if (model.Holes.Count == model.NumberOfHoles) return model;
-
-            if(model.Holes.Count < model.NumberOfHoles)
-            {
-                return CreateNewHoles(model);
-            }
+            if(model.Holes.Count < model.NumberOfHoles) return CreateNewHoles(model);
 
             return RemoveHoles(model);
         }
@@ -36,11 +33,8 @@ namespace PlayDiscGolf.Business.Calculations.Hole
 
         private CreateHolesViewModel RemoveHoles(CreateHolesViewModel model)
         {
-            var newHolesList = model.Holes;
-            for (int i = model.NumberOfHoles; i < model.Holes.Count; i++)
-            {
-                newHolesList.RemoveAt(i);
-            }
+            List<CourseFormViewModel.CourseHolesViewModel> newHolesList = model.Holes;
+            for (int i = model.NumberOfHoles; i < model.Holes.Count; i++) newHolesList.RemoveAt(i);
             model.Holes = newHolesList;
 
             return model;

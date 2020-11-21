@@ -12,9 +12,6 @@ namespace PlayDiscGolf.Business.Calculations.ScoreCard
             (scoreCards as IEnumerable<ScoreCardDto>).SelectMany(p => p.PlayerCards).Where(p => p.UserID == userID)
             .Select(p => p.TotalScore).Max();
 
-
-            
-
         public double AverageRound(List<ScoreCardDto> scoreCards, string userID) =>
             (scoreCards as IEnumerable<ScoreCardDto>).SelectMany(p => p.PlayerCards).Where(p => p.UserID == userID)
             .Select(p => p.TotalScore).Average();

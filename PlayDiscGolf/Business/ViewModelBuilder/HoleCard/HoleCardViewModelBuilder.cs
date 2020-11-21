@@ -10,7 +10,6 @@ using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
 using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
-using PlayDiscGolf.ViewModels.Paging;
 using PlayDiscGolf.ViewModels.ScoreCard;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.HoleCard
         {
             _holeRepository = holeRepository;
         }
-        public async Task<List<HoleCardViewModel>> CreateHoleCardsForCourseAsync(Guid courseID, Guid playerCardID)
+        public async Task<List<HoleCardViewModel>> BuildHoleCardsForCourseAsync(Guid courseID, Guid playerCardID)
         {
             List<HoleCardViewModel> holeCardViewModelList = new List<HoleCardViewModel>();
 

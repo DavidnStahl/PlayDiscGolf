@@ -24,7 +24,7 @@ namespace PlayDiscGolf.Controllers
 
         public async Task<IActionResult> Index() =>
             View(new NewCountryCourseViewModel {
-                AddedCountryCourses = await _adminNewCountryCourseService.GetAddedCountryCodesInCourses() 
+                AddedCountryCourses = await _adminNewCountryCourseService.GetAddedCountryCodesInCoursesAsync() 
             });
     }
 }

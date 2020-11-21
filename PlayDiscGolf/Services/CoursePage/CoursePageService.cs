@@ -4,6 +4,7 @@ using PlayDiscGolf.Data.Cards.Scores;
 using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
 using PlayDiscGolf.Dtos;
+using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
 using System;
 using System.Collections.Generic;
@@ -34,8 +35,7 @@ namespace PlayDiscGolf.Services.CoursePage
         public async Task<CourseInfoDto> GetCoursePageInformationAsync(Guid courseID)
         {
             Course course = await _courseRepository.GetCourseByIDAsync(courseID);
-            string userID = await _accountService.GetInloggedUserID();
-            
+            string userID = await _accountService.GetInloggedUserID();           
             List<ScoreCardDto> scoreCard = _mapper.Map<List<ScoreCardDto>>(await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(userID));
 
             return new CourseInfoDto
@@ -49,8 +49,8 @@ namespace PlayDiscGolf.Services.CoursePage
                 Name = course.Name,
                 TotalParValue = course.TotalParValue,
                 NumberOfRounds = scoreCard.Count,
-                BestRound = scoreCard.Count > 0 ? _scoreCardCalculation.BestRound(scoreCard, userID).ToString() : "None",
-                AverageRound = scoreCard.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCard, userID).ToString() : "None"
+                BestRound = scoreCard.Count > 0 ? _scoreCardCalculation.BestRound(scoreCard, userID).ToString() : EnumHelper.BestRound.None.ToString(),
+                AverageRound = scoreCard.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCard, userID).ToString() : EnumHelper.AverageRound.None.ToString()
             };
         }        
     }

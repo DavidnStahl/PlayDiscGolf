@@ -38,7 +38,6 @@ namespace PlayDiscGolf.Services.Home
         public async Task<SearchFormHomePageViewModel> ConfigureCountriesAndTypesAsync(SearchFormHomePageViewModel model)
         {
             model.Countries = await GetAllCourseCountriesAsync();
-
             model.Types = SetTypes();
 
             return model;

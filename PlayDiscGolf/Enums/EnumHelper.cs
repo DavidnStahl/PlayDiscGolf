@@ -24,5 +24,21 @@ namespace PlayDiscGolf.Enums
             Plus,
             Minus
         }
+
+        public enum BestRound
+        {
+            None
+        }
+
+        public enum AverageRound
+        {
+            None
+        }
+
+        public enum UserManager
+        {
+            User
+        }
+
     }
 }

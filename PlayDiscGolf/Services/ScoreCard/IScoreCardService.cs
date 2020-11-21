@@ -15,6 +15,6 @@ namespace PlayDiscGolf.Services.ScoreCard
 
         public Task<ScoreCardGameOnViewModel> StartScoreCardAsync();
 
-        public Task<ScoreCardGameOnViewModel> UpdateScoreCardAsync(string scoreCardID, string holeNumber, string addOrRemove, string userName);
+        public Task<ScoreCardGameOnViewModel> ModifyScoreCardAsync(string scoreCardID, string holeNumber, string addOrRemove, string userName);
     }
 }

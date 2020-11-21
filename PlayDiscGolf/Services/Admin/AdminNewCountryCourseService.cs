@@ -13,6 +13,7 @@ namespace PlayDiscGolf.Services.Admin
         {
             _courseRepository = courseRepository;
         }
-        public async Task<List<string>> GetAddedCountryCodesInCoursesAsync() => await _courseRepository.GetAllCoursesCountriesAsync();
+        public async Task<List<string>> GetAddedCountryCodesInCoursesAsync() =>
+            await _courseRepository.GetAllCoursesCountriesAsync();
     }
 }

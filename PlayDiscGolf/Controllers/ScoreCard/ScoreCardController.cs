@@ -34,6 +34,9 @@ namespace PlayDiscGolf.Controllers.ScoreCard
             View("ScoreCardLive",await _scoreCardService.StartScoreCardAsync());
 
         public async Task<IActionResult> UpdateScoreCard(string scoreCardID, string holeNumber, string addOrRemove, string userName) =>
-            PartialView("_ScoreCardLive", await _scoreCardService.UpdateScoreCardAsync(scoreCardID, holeNumber, addOrRemove, userName));
+            PartialView("_ScoreCardLive", await _scoreCardService.ModifyScoreCardAsync(scoreCardID, holeNumber, addOrRemove, userName));
+
+        public async Task<IActionResult> ChangeHole(string scoreCardID, string holeNumber) =>
+            PartialView("_ScoreCardLive", await _scoreCardService.ModifyScoreCardAsync(scoreCardID, holeNumber, null, null));
     }
 }

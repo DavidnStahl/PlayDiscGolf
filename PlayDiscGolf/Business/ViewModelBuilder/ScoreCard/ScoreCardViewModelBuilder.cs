@@ -11,7 +11,6 @@ using PlayDiscGolf.Data.Courses;
 using PlayDiscGolf.Data.Holes;
 using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
-using PlayDiscGolf.ViewModels.Paging;
 using PlayDiscGolf.ViewModels.ScoreCard;
 using System;
 using System.Collections.Generic;
@@ -50,7 +49,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
                         UserName = _httpContextAccessor.HttpContext.User.Identity.Name,
                         PlayerCardID = playerCardID,
                         ScoreCardID =  scoreCardID,
-                        HoleCards = await _holeCardViewModelBuilder.CreateHoleCardsForCourseAsync(Guid.Parse(courseID), playerCardID)
+                        HoleCards = await _holeCardViewModelBuilder.BuildHoleCardsForCourseAsync(Guid.Parse(courseID), playerCardID)
                     }}
             };
         }
@@ -66,7 +65,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
                     UserName = newName,
                     ScoreCardID = sessionModel.ScoreCardID,
                     PlayerCardID = playerCardID,
-                    HoleCards = await _holeCardViewModelBuilder.CreateHoleCardsForCourseAsync(sessionModel.CourseID, playerCardID)
+                    HoleCards = await _holeCardViewModelBuilder.BuildHoleCardsForCourseAsync(sessionModel.CourseID, playerCardID)
                 }).ToList();
 
             return sessionModel;
