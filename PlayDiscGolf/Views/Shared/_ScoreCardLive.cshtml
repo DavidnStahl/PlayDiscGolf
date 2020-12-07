@@ -62,7 +62,7 @@
 
                         <a type="button" id="@player.PlayerCardID" class="btn text-success form-group text-right" style="width:auto;" asp-action="UpdateScoreCard" asp-controller="ScoreCard"
                            asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="Plus"
-                           asp-route-userName="@player.UserName" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">+</a>
+                           asp-route-userName="@player.UserName" asp-route-courseID="@Model.ScoreCardViewModel.CourseID.ToString()" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">+</a>
                     </div>
                 </div>
             }

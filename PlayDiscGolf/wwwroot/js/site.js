@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
 
 
-
     jQueryAjaxPost = form => {
         try {
             $.ajax({

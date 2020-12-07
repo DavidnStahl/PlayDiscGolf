@@ -1,0 +1,24 @@
+﻿@model PlayDiscGolf.Dtos.ScoreCardDto
+
+
+@foreach (var playerCard in Model.PlayerCards)
+{
+    <div class="card" style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Name: @playerCard.UserName</li>
+
+            @if (playerCard.TotalScore > 0)
+            {
+                <li class="list-group-item">Score: +@playerCard.TotalScore</li>
+            }
+            else
+            {
+                <li class="list-group-item">Score: @playerCard.TotalScore</li>
+            }
+
+        </ul>
+
+    </div>
+}
+<a type="button" class="btn btn-primary" asp-action="OpenScoreCard" asp-controller="ScoreCard"
+   asp-route-scoreCardID="@Model.ScoreCardID">Open Scorecard</a>

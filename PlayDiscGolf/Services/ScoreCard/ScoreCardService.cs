@@ -62,7 +62,8 @@ namespace PlayDiscGolf.Services.ScoreCard
 
         public async Task<List<PlayerCardViewModel>> AddPlayerToSessionAndReturnUpdatedPlayersAsync(string newName)
         {
-            ScoreCardViewModel sessionModel = await _scoreCardViewModelBuilder.BuildUpdatedScoreCardWithUpdatedPlayersAsync(_sessionStorage.Get(_sessionKey), newName);
+            var sessionModel = await _scoreCardViewModelBuilder.BuildUpdatedScoreCardWithUpdatedPlayersAsync(_sessionStorage.Get(_sessionKey), newName);
+
             _sessionStorage.Save(_sessionKey, sessionModel);
 
             return sessionModel.PlayerCards;
@@ -70,8 +71,11 @@ namespace PlayDiscGolf.Services.ScoreCard
 
         public List<PlayerCardViewModel> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer)
         {
-            ScoreCardViewModel sessionModel = _sessionStorage.Get(_sessionKey);
-            sessionModel.PlayerCards = (sessionModel.PlayerCards.Where(player => player.UserName != removePlayer) as IEnumerable<PlayerCardViewModel>).ToList();
+            var sessionModel = _sessionStorage.Get(_sessionKey);
+
+            sessionModel.PlayerCards = (sessionModel.PlayerCards.Where(player => player.UserName != removePlayer) 
+                as IEnumerable<PlayerCardViewModel>).ToList();
+
             _sessionStorage.Save(_sessionKey, sessionModel);
 
             return sessionModel.PlayerCards;
@@ -80,26 +84,32 @@ namespace PlayDiscGolf.Services.ScoreCard
         public async Task<ScoreCardGameOnViewModel> StartScoreCardAsync()
         {
             await _scoreCardRepository.CreateScoreCardIncludePlayerCardAsync(_mapper.Map<Models.Models.DataModels.ScoreCard>(_sessionStorage.Get(_sessionKey)));
+
             await _scoreCardRepository.SaveChangesAsync();
-            Models.Models.DataModels.ScoreCard scoreCard = await GetScoreCardAsync(_sessionStorage.Get(_sessionKey).ScoreCardID.ToString());
+
+            var scoreCard = await GetScoreCardAsync(_sessionStorage.Get(_sessionKey).ScoreCardID.ToString(), _sessionStorage.Get(_sessionKey).CourseID);
+
+            var hole = await GetHoleAsync(scoreCard.CourseID, "1");
 
             return new ScoreCardGameOnViewModel
             {
-                Hole = (await _holeRepository.GetHolesByCourseIDAsync(scoreCard.CourseID) as IEnumerable<Hole>).FirstOrDefault(hole => hole.HoleNumber == 1),
+                Hole = hole,
                 ScoreCardViewModel = _mapper.Map<ScoreCardViewModel>(scoreCard)
             };
         }
 
-        public async Task<ScoreCardGameOnViewModel> ModifyScoreCardAsync(string scoreCardID, string holeNumber, string addOrRemove, string userName)
+        public async Task<ScoreCardGameOnViewModel> ModifyScoreCardAsync(string scoreCardID, string holeNumber, string addOrRemove, string userName, Guid courseID)
         {
-            Models.Models.DataModels.ScoreCard scoreCard = await GetScoreCardAsync(scoreCardID);
-            Hole hole = await GetHoleAsync(scoreCard.CourseID, holeNumber);
-            if (addOrRemove != null) await UpdateScoreCardAsync(userName, holeNumber, hole, addOrRemove, scoreCard);
+            var scoreCard = await GetScoreCardAsync(scoreCardID,courseID);
+            var hole = await GetHoleAsync(scoreCard.CourseID, holeNumber);
+
+            if (addOrRemove != null) 
+                await UpdateScoreCardAsync(userName, holeNumber, hole, addOrRemove, scoreCard);
 
             return new ScoreCardGameOnViewModel 
             {
                 Hole = hole,
-                ScoreCardViewModel = _mapper.Map<ScoreCardViewModel>(await GetScoreCardAsync(scoreCardID))
+                ScoreCardViewModel = _mapper.Map<ScoreCardViewModel>(scoreCard)
             };
         }
 
@@ -112,26 +122,38 @@ namespace PlayDiscGolf.Services.ScoreCard
         private PlayerCard GetPlayerCard(Models.Models.DataModels.ScoreCard scoreCard, string userName) =>
             (scoreCard.PlayerCards as IEnumerable<PlayerCard>).FirstOrDefault(playerCard => playerCard.UserName == userName);
 
-        private async Task<Models.Models.DataModels.ScoreCard> GetScoreCardAsync(string scoreCardID) =>
-            (await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(_userManager.GetUserId(_httpContextAccessor.HttpContext.User)) 
+        private async Task<Models.Models.DataModels.ScoreCard> GetScoreCardAsync(string scoreCardID, Guid courseID) =>
+            (await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(_userManager.GetUserId(_httpContextAccessor.HttpContext.User),courseID) 
             as IEnumerable<Models.Models.DataModels.ScoreCard>).FirstOrDefault(scoreCard => scoreCard.ScoreCardID == Guid.Parse(scoreCardID));
 
 
         private async Task UpdateScoreCardAsync(string userName, string holeNumber, Hole hole, string addOrRemove, Models.Models.DataModels.ScoreCard scoreCard)
         {
-            PlayerCard playerCard = GetPlayerCard(scoreCard, userName);
-            HoleCard holeCard = GetHoleCard(playerCard, holeNumber);
-            if (addOrRemove == EnumHelper.PlusAndMinus.Plus.ToString()) await IncreaseScoreOnHoleCardAsync(holeCard, scoreCard, playerCard);
-            else if(addOrRemove == EnumHelper.PlusAndMinus.Minus.ToString() && holeCard.Score > 0) await DecreaseScoreOnHoleCardAsync(holeCard, scoreCard, playerCard);
+            var playerCard = GetPlayerCard(scoreCard, userName);
+
+            var holeCard = GetHoleCard(playerCard, holeNumber);
+
+            if (addOrRemove == EnumHelper.PlusAndMinus.Plus.ToString()) 
+                await IncreaseScoreOnHoleCardAsync(holeCard, scoreCard, playerCard, hole);
+            else if(addOrRemove == EnumHelper.PlusAndMinus.Minus.ToString()) 
+                await DecreaseScoreOnHoleCardAsync(holeCard, scoreCard, playerCard, hole);
         }
 
-        private async Task IncreaseScoreOnHoleCardAsync(HoleCard holeCard, Models.Models.DataModels.ScoreCard scoreCard, PlayerCard playerCard)
+        private async Task IncreaseScoreOnHoleCardAsync(HoleCard holeCard, Models.Models.DataModels.ScoreCard scoreCard, PlayerCard playerCard, Hole hole)
         {
-            holeCard.Score++;
+            if (holeCard.Score == 0)
+                holeCard.Score = hole.ParValue + 1;
+            else
+                holeCard.Score++;
+
             _scoreCardRepository.UpdateScoreCard(scoreCard);
+
             await _scoreCardRepository.SaveChangesAsync();
+
             await UpdatePlayerTotalScoreAsync(scoreCard, playerCard);
+
             _scoreCardRepository.UpdateScoreCard(scoreCard);
+
             await _scoreCardRepository.SaveChangesAsync();
         }
 
@@ -145,14 +167,36 @@ namespace PlayDiscGolf.Services.ScoreCard
             ((await _courseRepository.GetCourseByIDAsync(scoreCard.CourseID)).Holes as IEnumerable<Hole>).Where(course => (playerCard.HoleCards as IEnumerable<HoleCard>)
             .Where(r => r.Score > 0).Select(holeCard => holeCard.HoleNumber).ToList().Contains(course.HoleNumber)).Select(hole => hole.ParValue).Sum();
 
-        private async Task DecreaseScoreOnHoleCardAsync(HoleCard holeCard, Models.Models.DataModels.ScoreCard scoreCard, PlayerCard playerCard)
-        {           
-            holeCard.Score--;
+        private async Task DecreaseScoreOnHoleCardAsync(HoleCard holeCard, Models.Models.DataModels.ScoreCard scoreCard, PlayerCard playerCard, Hole hole)
+        {
+            if (holeCard.Score == 0)
+                holeCard.Score = hole.ParValue - 1;
+            else
+                holeCard.Score--;
+
             _scoreCardRepository.UpdateScoreCard(scoreCard);
+
             await _scoreCardRepository.SaveChangesAsync();
+
             await UpdatePlayerTotalScoreAsync(scoreCard, playerCard);
+
             _scoreCardRepository.UpdateScoreCard(scoreCard);
+
             await _scoreCardRepository.SaveChangesAsync();
+        }
+
+        public async Task<ScoreCardGameOnViewModel> OpenScoreCardAsync(string scoreCardID,Guid courseID)
+        {
+            var scoreCard = await GetScoreCardAsync(scoreCardID, courseID);
+            var hole = await GetHoleAsync(scoreCard.CourseID, "1");
+
+            var model =  new ScoreCardGameOnViewModel
+            {
+                Hole = hole,
+                ScoreCardViewModel = _mapper.Map<ScoreCardViewModel>(scoreCard)
+            };
+
+            return model;
         }
     }
 }

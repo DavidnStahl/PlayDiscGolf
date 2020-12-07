@@ -26,9 +26,13 @@ namespace PlayDiscGolf.Controllers.Account
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) { return View(model); }
-            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
-            if (result.Succeeded) return RedirectToAction("index", "home");
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+
+            if (result.Succeeded) 
+                return RedirectToAction("index", "home");
 
             return View(model);            
         }
@@ -45,11 +49,19 @@ namespace PlayDiscGolf.Controllers.Account
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
-            RegisterUserDto registerUserDtos = await _accountService.UserRegisterAsync(model);
-            if (registerUserDtos.CreateUserSucceded == true) return RedirectToAction("Index", "Home");
-            if(registerUserDtos.ErrorMessegeEmail == true) ModelState.AddModelError("Email", "Email is taken");  
-            if(registerUserDtos.ErrorMessegeUsername == true) ModelState.AddModelError("Username", "Username is taken");           
+            if (!ModelState.IsValid) 
+                return View(model);
+
+            var registerUserDtos = await _accountService.UserRegisterAsync(model);
+
+            if (registerUserDtos.CreateUserSucceded == true) 
+                return RedirectToAction("Index", "Home");
+
+            if(registerUserDtos.ErrorMessegeEmail == true) 
+                ModelState.AddModelError("Email", "Email is taken");
+            
+            if(registerUserDtos.ErrorMessegeUsername == true) 
+                ModelState.AddModelError("Username", "Username is taken");           
 
             return View(model);
         }

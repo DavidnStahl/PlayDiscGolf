@@ -8,7 +8,7 @@ namespace PlayDiscGolf.Data.Cards.Scores
 {
     public interface IScoreCardRepository
     {
-        public Task<List<ScoreCard>> GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(string userID);
+        public Task<List<ScoreCard>> GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(string userID, Guid courseID);
 
         public void UpdateScoreCard(ScoreCard scoreCard);
 

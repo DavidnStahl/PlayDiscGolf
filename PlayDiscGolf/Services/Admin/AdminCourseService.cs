@@ -33,13 +33,16 @@ namespace PlayDiscGolf.Services.Admin
         public async Task SaveUpdatedCourseAsync(CourseFormViewModel course)
         {
             _courseRepository.EditCourse(_mapper.Map(course, await _courseRepository.GetCourseByIDAsync(course.CourseID)));
+
             await _courseRepository.SaveChangesAsync();
         }
 
         public async Task<Course> GetCourseByIDAsync(Guid id)
         {
-            Course course = await _courseRepository.GetCourseByIDAsync((id));
+            var course = await _courseRepository.GetCourseByIDAsync((id));
+
             course.Holes = await _holeRepository.GetHolesByCourseIDAsync(id);
+
             return course;
         }
             

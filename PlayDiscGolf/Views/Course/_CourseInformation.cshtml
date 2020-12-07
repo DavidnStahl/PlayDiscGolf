@@ -1,0 +1,36 @@
+﻿@model PlayDiscGolf.ViewModels.Course.CoursePageViewModel
+
+
+@{
+    var bestRound = "None";
+    var averageRound = "None";
+
+    if (Model.BestRound == null)
+    {
+
+    }
+    else
+    {
+        bestRound = Convert.ToInt32(Model.BestRound) > 0? "+" + Model.BestRound: Model.BestRound;
+        averageRound = Model.AverageRound;
+    }
+
+
+    var score = 0;
+    var scoreTotal = "";
+
+
+}
+<div class="card" style="width: 18rem;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Name: @Model.FullName</li>
+        <li class="list-group-item">Holes: @Model.TotalHoles</li>
+        <li class="list-group-item">Par: @Model.TotalParValue</li>
+        <li class="list-group-item">Distance: @Model.TotalDistance</li>
+        <li class="list-group-item">Played: @Model.NumberOfRounds.ToString()</li>
+        <li class="list-group-item">Best Round: @bestRound</li>
+        <li class="list-group-item">Average Round: @averageRound</li>
+    </ul>
+</div>
+<a type="button" class="btn btn-success" asp-action="CreateScoreCard" asp-controller="ScoreCard"
+   asp-route-courseID="@Model.CourseID.ToString()">Create Scorecard</a>

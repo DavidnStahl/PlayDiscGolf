@@ -34,8 +34,9 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
         }
         public async Task<ScoreCardViewModel> BuildScoreCardCreateInformationAsync(string courseID)
         {
-            Guid scoreCardID = Guid.NewGuid();
-            Guid playerCardID = Guid.NewGuid();
+            var scoreCardID = Guid.NewGuid();
+
+            var playerCardID = Guid.NewGuid();
 
             return new ScoreCardViewModel
             {
@@ -56,10 +57,9 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
 
         public async Task<ScoreCardViewModel> BuildUpdatedScoreCardWithUpdatedPlayersAsync(ScoreCardViewModel sessionModel, string newName)
         {
-            Guid playerCardID = Guid.NewGuid();
+            var playerCardID = Guid.NewGuid();
 
-            sessionModel.PlayerCards = (sessionModel
-                .PlayerCards as IEnumerable<PlayerCardViewModel>)
+            sessionModel.PlayerCards = (sessionModel.PlayerCards as IEnumerable<PlayerCardViewModel>)
                 .Where(player => player.UserName != newName).Append(new PlayerCardViewModel
                 {
                     UserName = newName,

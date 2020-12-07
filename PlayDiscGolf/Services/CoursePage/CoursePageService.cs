@@ -34,23 +34,25 @@ namespace PlayDiscGolf.Services.CoursePage
         }
         public async Task<CourseInfoDto> GetCoursePageInformationAsync(Guid courseID)
         {
-            Course course = await _courseRepository.GetCourseByIDAsync(courseID);
-            string userID = await _accountService.GetInloggedUserID();           
-            List<ScoreCardDto> scoreCard = _mapper.Map<List<ScoreCardDto>>(await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(userID));
+            var course = await _courseRepository.GetCourseByIDAsync(courseID);
+
+            var userID = await _accountService.GetInloggedUserID();   
+            
+            var scoreCards = _mapper.Map<List<ScoreCardDto>>(await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(userID, courseID));
 
             return new CourseInfoDto
             {
                 CourseID = courseID,
                 TotalDistance = course.TotalDistance,
-                ScoreCards = scoreCard,
+                ScoreCards = scoreCards,
                 FullName = course.FullName,
                 Holes = await _holeRepository.GetHolesByCourseIDAsync(courseID),
                 TotalHoles = course.HolesTotal,
                 Name = course.Name,
                 TotalParValue = course.TotalParValue,
-                NumberOfRounds = scoreCard.Count,
-                BestRound = scoreCard.Count > 0 ? _scoreCardCalculation.BestRound(scoreCard, userID).ToString() : EnumHelper.BestRound.None.ToString(),
-                AverageRound = scoreCard.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCard, userID).ToString() : EnumHelper.AverageRound.None.ToString()
+                NumberOfRounds = scoreCards.Count,
+                BestRound = scoreCards.Count > 0 ? _scoreCardCalculation.BestRound(scoreCards, userID).ToString() : EnumHelper.BestRound.None.ToString(),
+                AverageRound = scoreCards.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCards, userID).ToString() : EnumHelper.AverageRound.None.ToString()
             };
         }        
     }

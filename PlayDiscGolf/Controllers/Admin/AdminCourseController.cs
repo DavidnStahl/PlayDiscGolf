@@ -36,7 +36,8 @@ namespace PlayDiscGolf.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCourse(CourseFormViewModel model)
         {
-            if(!ModelState.IsValid) View("Index", new AdminSearchViewModel { Course = model });
+            if(!ModelState.IsValid) 
+                View("Index", new AdminSearchViewModel { Course = model });
 
             await _adminCourseService.SaveUpdatedCourseAsync(model);
 

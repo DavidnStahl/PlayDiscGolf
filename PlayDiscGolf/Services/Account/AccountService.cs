@@ -38,8 +38,13 @@ namespace PlayDiscGolf.Services
 
         private async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDtos, RegisterViewModel model)
         {
-            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
-            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            var user = new IdentityUser 
+            { 
+                UserName = model.Username,
+                Email = model.Email 
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
 
             return (result.Succeeded)? await SignInUserAfterRegisterAsync(user, registerUserDtos) : registerUserDtos;
         }
@@ -47,7 +52,10 @@ namespace PlayDiscGolf.Services
         private async Task<RegisterUserDto> SignInUserAfterRegisterAsync(IdentityUser user, RegisterUserDto registerUserDtos)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
-            _userManager.AddToRoleAsync(user, (new DataBaseContext()).Roles.OrderBy(r => r.Name).FirstOrDefault(r => r.Name == EnumHelper.UserManager.User.ToString()).Name.ToString()).Wait();
+
+            _userManager.AddToRoleAsync(user, (new DataBaseContext()).Roles.OrderBy(r => r.Name)
+                .FirstOrDefault(r => r.Name == EnumHelper.UserManager.User.ToString()).Name.ToString()).Wait();
+
             registerUserDtos.CreateUserSucceded = true;
 
             return registerUserDtos;
@@ -55,14 +63,16 @@ namespace PlayDiscGolf.Services
 
         private async Task<RegisterUserDto> CheckIfEmailIsTakenAsync(RegisterViewModel model,RegisterUserDto registerUserDtos)
         {
-            if (await _userManager.FindByEmailAsync(model.Email) != null) registerUserDtos.ErrorMessegeEmail = true;
+            if (await _userManager.FindByEmailAsync(model.Email) != null) 
+                registerUserDtos.ErrorMessegeEmail = true;
 
             return registerUserDtos;
         }
 
         private async Task<RegisterUserDto> CheckIfUsernameIsTakenAsync(RegisterViewModel model, RegisterUserDto registerUserDtos)
         {
-            if (await _userManager.FindByNameAsync(model.Username) != null) registerUserDtos.ErrorMessegeUsername = true;
+            if (await _userManager.FindByNameAsync(model.Username) != null) 
+                registerUserDtos.ErrorMessegeUsername = true;
 
             return registerUserDtos;
         }     

@@ -28,12 +28,11 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.HoleCard
         }
         public async Task<List<HoleCardViewModel>> BuildHoleCardsForCourseAsync(Guid courseID, Guid playerCardID)
         {
-            List<HoleCardViewModel> holeCardViewModelList = new List<HoleCardViewModel>();
+            var holeCardViewModelList = new List<HoleCardViewModel>();
 
-            List<Hole> holes = await _holeRepository.GetHolesByCourseIDAsync(courseID);
+            var holes = await _holeRepository.GetHolesByCourseIDAsync(courseID);
 
             for (int i = 0; i < holes.Count; i++)
-            {
                 holeCardViewModelList.Add(new HoleCardViewModel
                 {
                     HoleCardID = Guid.NewGuid(),
@@ -41,7 +40,6 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.HoleCard
                     PlayerCardID = playerCardID,
                     Score = 0
                 });
-            }
 
             return holeCardViewModelList;
         }

@@ -22,7 +22,8 @@ namespace PlayDiscGolf.Controllers
         }
         
         public async Task<IActionResult> Index() =>
-            View(new HomeViewModel { 
+            View(new HomeViewModel 
+            { 
                 SearchFormHomePageViewModel = await _homeService.ConfigureCountriesAndTypesAsync(new SearchFormHomePageViewModel())
             });
 
