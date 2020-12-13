@@ -1,6 +1,8 @@
-﻿using PlayDiscGolf.Dtos;
+﻿using Microsoft.AspNetCore.Identity;
+using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Models.ViewModels.Account;
 using PlayDiscGolf.ViewModels.User;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Services
@@ -10,6 +12,8 @@ namespace PlayDiscGolf.Services
         public Task<RegisterUserDto> UserRegisterAsync(RegisterViewModel model);
 
         public Task<string> GetInloggedUserIDAsync();
+
+        Task<IdentityUser> GetUserByQueryAsync(string query);
 
         Task<string> GetEmailAsync();
 

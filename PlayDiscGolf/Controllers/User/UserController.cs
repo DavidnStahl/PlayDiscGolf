@@ -65,12 +65,13 @@ namespace PlayDiscGolf.Controllers.User
             return View(model);
         }
 
-        [HttpGet]
         public async Task<IActionResult> SearchUser(string query)
         {
-            var model = await _userService.GetSearchResultFromQueryAsync(query);
+            var user = await _accountService.GetUserByQueryAsync(query);
 
-            return PartialView("_SearchResultUserName", model);
+            if (ModelState.IsValid && user != null) return View(new UserClaimSearchResultModel { UserName = user.UserName });
+
+            return View(new UserClaimSearchResultModel());
         }
 
         public async Task<IActionResult> ClaimScoreCard(UserInformationViewModel model)

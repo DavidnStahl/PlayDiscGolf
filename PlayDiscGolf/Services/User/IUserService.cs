@@ -12,7 +12,5 @@ namespace PlayDiscGolf.Services.User
 
         Task ClaimGamesFromUsernameAsync(UserInformationViewModel model);
 
-        Task<UserInformationViewModel> GetSearchResultFromQueryAsync(string query);
-
     }
 }

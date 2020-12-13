@@ -5,6 +5,7 @@ using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
 using PlayDiscGolf.ViewModels.User;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -110,6 +111,13 @@ namespace PlayDiscGolf.Services
             var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
             user.NormalizedUserName = newUserName;
             await _userManager.UpdateNormalizedUserNameAsync(user);
+        }
+
+        public async Task<IdentityUser> GetUserByQueryAsync(string query)
+        {
+            var user = await _userManager.FindByNameAsync(query);
+
+            return user;
         }
 
         /*private async Task<RegisterUserDto> CheckIfEmailIsTakenAsync(RegisterViewModel model,RegisterUserDto registerUserDtos)

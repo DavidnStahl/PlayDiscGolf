@@ -33,14 +33,5 @@ namespace PlayDiscGolf.Services.User
         {
             throw new NotImplementedException();
         }
-        public async Task<UserInformationViewModel> GetSearchResultFromQueryAsync(string userName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task GetScoreCardsToClaimFromUser()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
