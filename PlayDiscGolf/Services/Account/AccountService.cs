@@ -4,6 +4,7 @@ using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
+using PlayDiscGolf.ViewModels.User;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,13 +30,24 @@ namespace PlayDiscGolf.Services
 
             return registerUserDtos.CreateUserSucceded == true ? await CreateUserAsync(registerUserDtos, model) : registerUserDtos;
         }
-        public async Task<string> GetInloggedUserID()
+        public async Task<string> GetInloggedUserIDAsync()
         {
-            IdentityUser user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+            var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
 
             return user.Id;
         }
 
+        public async Task<string> GetEmailAsync()
+        {
+            var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+
+            return user.Email;
+        }
+
+        public string GetUserName()
+        {
+            return _httpContextAccessor.HttpContext.User.Identity.Name;
+        }
         private async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDtos, RegisterViewModel model)
         {
             var user = new IdentityUser 
@@ -75,6 +87,33 @@ namespace PlayDiscGolf.Services
                 registerUserDtos.ErrorMessegeUsername = true;
 
             return registerUserDtos;
-        }     
+        }
+
+        public async Task ChangePasswordAsync(string newPassword)
+        {
+            var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ChangePasswordAsync(user, token, newPassword);
+
+            if(result.Succeeded)
+                await _signInManager.RefreshSignInAsync(user);
+        }
+
+        public async Task ChangeEmailAsync(string newEmail)
+        {
+            var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+            var token = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+            var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
+
+            if (result.Succeeded)
+                await _signInManager.RefreshSignInAsync(user);
+        }
+
+        public async Task ChangeUserNameAsync(string newUserName)
+        {
+            var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+            user.NormalizedUserName = newUserName;
+            await _userManager.UpdateNormalizedUserNameAsync(user);
+        }
     }
 }

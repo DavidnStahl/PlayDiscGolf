@@ -10,10 +10,10 @@ namespace PlayDiscGolf.Business.Calculations.ScoreCard
     {
         public int BestRound(List<ScoreCardDto> scoreCards, string userID) =>
             (scoreCards as IEnumerable<ScoreCardDto>).SelectMany(p => p.PlayerCards).Where(p => p.UserID == userID)
-            .Select(p => p.TotalScore).Max();
+            .Select(p => p.TotalScore).Min();
 
-        public double AverageRound(List<ScoreCardDto> scoreCards, string userID) =>
-            (scoreCards as IEnumerable<ScoreCardDto>).SelectMany(p => p.PlayerCards).Where(p => p.UserID == userID)
-            .Select(p => p.TotalScore).Average();
+        public int AverageRound(List<ScoreCardDto> scoreCards, string userID) =>
+            Convert.ToInt32((scoreCards as IEnumerable<ScoreCardDto>).SelectMany(p => p.PlayerCards).Where(p => p.UserID == userID)
+            .Select(p => p.TotalScore).Average());
     }
 }

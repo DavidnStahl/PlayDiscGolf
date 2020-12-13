@@ -10,6 +10,6 @@ namespace PlayDiscGolf.Business.Calculations.ScoreCard
     {
         public int BestRound(List<ScoreCardDto> scoreCards, string userID);
 
-        public double AverageRound(List<ScoreCardDto> scoreCards, string userID);
+        public int AverageRound(List<ScoreCardDto> scoreCards, string userID);
     }
 }

@@ -14,7 +14,7 @@
         <div class="card" style="width: 18rem;">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Start: @scoreCard.StartDate</li>
-                <li class="list-group-item">Holes: @Model.TotalHoles</li>
+                <li class="list-group-item">Holes played: @scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count() / @Model.TotalHoles</li>
             </ul>
         </div>
         @await Html.PartialAsync("_ScoreCard", scoreCard);

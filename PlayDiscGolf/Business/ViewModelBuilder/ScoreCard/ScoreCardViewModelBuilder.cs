@@ -44,6 +44,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
                 UserName = _httpContextAccessor.HttpContext.User.Identity.Name,
                 UserID = _userManager.GetUserId(_httpContextAccessor.HttpContext.User),
                 ScoreCardID = scoreCardID,
+                StartDate = DateTime.Now,
                 PlayerCards = new List<PlayerCardViewModel> {
                     new PlayerCardViewModel {
                         UserID = _userManager.GetUserId(_httpContextAccessor.HttpContext.User),

@@ -36,7 +36,7 @@ namespace PlayDiscGolf.Services.CoursePage
         {
             var course = await _courseRepository.GetCourseByIDAsync(courseID);
 
-            var userID = await _accountService.GetInloggedUserID();   
+            var userID = await _accountService.GetInloggedUserIDAsync();   
             
             var scoreCards = _mapper.Map<List<ScoreCardDto>>(await _scoreCardRepository.GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(userID, courseID));
 

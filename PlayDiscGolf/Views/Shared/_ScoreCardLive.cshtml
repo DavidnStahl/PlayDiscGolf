@@ -49,7 +49,7 @@
 
                         <a type="button" id="@player.UserName" class="btn text-success form-group text-right" style="width:auto;margin-left:50px" asp-action="UpdateScoreCard" asp-controller="ScoreCard"
                            asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="Minus"
-                           asp-route-userName="@player.UserName" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">-</a>
+                           asp-route-userName="@player.UserName" asp-route-courseID="@Model.ScoreCardViewModel.CourseID.ToString()" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">-</a>
 
                         @if (holeCard.Score == 0)
                         {
@@ -78,7 +78,7 @@
 
                 <li class="page-item">
                     <a class="page-link" aria-label="Previous" asp-action="ChangeHole" asp-controller="ScoreCard"
-                       asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@leftArrowHoleNumber.ToString()"
+                       asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@leftArrowHoleNumber.ToString()" asp-route-courseID="@Model.Hole.CourseID.ToString()"
                        data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
@@ -95,14 +95,14 @@
                 {
                     <li class="page-item active">
                         <a class="page-link" asp-action="ChangeHole" asp-controller="ScoreCard"
-                           asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()"
+                           asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-courseID="@Model.Hole.CourseID.ToString()"
                            data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">@i <span class="sr-only">(current)</span></a>
                     </li>
                 }
                 else
                 {
                     <li class="page-item"><a class="page-link" asp-action="ChangeHole" asp-controller="ScoreCard"
-                           asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@i.ToString()"
+                           asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@i.ToString()" asp-route-courseID="@Model.Hole.CourseID.ToString()"
                            data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">@i</a>
                     </li>
                 }
@@ -120,7 +120,7 @@
             {
                 <li class="page-item">
                     <a class="page-link" aria-label="Next" asp-action="ChangeHole" asp-controller="ScoreCard"
-                           asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@rightArrowHoleNumber.ToString()"
+                           asp-route-scoreCardID="@Model.ScoreCardViewModel.ScoreCardID.ToString()" asp-route-holeNumber="@rightArrowHoleNumber.ToString()" asp-route-courseID="@Model.Hole.CourseID.ToString()"
                            data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>

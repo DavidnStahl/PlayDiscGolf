@@ -5,19 +5,15 @@
     var bestRound = "None";
     var averageRound = "None";
 
-    if (Model.BestRound == null)
+    if (Model.BestRound == "None")
     {
 
     }
     else
     {
         bestRound = Convert.ToInt32(Model.BestRound) > 0? "+" + Model.BestRound: Model.BestRound;
-        averageRound = Model.AverageRound;
+        averageRound = Convert.ToInt32(Model.AverageRound) > 0 ? "+" + Model.AverageRound : Model.AverageRound;
     }
-
-
-    var score = 0;
-    var scoreTotal = "";
 
 
 }

@@ -53,7 +53,7 @@ namespace PlayDiscGolf.SaveLocationData.Services
         {
             var root = new Root();
 
-            using (StreamReader read = new StreamReader($@"C:\Source\Examenarbete\PlayDiscGolf\PlayDiscGolf.SaveLocationData\LocationData.json"))
+            using (StreamReader read = new StreamReader($@"C:\source\Examensarbete\PlayDiscGolf.SaveLocationData\LocationData.json"))
             {
                 string json = read.ReadToEnd();
                 root = JsonConvert.DeserializeObject<Root>(json);

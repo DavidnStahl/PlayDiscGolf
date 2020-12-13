@@ -25,6 +25,7 @@ using PlayDiscGolf.Services.Admin;
 using PlayDiscGolf.Services.CoursePage;
 using PlayDiscGolf.Services.Home;
 using PlayDiscGolf.Services.ScoreCard;
+using PlayDiscGolf.Services.User;
 using PlayDiscGolf.ViewModels.ScoreCard;
 
 namespace PlayDiscGolf
@@ -68,6 +69,8 @@ namespace PlayDiscGolf
             services.AddScoped<IHomeService, HomeService>();            
             services.AddScoped<ICoursePageService, CoursePageService>();
             services.AddScoped<IScoreCardService, ScoreCardService>();
+            services.AddScoped<IUserService, UserService>();
+
 
             services.AddScoped<ISessionStorage<ScoreCardViewModel>, SessionStorageScoreCardViewModel>();
 
