@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Services;
 using PlayDiscGolf.Services.User;
+using PlayDiscGolf.ViewModels.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,63 @@ namespace PlayDiscGolf.Controllers.User
         }
         public async Task<IActionResult> Index()
         {
-            var model = await _userService.GetUserInformation();
+            var model = new UserInformationViewModel
+            {
+                UserID = await _accountService.GetInloggedUserIDAsync(),
+                Email = await _accountService.GetEmailAsync(),
+                Username = _accountService.GetUserName()
+            };
+
             return View(model);
-        }            
+        }
+
+        public async Task<IActionResult> SaveUserInformation(UserUpdateInformationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var isEmailTaken = await _accountService.IsEmailTakenAsync(model.Email);
+                var isUserNameTaken = await _accountService.IsUserNameTakenAsync(model.Username);
+
+                if (!isEmailTaken && !isUserNameTaken)
+                {
+                    await _accountService.ChangeEmailAsync(model.Email);
+                    await _accountService.ChangeUserNameAsync(model.Username);
+
+                    return RedirectToAction("Index");
+                }
+
+                if (isEmailTaken) ModelState.AddModelError("Email", "Email is Taken");
+                if (isUserNameTaken) ModelState.AddModelError("UserName", "UserName is Taken");
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> ChangePassword(UserChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _accountService.ChangePasswordAsync(model.Password);
+
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchUser(string query)
+        {
+            var model = await _userService.GetSearchResultFromQueryAsync(query);
+
+            return PartialView("_SearchResultUserName", model);
+        }
+
+        public async Task<IActionResult> ClaimScoreCard(UserInformationViewModel model)
+        {
+            await _userService.ClaimGamesFromUsernameAsync(model);
+
+            return RedirectToAction("Index");
+        }
     }
 }

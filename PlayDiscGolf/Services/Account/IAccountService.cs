@@ -20,6 +20,9 @@ namespace PlayDiscGolf.Services
         Task ChangeEmailAsync(string newEmail);
 
         Task ChangeUserNameAsync(string newUserName);
+        Task<bool> IsEmailTakenAsync(string email);
+        Task<bool> IsUserNameTakenAsync(string userName);
+
 
 
     }

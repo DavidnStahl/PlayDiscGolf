@@ -15,5 +15,7 @@ namespace PlayDiscGolf.Data.Cards.Scores
         public Task SaveChangesAsync();
 
         public Task CreateScoreCardIncludePlayerCardAsync(ScoreCard scoreCard);
+
+        public Task<List<ScoreCard>> GetAllScoreCardsAndIncludePlayerCardsByUserNameAsync(string userName);
     }
 }

@@ -16,6 +16,5 @@ namespace PlayDiscGolf.ViewModels.User
         public string YourNameInThoseGames { get; set; }
         public List<PlayerCardViewModel> PlayerCards { get; set; }
         public bool ClaimGames { get; set; }
-
     }
 }

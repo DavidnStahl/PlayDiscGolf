@@ -19,6 +19,11 @@ namespace PlayDiscGolf.Data
         public async Task CreateScoreCardIncludePlayerCardAsync(ScoreCard scoreCard) =>
             await _context.ScoreCards.AddAsync(scoreCard);
 
+        public async Task<List<ScoreCard>> GetAllScoreCardsAndIncludePlayerCardsByUserNameAsync(string userName)
+        {
+            return await _context.ScoreCards.Include(s => s.PlayerCards).Where(scoreCard => scoreCard.UserName == userName).ToListAsync();
+        }
+
         public async Task<List<ScoreCard>> GetScoreCardIncludePlayerCardIncludeHoleCardByIDAsync(string userID, Guid courseID) =>
             await _context.ScoreCards
             .Include(players => players.PlayerCards)

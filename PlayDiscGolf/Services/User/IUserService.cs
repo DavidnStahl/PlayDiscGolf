@@ -8,10 +8,11 @@ namespace PlayDiscGolf.Services.User
 {
     public interface IUserService
     {
-        Task<UserInformationViewModel> GetUserInformation();
+        Task<UserInformationViewModel> GetUserInformationAsync();
 
-        Task SaveUserInformation(UserInformationViewModel model);
+        Task ClaimGamesFromUsernameAsync(UserInformationViewModel model);
 
-        Task ClaimGamesFromUsername(UserInformationViewModel model);
+        Task<UserInformationViewModel> GetSearchResultFromQueryAsync(string query);
+
     }
 }

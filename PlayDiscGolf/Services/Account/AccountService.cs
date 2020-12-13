@@ -25,10 +25,16 @@ namespace PlayDiscGolf.Services
 
         public async Task<RegisterUserDto> UserRegisterAsync(RegisterViewModel model)
         {
-            RegisterUserDto registerUserDtos = await CheckIfEmailIsTakenAsync(model, new RegisterUserDto());
-            registerUserDtos = await CheckIfUsernameIsTakenAsync(model, registerUserDtos);
+            var registerUserDto = new RegisterUserDto
+            {
+                ErrorMessegeEmail = await IsEmailTakenAsync(model.Email),
+                ErrorMessegeUsername = await IsUserNameTakenAsync(model.Username)
+            };
 
-            return registerUserDtos.CreateUserSucceded == true ? await CreateUserAsync(registerUserDtos, model) : registerUserDtos;
+            //RegisterUserDto registerUserDtos = await CheckIfEmailIsTakenAsync(model, new RegisterUserDto());
+            //registerUserDtos = await CheckIfUsernameIsTakenAsync(model, registerUserDtos);
+
+            return registerUserDto.CreateUserSucceded == true ? await CreateUserAsync(registerUserDto, model) : registerUserDto;
         }
         public async Task<string> GetInloggedUserIDAsync()
         {
@@ -71,23 +77,13 @@ namespace PlayDiscGolf.Services
             registerUserDtos.CreateUserSucceded = true;
 
             return registerUserDtos;
-        }
+        }      
 
-        private async Task<RegisterUserDto> CheckIfEmailIsTakenAsync(RegisterViewModel model,RegisterUserDto registerUserDtos)
-        {
-            if (await _userManager.FindByEmailAsync(model.Email) != null) 
-                registerUserDtos.ErrorMessegeEmail = true;
+        public async Task<bool> IsEmailTakenAsync(string email) =>
+            await _userManager.FindByNameAsync(email) != null;
 
-            return registerUserDtos;
-        }
-
-        private async Task<RegisterUserDto> CheckIfUsernameIsTakenAsync(RegisterViewModel model, RegisterUserDto registerUserDtos)
-        {
-            if (await _userManager.FindByNameAsync(model.Username) != null) 
-                registerUserDtos.ErrorMessegeUsername = true;
-
-            return registerUserDtos;
-        }
+        public async Task<bool> IsUserNameTakenAsync(string userName) =>
+            await _userManager.FindByNameAsync(userName) != null;
 
         public async Task ChangePasswordAsync(string newPassword)
         {
@@ -115,5 +111,21 @@ namespace PlayDiscGolf.Services
             user.NormalizedUserName = newUserName;
             await _userManager.UpdateNormalizedUserNameAsync(user);
         }
+
+        /*private async Task<RegisterUserDto> CheckIfEmailIsTakenAsync(RegisterViewModel model,RegisterUserDto registerUserDtos)
+        {
+            if (await _userManager.FindByEmailAsync(model.Email) != null) 
+                registerUserDtos.ErrorMessegeEmail = true;
+
+            return registerUserDtos;
+        }
+
+        private async Task<RegisterUserDto> CheckIfUsernameIsTakenAsync(RegisterViewModel model, RegisterUserDto registerUserDtos)
+        {
+            if (await _userManager.FindByNameAsync(model.Username) != null) 
+                registerUserDtos.ErrorMessegeUsername = true;
+
+            return registerUserDtos;
+        }*/
     }
 }
