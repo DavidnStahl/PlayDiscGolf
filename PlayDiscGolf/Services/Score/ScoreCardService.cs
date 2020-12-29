@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using PlayDiscGolf.Business.Session;
 using PlayDiscGolf.Business.ViewModelBuilder.HoleCard;
 using PlayDiscGolf.Business.ViewModelBuilder.ScoreCard;
+using PlayDiscGolf.Data;
 using PlayDiscGolf.Data.Cards.Holes;
 using PlayDiscGolf.Data.Cards.Players;
 using PlayDiscGolf.Data.Cards.Scores;
@@ -18,17 +19,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Services.ScoreCard
+namespace PlayDiscGolf.Services.Score
 {
     public class ScoreCardService : IScoreCardService
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ISessionStorage<ScoreCardViewModel> _sessionStorage;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IScoreCardRepository _scoreCardRepository;
-        private readonly IPlayerCardRepository _playerCardRepository;
-        private readonly IHoleCardRepository _holeCardRepository;
-        private readonly IHoleRepository _holeRepository;
+        private readonly IEntityRepository<ScoreCard> _scoreCardRepository;
+        private readonly IEntityRepository<PlayerCard> _playerCardRepository;
+        private readonly IEntityRepository<HoleCard> _holeCardRepository;
+        private readonly IEntityRepository<Hole> _holeRepository;
         private readonly IMapper _mapper;
         private readonly IScoreCardViewModelBuilder _scoreCardViewModelBuilder;
         private readonly IHoleCardViewModelBuilder _holeCardViewModelBuilder;
@@ -36,9 +37,10 @@ namespace PlayDiscGolf.Services.ScoreCard
         private readonly string _sessionKey;
 
         public ScoreCardService(UserManager<IdentityUser> userManager, ISessionStorage<ScoreCardViewModel> sessionStorage
-            , IHttpContextAccessor httpContextAccessor, IScoreCardRepository scoreCardRepository, IPlayerCardRepository playerCardRepository,
-            IHoleCardRepository holeCardRepository, IHoleRepository holeRepository, IMapper mapper, IScoreCardViewModelBuilder scoreCardViewModelBuilder,
-            IHoleCardViewModelBuilder holeCardViewModelBuilder, ICourseRepository courseRepository)
+            , IHttpContextAccessor httpContextAccessor/*, IScoreCardRepository scoreCardRepository, IPlayerCardRepository playerCardRepository,
+            IHoleCardRepository holeCardRepository, IHoleRepository holeRepository*/, IMapper mapper, IScoreCardViewModelBuilder scoreCardViewModelBuilder,
+            IHoleCardViewModelBuilder holeCardViewModelBuilder, ICourseRepository courseRepository,
+            IEntityRepository<ScoreCard> scoreCardRepository, IEntityRepository<PlayerCard> playerCardRepository, IEntityRepository<HoleCard> holeCardRepository, IEntityRepository<Hole> holeRepository)
         {
             _userManager = userManager;
             _sessionStorage = sessionStorage;
@@ -83,9 +85,16 @@ namespace PlayDiscGolf.Services.ScoreCard
 
         public async Task<ScoreCardGameOnViewModel> StartScoreCardAsync()
         {
-            await _scoreCardRepository.CreateScoreCardIncludePlayerCardAsync(_mapper.Map<Models.Models.DataModels.ScoreCard>(_sessionStorage.Get(_sessionKey)));
+            //await _scoreCardRepository.CreateScoreCardIncludePlayerCardAsync(_mapper.Map<Models.Models.DataModels.ScoreCard>(_sessionStorage.Get(_sessionKey)));
 
-            await _scoreCardRepository.SaveChangesAsync();
+            var cachedScoreCard = _sessionStorage.Get(_sessionKey);
+
+            var scorecard = _mapper.Map<ScoreCard>(cachedScoreCard);
+
+            _scoreCardRepository.Add(scorecard); 
+            _scoreCardRepository.Save();
+
+            //await _scoreCardRepository.SaveChangesAsync();
 
             var scoreCard = await GetScoreCardAsync(_sessionStorage.Get(_sessionKey).ScoreCardID.ToString(), _sessionStorage.Get(_sessionKey).CourseID);
 

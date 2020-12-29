@@ -69,7 +69,7 @@ namespace PlayDiscGolf.Controllers.User
         {
             var user = await _accountService.GetUserByQueryAsync(query);
 
-            if (ModelState.IsValid && user != null) return View(new UserClaimSearchResultModel { UserName = user.UserName });
+            if (user != null) return View(new UserClaimSearchResultModel { UserName = user.UserName });
 
             return View(new UserClaimSearchResultModel());
         }

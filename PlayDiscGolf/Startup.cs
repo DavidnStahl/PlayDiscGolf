@@ -63,13 +63,13 @@ namespace PlayDiscGolf
             .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders()
             .AddRoles<IdentityRole>();
 
-            services.AddScoped<IAdminCourseService, AdminCourseService>();
-            services.AddScoped<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IHomeService, HomeService>();            
-            services.AddScoped<ICoursePageService, CoursePageService>();
-            services.AddScoped<IScoreCardService, ScoreCardService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<IAdminCourseService, AdminCourseService>();
+            services.AddSingleton<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
+            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IHomeService, HomeService>();            
+            services.AddSingleton<ICoursePageService, CoursePageService>();
+            services.AddSingleton<IScoreCardService, ScoreCardService>();
+            services.AddSingleton<IUserService, UserService>();
 
 
             services.AddScoped<ISessionStorage<ScoreCardViewModel>, SessionStorageScoreCardViewModel>();
@@ -77,6 +77,8 @@ namespace PlayDiscGolf
             services.AddScoped<IScoreCardViewModelBuilder, ScoreCardViewModelBuilder>();
             services.AddScoped<IHoleCardViewModelBuilder, HoleCardViewModelBuilder>();
             services.AddScoped<IPlayerCardViewModelBuilder, PlayerCardViewModelBuilder>();
+
+            services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IHoleRepository,HoleRepository>();
