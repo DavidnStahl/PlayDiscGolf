@@ -8,14 +8,14 @@ namespace PlayDiscGolf.Services.Score
 {
     public interface IScoreCardService
     {
-        public Task<ScoreCardViewModel> GetScoreCardCreateInformationAsync(string courseID);
-        public Task<List<PlayerCardViewModel>> AddPlayerToSessionAndReturnUpdatedPlayersAsync(string newName);
+        ScoreCardViewModel GetScoreCardCreateInformation(string courseID);
+        List<PlayerCardViewModel> AddPlayerToSessionAndReturnUpdatedPlayers(string newName);
 
-        public List<PlayerCardViewModel> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer);
+        List<PlayerCardViewModel> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer);
 
-        public Task<ScoreCardGameOnViewModel> StartScoreCardAsync();
+        ScoreCardGameOnViewModel StartGame();
 
-        public Task<ScoreCardGameOnViewModel> ModifyScoreCardAsync(string scoreCardID, string holeNumber, string addOrRemove, string userName, Guid courseID);
-        public Task<ScoreCardGameOnViewModel> OpenScoreCardAsync(string scoreCardID, Guid courseID);
+        ScoreCardGameOnViewModel UpdateScore(string scoreCardID, string holeNumber, string addOrRemove, string userName);
+        ScoreCardGameOnViewModel OpenScoreCard(string scoreCardID);
     }
 }

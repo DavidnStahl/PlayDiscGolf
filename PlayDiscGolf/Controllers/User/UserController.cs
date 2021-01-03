@@ -73,12 +73,5 @@ namespace PlayDiscGolf.Controllers.User
 
             return View(new UserClaimSearchResultModel());
         }
-
-        public async Task<IActionResult> ClaimScoreCard(UserInformationViewModel model)
-        {
-            await _userService.ClaimGamesFromUsernameAsync(model);
-
-            return RedirectToAction("Index");
-        }
     }
 }

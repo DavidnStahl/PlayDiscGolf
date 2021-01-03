@@ -8,8 +8,8 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
 {
     public interface IScoreCardViewModelBuilder
     {
-        public Task<ScoreCardViewModel> BuildScoreCardCreateInformationAsync(string courseID);
+        public ScoreCardViewModel BuildScoreCardCreateInformation(string courseID);
 
-        public Task<ScoreCardViewModel> BuildUpdatedScoreCardWithUpdatedPlayersAsync(ScoreCardViewModel sessionModel, string newName);
+        public ScoreCardViewModel BuildUpdatedScoreCardWithUpdatedPlayers(ScoreCardViewModel sessionModel, string newName);
     }
 }

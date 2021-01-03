@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 
 namespace PlayDiscGolf.Services.Admin
 {
     public interface IAdminNewCountryCourseService
     {
-        public Task<List<string>> GetAddedCountryCodesInCoursesAsync();
+        List<string> GetAddedCountryCodesInCourses();
     }
 }

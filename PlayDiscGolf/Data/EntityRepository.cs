@@ -16,24 +16,9 @@ namespace PlayDiscGolf.Data
             _context = context;
         }
 
-        public IQueryable<T> Include(params Expression<Func<T, object>>[] includeExpressions)
+        public virtual IQueryable<T> GetAll()
         {
-            var dbSet = _context.Set<T>();
-
-            IQueryable<T> query = null;
-            foreach (var includeExpression in includeExpressions)
-            {
-                query = dbSet.Include(includeExpression);
-            }
-
-            return query ?? dbSet;
-        }
-
-        public virtual List<T> GetAll()
-        {
-
-            IQueryable<T> query = _context.Set<T>();
-            return query.ToList();
+            return _context.Set<T>();
         }
 
         public List<T> FindBy(Expression<Func<T, bool>> predicate)
@@ -41,10 +26,6 @@ namespace PlayDiscGolf.Data
 
             IQueryable<T> query = _context.Set<T>().Where(predicate);
             return query.ToList();
-        }
-        public virtual void Attach(T entity)
-        {
-            _context.Set<T>().Attach(entity);
         }
 
         public virtual bool Add(T entity)
@@ -71,20 +52,9 @@ namespace PlayDiscGolf.Data
             return true;
         }
 
-        public virtual bool SaveChanges(T entity)
-        {
-            if (_context.Entry(entity).State == EntityState.Detached)
-            {
-                _context.Set<T>().Attach(entity);
-            }
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
-            return true;
-        }
-        public virtual T FindById(int id)
+        public virtual T FindById(Guid id)
         {
             return _context.Set<T>().Find(id);
         }
-
     }
 }

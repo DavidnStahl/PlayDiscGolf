@@ -4,8 +4,6 @@ using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Models.ViewModels.Account;
-using PlayDiscGolf.ViewModels.User;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,9 +29,6 @@ namespace PlayDiscGolf.Services
                 ErrorMessegeEmail = await IsEmailTakenAsync(model.Email),
                 ErrorMessegeUsername = await IsUserNameTakenAsync(model.Username)
             };
-
-            //RegisterUserDto registerUserDtos = await CheckIfEmailIsTakenAsync(model, new RegisterUserDto());
-            //registerUserDtos = await CheckIfUsernameIsTakenAsync(model, registerUserDtos);
 
             return registerUserDto.CreateUserSucceded == true ? await CreateUserAsync(registerUserDto, model) : registerUserDto;
         }
@@ -119,21 +114,5 @@ namespace PlayDiscGolf.Services
 
             return user;
         }
-
-        /*private async Task<RegisterUserDto> CheckIfEmailIsTakenAsync(RegisterViewModel model,RegisterUserDto registerUserDtos)
-        {
-            if (await _userManager.FindByEmailAsync(model.Email) != null) 
-                registerUserDtos.ErrorMessegeEmail = true;
-
-            return registerUserDtos;
-        }
-
-        private async Task<RegisterUserDto> CheckIfUsernameIsTakenAsync(RegisterViewModel model, RegisterUserDto registerUserDtos)
-        {
-            if (await _userManager.FindByNameAsync(model.Username) != null) 
-                registerUserDtos.ErrorMessegeUsername = true;
-
-            return registerUserDtos;
-        }*/
     }
 }

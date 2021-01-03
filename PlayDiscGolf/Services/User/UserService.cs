@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using PlayDiscGolf.Data.Cards.Scores;
-using PlayDiscGolf.ViewModels.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using PlayDiscGolf.ViewModels.User;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Services.User
@@ -11,12 +6,10 @@ namespace PlayDiscGolf.Services.User
     public class UserService : IUserService
     {
         private readonly IAccountService _accountService;
-        private readonly IScoreCardRepository _scoreCardRepository;
 
-        public UserService(IAccountService accountService, IScoreCardRepository scoreCardRepository)
+        public UserService(IAccountService accountService)
         {
             _accountService = accountService;
-            _scoreCardRepository = scoreCardRepository;
         }
 
         public async Task<UserInformationViewModel> GetUserInformationAsync()
@@ -27,11 +20,6 @@ namespace PlayDiscGolf.Services.User
                 Email = await _accountService.GetEmailAsync(),
                 Username = _accountService.GetUserName()
             };
-        }
-
-        public Task ClaimGamesFromUsernameAsync(UserInformationViewModel model)
-        {
-            throw new NotImplementedException();
         }
     }
 }

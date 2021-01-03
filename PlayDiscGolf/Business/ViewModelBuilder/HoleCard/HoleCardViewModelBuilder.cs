@@ -1,14 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
-using PlayDiscGolf.Business.Session;
-using PlayDiscGolf.Data.Cards.Holes;
-using PlayDiscGolf.Data.Cards.Players;
-using PlayDiscGolf.Data.Cards.Scores;
-using PlayDiscGolf.Data.Courses;
-using PlayDiscGolf.Data.Holes;
-using PlayDiscGolf.Enums;
+﻿using PlayDiscGolf.Data;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.ViewModels.ScoreCard;
 using System;
@@ -20,17 +10,17 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.HoleCard
 {
     public class HoleCardViewModelBuilder : IHoleCardViewModelBuilder
     {
-        private readonly IHoleRepository _holeRepository;
+        private readonly IEntityRepository<Hole> _holeRepository;
 
-        public HoleCardViewModelBuilder(IHoleRepository holeRepository)
+        public HoleCardViewModelBuilder(IEntityRepository<Hole> holeRepository)
         {
             _holeRepository = holeRepository;
         }
-        public async Task<List<HoleCardViewModel>> BuildHoleCardsForCourseAsync(Guid courseID, Guid playerCardID)
+        public List<HoleCardViewModel> BuildHoleCardsForCourse(Guid courseID, Guid playerCardID)
         {
             var holeCardViewModelList = new List<HoleCardViewModel>();
 
-            var holes = await _holeRepository.GetHolesByCourseIDAsync(courseID);
+            var holes = _holeRepository.FindBy(x => x.CourseID == courseID);
 
             for (int i = 0; i < holes.Count; i++)
                 holeCardViewModelList.Add(new HoleCardViewModel

@@ -1,16 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
-using PlayDiscGolf.Business.Session;
 using PlayDiscGolf.Business.ViewModelBuilder.HoleCard;
-using PlayDiscGolf.Data.Cards.Holes;
-using PlayDiscGolf.Data.Cards.Players;
-using PlayDiscGolf.Data.Cards.Scores;
-using PlayDiscGolf.Data.Courses;
-using PlayDiscGolf.Data.Holes;
-using PlayDiscGolf.Enums;
-using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.ViewModels.ScoreCard;
 using System;
 using System.Collections.Generic;
@@ -32,7 +22,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
             _holeCardViewModelBuilder = holeCardViewModelBuilder;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<ScoreCardViewModel> BuildScoreCardCreateInformationAsync(string courseID)
+        public ScoreCardViewModel BuildScoreCardCreateInformation(string courseID)
         {
             var scoreCardID = Guid.NewGuid();
 
@@ -51,12 +41,12 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
                         UserName = _httpContextAccessor.HttpContext.User.Identity.Name,
                         PlayerCardID = playerCardID,
                         ScoreCardID =  scoreCardID,
-                        HoleCards = await _holeCardViewModelBuilder.BuildHoleCardsForCourseAsync(Guid.Parse(courseID), playerCardID)
+                        HoleCards = _holeCardViewModelBuilder.BuildHoleCardsForCourse(Guid.Parse(courseID), playerCardID)
                     }}
             };
         }
 
-        public async Task<ScoreCardViewModel> BuildUpdatedScoreCardWithUpdatedPlayersAsync(ScoreCardViewModel sessionModel, string newName)
+        public ScoreCardViewModel BuildUpdatedScoreCardWithUpdatedPlayers(ScoreCardViewModel sessionModel, string newName)
         {
             var playerCardID = Guid.NewGuid();
 
@@ -66,7 +56,7 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.ScoreCard
                     UserName = newName,
                     ScoreCardID = sessionModel.ScoreCardID,
                     PlayerCardID = playerCardID,
-                    HoleCards = await _holeCardViewModelBuilder.BuildHoleCardsForCourseAsync(sessionModel.CourseID, playerCardID)
+                    HoleCards = _holeCardViewModelBuilder.BuildHoleCardsForCourse(sessionModel.CourseID, playerCardID)
                 }).ToList();
 
             return sessionModel;

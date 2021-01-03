@@ -8,14 +8,12 @@ namespace PlayDiscGolf.Data
 {
     public interface IEntityRepository<T> where T : class
     {
-        IQueryable<T> Include(params Expression<Func<T, object>>[] includeExpressions);
-        List<T> GetAll();
+        IQueryable<T> GetAll();
         List<T> FindBy(Expression<Func<T, bool>> predicate);
         bool Add(T entity);
         bool Delete(T entity);
         bool Edit(T entity);
         bool Save();
-        bool SaveChanges(T entity);
-        T FindById(int id);
+        T FindById(Guid id);
     }
 }

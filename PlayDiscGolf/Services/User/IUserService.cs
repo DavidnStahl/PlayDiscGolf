@@ -9,8 +9,5 @@ namespace PlayDiscGolf.Services.User
     public interface IUserService
     {
         Task<UserInformationViewModel> GetUserInformationAsync();
-
-        Task ClaimGamesFromUsernameAsync(UserInformationViewModel model);
-
     }
 }

@@ -22,9 +22,9 @@ namespace PlayDiscGolf.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index() =>
+        public IActionResult Index() =>
             View(new NewCountryCourseViewModel {
-                AddedCountryCourses = await _adminNewCountryCourseService.GetAddedCountryCodesInCoursesAsync() 
+                AddedCountryCourses = _adminNewCountryCourseService.GetAddedCountryCodesInCourses() 
             });
     }
 }

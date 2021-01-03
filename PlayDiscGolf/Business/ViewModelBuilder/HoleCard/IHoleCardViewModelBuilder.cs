@@ -8,6 +8,6 @@ namespace PlayDiscGolf.Business.ViewModelBuilder.HoleCard
 {
     public interface IHoleCardViewModelBuilder
     {
-        public Task<List<HoleCardViewModel>> BuildHoleCardsForCourseAsync(Guid courseID, Guid playerCardID);
+        List<HoleCardViewModel> BuildHoleCardsForCourse(Guid courseID, Guid playerCardID);
     }
 }

@@ -1,19 +1,21 @@
-﻿using PlayDiscGolf.Data.Courses;
-using System;
+﻿using PlayDiscGolf.Data;
+using PlayDiscGolf.Models.Models.DataModels;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace PlayDiscGolf.Services.Admin
 {
     public class AdminNewCountryCourseService : IAdminNewCountryCourseService
     {
-        private readonly ICourseRepository _courseRepository;
-        public AdminNewCountryCourseService(ICourseRepository courseRepository)
+        private readonly IEntityRepository<Course> _courseRepository;
+        public AdminNewCountryCourseService(IEntityRepository<Course> courseRepository)
         {
             _courseRepository = courseRepository;
         }
-        public async Task<List<string>> GetAddedCountryCodesInCoursesAsync() =>
-            await _courseRepository.GetAllCoursesCountriesAsync();
+        public List<string> GetAddedCountryCodesInCourses()
+        {
+            return _courseRepository.GetAll().Select(x => x.Country).Distinct().ToList();
+        }
     }
 }

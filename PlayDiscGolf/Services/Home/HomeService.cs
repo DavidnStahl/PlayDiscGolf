@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using PlayDiscGolf.Data.Courses;
+using PlayDiscGolf.Data;
 using PlayDiscGolf.Enums;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.ViewModels.Home;
@@ -13,33 +13,32 @@ namespace PlayDiscGolf.Services.Home
     public class HomeService : IHomeService
     {
 
-        private readonly ICourseRepository _courseRepository;
+        private readonly IEntityRepository<Course> _courseRepository;
 
-        public HomeService(ICourseRepository courseRepository)
+        public HomeService(IEntityRepository<Course> courseRepository)
         {
             _courseRepository = courseRepository;
         }
-        
-        public async Task<List<SelectListItem>> GetAllCourseCountriesAsync() =>
-            (await _courseRepository.GetAllCoursesCountriesAsync() as IEnumerable<string>).Select(country => 
-            new SelectListItem { Value = country, Text = country}).ToList();
 
-        public List<SelectListItem> SetTypes() =>
-            new List<SelectListItem>{
+        public List<Course> GetCourseBySearchQuery(SearchFormHomePageViewModel model)
+        {
+            if(model.Type == EnumHelper.SearchType.Area.ToString())
+                return _courseRepository.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query)).ToList();
+
+            return _courseRepository.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query)).ToList();    
+        }
+
+        public SearchFormHomePageViewModel ConfigureCountriesAndTypes(SearchFormHomePageViewModel model)
+        {
+            model.Countries = _courseRepository
+                .GetAll()
+                .Select(x => new SelectListItem { Value = x.Country, Text = x.Country })
+                .ToList();
+
+            model.Types = new List<SelectListItem>{
                 new SelectListItem(EnumHelper.SearchType.Area.ToString(), EnumHelper.SearchType.Area.ToString()),
                 new SelectListItem(EnumHelper.SearchType.Course.ToString(), EnumHelper.SearchType.Course.ToString())
             };
-
-        public async Task<List<Course>> GetCourseBySearchQueryAsync(SearchFormHomePageViewModel model) =>
-            (model.Type == EnumHelper.SearchType.Area.ToString()) ?
-            await _courseRepository.GetCoursesByCountryAreaAndQueryAsync(model.Country, model.Query) :
-            await _courseRepository.GetCoursesByCountryFullNameAndQueryAsync(model.Country, model.Query);
-
-        public async Task<SearchFormHomePageViewModel> ConfigureCountriesAndTypesAsync(SearchFormHomePageViewModel model)
-        {
-            model.Countries = await GetAllCourseCountriesAsync();
-
-            model.Types = SetTypes();
 
             return model;
         }

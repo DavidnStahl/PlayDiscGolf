@@ -23,32 +23,49 @@ namespace PlayDiscGolf.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Index() =>
-            View(new AdminSearchViewModel());
+        public IActionResult Index()
+        {
+            var model = new AdminSearchViewModel();
+            return View(model);
+        }
 
-        public async Task<IActionResult> Search([FromQuery] SearchViewModel model) =>
-            PartialView("_CourseSearchResult", _mapper.Map<List<SearchCourseItemViewModel>>(await _adminCourseService.GetCoursesBySearchAsync(model)));
+        public IActionResult Search([FromQuery] SearchViewModel searchModel) 
+        {
+            var model = _mapper.Map<List<SearchCourseItemViewModel>>(_adminCourseService.GetCoursesBySearch(searchModel));
 
-        public async Task<PartialViewResult> SelectedLocation(Guid id) =>
-            PartialView("_CourseForm", _mapper.Map<CourseFormViewModel>(await _adminCourseService.GetCourseByIDAsync(id)));
+            return PartialView("_CourseSearchResult", model);
+        }
+
+        public PartialViewResult SelectedLocation(Guid id)
+        {
+            var model = _mapper.Map<CourseFormViewModel>(_adminCourseService.GetCourseByID(id));
+
+            return PartialView("_CourseForm", model);
+        }
+            
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> EditCourse(CourseFormViewModel model)
+        public IActionResult EditCourse(CourseFormViewModel model)
         {
             if(!ModelState.IsValid) 
                 View("Index", new AdminSearchViewModel { Course = model });
 
-            await _adminCourseService.SaveUpdatedCourseAsync(model);
+            _adminCourseService.SaveUpdatedCourse(model);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> GetHoles(string holes, string courseID) =>
-            PartialView("_CreateHoles", _adminCourseService.ManageNumberOfHolesFromForm(new CreateHolesViewModel {
+        public IActionResult GetHoles(string holes, string courseID)
+        { 
+            var model = new CreateHolesViewModel
+            {
                 NumberOfHoles = Convert.ToInt32(holes),
                 CourseID = Guid.Parse(courseID),
-                Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(await _adminCourseService.GetCoursesHolesAsync(Guid.Parse(courseID)))
-            }));
+                Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(_adminCourseService.GetCoursesHoles(Guid.Parse(courseID)))
+            };
+
+            return PartialView("_CreateHoles", model);
+        }
     }
 }

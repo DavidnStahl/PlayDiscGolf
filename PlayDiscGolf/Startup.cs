@@ -14,17 +14,12 @@ using PlayDiscGolf.Business.ViewModelBuilder.HoleCard;
 using PlayDiscGolf.Business.ViewModelBuilder.PlayerCard;
 using PlayDiscGolf.Business.ViewModelBuilder.ScoreCard;
 using PlayDiscGolf.Data;
-using PlayDiscGolf.Data.Cards.Holes;
-using PlayDiscGolf.Data.Cards.Players;
-using PlayDiscGolf.Data.Cards.Scores;
-using PlayDiscGolf.Data.Courses;
-using PlayDiscGolf.Data.Holes;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.Services;
 using PlayDiscGolf.Services.Admin;
 using PlayDiscGolf.Services.CoursePage;
 using PlayDiscGolf.Services.Home;
-using PlayDiscGolf.Services.ScoreCard;
+using PlayDiscGolf.Services.Score;
 using PlayDiscGolf.Services.User;
 using PlayDiscGolf.ViewModels.ScoreCard;
 
@@ -63,13 +58,13 @@ namespace PlayDiscGolf
             .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders()
             .AddRoles<IdentityRole>();
 
-            services.AddSingleton<IAdminCourseService, AdminCourseService>();
-            services.AddSingleton<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
-            services.AddSingleton<IAccountService, AccountService>();
-            services.AddSingleton<IHomeService, HomeService>();            
-            services.AddSingleton<ICoursePageService, CoursePageService>();
-            services.AddSingleton<IScoreCardService, ScoreCardService>();
-            services.AddSingleton<IUserService, UserService>();
+            services.AddTransient<IAdminCourseService, AdminCourseService>();
+            services.AddTransient<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IHomeService, HomeService>();            
+            services.AddTransient<ICoursePageService, CoursePageService>();
+            services.AddTransient<IScoreCardService, ScoreCardService>();
+            services.AddTransient<IUserService, UserService>();
 
 
             services.AddScoped<ISessionStorage<ScoreCardViewModel>, SessionStorageScoreCardViewModel>();
@@ -79,12 +74,6 @@ namespace PlayDiscGolf
             services.AddScoped<IPlayerCardViewModelBuilder, PlayerCardViewModelBuilder>();
 
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
-
-            services.AddScoped<ICourseRepository, CourseRepository>();
-            services.AddScoped<IHoleRepository,HoleRepository>();
-            services.AddScoped<IScoreCardRepository, ScoreCardRepository>();
-            services.AddScoped<IPlayerCardRepository, PlayerCardRepository>();
-            services.AddScoped<IHoleCardRepository, HoleCardRepository>();
 
             services.AddScoped<IScoreCardCalculation, ScoreCardCalculation>();
             services.AddScoped<ICreateHolesCalculation, CreateHolesCalculation>();
