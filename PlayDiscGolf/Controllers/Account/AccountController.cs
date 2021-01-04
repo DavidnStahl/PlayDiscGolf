@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using PlayDiscGolf.Models.ViewModels.Account;
-using PlayDiscGolf.Services;
 using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Dtos;
+using PlayDiscGolf.Core.Services.Account;
+using AutoMapper;
+using PlayDiscGolf.Core.Dtos.Account;
 
 namespace PlayDiscGolf.Controllers.Account
 {
@@ -11,11 +13,13 @@ namespace PlayDiscGolf.Controllers.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
 
-        public AccountController(SignInManager<IdentityUser> signInManager, IAccountService accountService)
+        public AccountController(SignInManager<IdentityUser> signInManager, IAccountService accountService, IMapper mapper)
         {
             _signInManager = signInManager;
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -52,7 +56,7 @@ namespace PlayDiscGolf.Controllers.Account
             if (!ModelState.IsValid) 
                 return View(model);
 
-            var registerUserDtos = await _accountService.UserRegisterAsync(model);
+            var registerUserDtos = await _accountService.UserRegisterAsync(_mapper.Map<RegisterDto>(model));
 
             if (registerUserDtos.CreateUserSucceded == true) 
                 return RedirectToAction("Index", "Home");

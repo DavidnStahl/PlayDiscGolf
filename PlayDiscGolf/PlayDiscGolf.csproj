@@ -24,7 +24,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PlayDiscGolf.Core\PlayDiscGolf.Core.csproj" />
     <ProjectReference Include="..\PlayDiscGolf.Models\PlayDiscGolf.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AutoMapper\Profiles\AdminCourse\" />
+    <Folder Include="AutoMapper\Profiles\AdminNewCountryCourses\" />
+    <Folder Include="AutoMapper\Profiles\Course\" />
+    <Folder Include="AutoMapper\Profiles\Home\" />
+    <Folder Include="AutoMapper\Profiles\User\" />
+    <Folder Include="AutoMapper\Profiles\ScoreCard\" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace PlayDiscGolf.Data
+namespace PlayDiscGolf.Infrastructure.Repository.Generic
 {
     public class EntityRepository<T> : IEntityRepository<T> where T : class
     {
@@ -15,7 +15,7 @@ namespace PlayDiscGolf.Data
             _context = context;
         }
 
-        public virtual IQueryable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _context.Set<T>();
         }

@@ -23,7 +23,6 @@ namespace PlayDiscGolf.Models.Models.DataModels
         public DbSet<ScoreCard> ScoreCards { get; set; }
         public DbSet<PlayerCard> PlayerCards { get; set; }
         public DbSet<HoleCard> HoleCards { get; set; }
-        public DbSet<ClaimScoreCard> ClaimScoreCards { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
