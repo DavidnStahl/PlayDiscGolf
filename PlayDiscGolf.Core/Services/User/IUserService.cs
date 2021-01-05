@@ -1,5 +1,5 @@
 ﻿
-using PlayDiscGolf.Core.Dtos.ScoreCard;
+using PlayDiscGolf.Core.Dtos.User;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Core.Services.User

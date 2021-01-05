@@ -3,6 +3,6 @@ namespace PlayDiscGolf.Core.Dtos.Home
 {
     public class HomeDto
     {
-        public SearchFormHomeDto SearchFormHomePageViewModel = new SearchFormHomeDto();
+        public SearchFormHomeDto SearchFormHomeDto = new SearchFormHomeDto();
     }
 }

@@ -7,7 +7,6 @@ namespace PlayDiscGolf.Core.Dtos.AdminCourse
     {
         public int NumberOfHoles { get; set; }
         public Guid CourseID { get; set; }
-
         public List<CourseHolesDto> Holes = new List<CourseHolesDto>();       
     }
 }

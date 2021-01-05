@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Core.Dtos.Account;
+using PlayDiscGolf.Core.Enums;
 using PlayDiscGolf.Core.Services.Account;
 using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Models.Models.DataModels;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.Services
+namespace PlayDiscGolf.Core.Services.Account
 {
     public class AccountService : IAccountService
     {

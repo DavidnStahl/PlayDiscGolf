@@ -7,20 +7,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlayDiscGolf.Business.Calculations.Hole;
-using PlayDiscGolf.Business.Calculations.ScoreCard;
-using PlayDiscGolf.Business.Session;
-using PlayDiscGolf.Business.ViewModelBuilder.HoleCard;
-using PlayDiscGolf.Business.ViewModelBuilder.PlayerCard;
-using PlayDiscGolf.Business.ViewModelBuilder.ScoreCard;
-using PlayDiscGolf.Data;
+using PlayDiscGolf.Core.Business.Calculations.Hole;
+using PlayDiscGolf.Core.Business.Calculations.ScoreCard;
+using PlayDiscGolf.Core.Business.DtoBuilder.HoleCard;
+using PlayDiscGolf.Core.Business.DtoBuilder.PlayerCard;
+using PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard;
+using PlayDiscGolf.Core.Business.Session;
+using PlayDiscGolf.Core.Dtos.Cards;
+using PlayDiscGolf.Core.Services.Account;
+using PlayDiscGolf.Core.Services.Admin;
+using PlayDiscGolf.Core.Services.CoursePage;
+using PlayDiscGolf.Core.Services.Home;
+using PlayDiscGolf.Core.Services.Score;
+using PlayDiscGolf.Core.Services.User;
+using PlayDiscGolf.Infrastructure.Repository.Generic;
+using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
-using PlayDiscGolf.Services;
-using PlayDiscGolf.Services.Admin;
-using PlayDiscGolf.Services.CoursePage;
-using PlayDiscGolf.Services.Home;
-using PlayDiscGolf.Services.Score;
-using PlayDiscGolf.Services.User;
 using PlayDiscGolf.ViewModels.ScoreCard;
 
 namespace PlayDiscGolf
@@ -58,20 +60,20 @@ namespace PlayDiscGolf
             .AddEntityFrameworkStores<DataBaseContext>().AddDefaultTokenProviders()
             .AddRoles<IdentityRole>();
 
-            services.AddTransient<IAdminCourseService, AdminCourseService>();
-            services.AddTransient<IAdminNewCountryCourseService, AdminNewCountryCourseService>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IHomeService, HomeService>();            
-            services.AddTransient<ICoursePageService, CoursePageService>();
-            services.AddTransient<IScoreCardService, ScoreCardService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IHomeService, HomeService>();            
+            services.AddScoped<ICoursePageService, CoursePageService>();
+            services.AddScoped<IScoreCardService, ScoreCardService>();
+            services.AddScoped<IUserService, UserService>();
 
 
-            services.AddScoped<ISessionStorage<ScoreCardViewModel>, SessionStorageScoreCardViewModel>();
+            services.AddScoped<ISessionStorage<ScoreCardDto>, SessionStorageScoreCardDto>();
 
-            services.AddScoped<IScoreCardViewModelBuilder, ScoreCardViewModelBuilder>();
-            services.AddScoped<IHoleCardViewModelBuilder, HoleCardViewModelBuilder>();
-            services.AddScoped<IPlayerCardViewModelBuilder, PlayerCardViewModelBuilder>();
+            services.AddScoped<IScoreCardDtoBuilder, ScoreCardDtoBuilder>();
+            services.AddScoped<IHoleCardDtoBuilder, HoleCardDtoBuilder>();
+            services.AddScoped<IPlayerCardDtoBuilder, PlayerCardDtoBuilder>();
+            services.AddScoped<IUnitOfwork, UnitOfWork>();
 
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 

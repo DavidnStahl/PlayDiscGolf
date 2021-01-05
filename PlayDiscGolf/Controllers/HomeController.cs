@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Models.ViewModels;
 using PlayDiscGolf.ViewModels.Home;
 using AutoMapper;
-using PlayDiscGolf.Services.Home;
+using PlayDiscGolf.Core.Services.Home;
+using PlayDiscGolf.Core.Dtos.Home;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace PlayDiscGolf.Controllers
 {
@@ -20,13 +23,10 @@ namespace PlayDiscGolf.Controllers
             _homeService = homeService;
             _mapper = mapper;
         }
-        
+
         public IActionResult Index()
         {
-            var model = new HomeViewModel
-            {
-                SearchFormHomePageViewModel = _homeService.ConfigureCountriesAndTypes(new SearchFormHomePageViewModel())
-            };
+            var model = SetCountriesAndTypesViewModel();
 
             return View(model);
         }
@@ -37,14 +37,49 @@ namespace PlayDiscGolf.Controllers
         {
             if (ModelState.IsValid)
             {
-                model = _homeService.ConfigureCountriesAndTypes(model);
-                model.SearchResultAjaxFormViewModel = _mapper.Map<List<SearchResultAjaxFormViewModel>>(_homeService.GetCourseBySearchQuery(model));
+                model = GetCourseBySearchQuery(model);
+
                 return PartialView("_SearchFormHomePage", model);
             }
             
-            return PartialView("_SearchFormHomePage", _homeService.ConfigureCountriesAndTypes(model));
+            return PartialView("_SearchFormHomePage", _homeService.ConfigureCountriesAndTypes(_mapper.Map<SearchFormHomeDto>(model)));
         }
 
-        
+        private SearchFormHomePageViewModel GetCourseBySearchQuery(SearchFormHomePageViewModel model)
+        {
+
+            var dto = _homeService.GetCourseBySearchQuery(new SearchFormHomeDto
+            {
+                Countries = model.Countries.Select(x => x.Text).ToList(),
+                Types = model.Types.Select(x => x.Text).ToList(),
+                Country = model.Country,
+                Query = model.Query,
+                Type = model.Type
+            });
+
+            model.SearchResultAjaxFormViewModel = _mapper.Map<List<SearchResultAjaxFormViewModel>>(dto);
+
+            return model;
+        }
+
+        private HomeViewModel SetCountriesAndTypesViewModel()
+        {
+            var model = new HomeViewModel();
+            var dto = _homeService.ConfigureCountriesAndTypes(new SearchFormHomeDto());
+
+            foreach (var country in dto.Countries)
+            {
+                model.SearchFormHomePageViewModel.Countries.Add(new SelectListItem { Value = country, Text = country });
+            }
+
+            foreach (var type in dto.Types)
+            {
+                model.SearchFormHomePageViewModel.Types.Add(new SelectListItem { Value = type, Text = type });
+            }
+
+            return model;
+        }
+
+
     }
 }

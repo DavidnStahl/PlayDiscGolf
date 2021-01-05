@@ -1,5 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PlayDiscGolf.Core.Dtos.Home;
+using PlayDiscGolf.Core.Services.Home;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.ViewModels.Home;
 using System;

@@ -10,7 +10,6 @@ namespace PlayDiscGolf.Models.ViewModels
     {
         public int NumberOfHoles { get; set; }
         public Guid CourseID { get; set; }
-
         public List<CourseHolesViewModel> Holes = new List<CourseHolesViewModel>();       
     }
 }

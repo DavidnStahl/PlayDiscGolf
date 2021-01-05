@@ -5,6 +5,7 @@ using PlayDiscGolf.Models.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace PlayDiscGolf.Infrastructure.Repository.Specific
 {
@@ -17,14 +18,14 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific
             _context = context;
         }
 
-        public List<ScoreCard> GetScoreCardsByUserNameAndCourseIDAndIncludePlayerCardAndHoleCard(string userID, Guid courseID)
+        public ScoreCard GetScoreCardAndIncludePlayerCardAndHoleCard(Expression<Func<ScoreCard, bool>> predicate)
         {
-            return _context.ScoreCards
+            return _context
+                .Set<ScoreCard>()
                 .Include(x => x.PlayerCards)
                 .ThenInclude(x => x.HoleCards)
-                .Where(x => x.UserID == userID && x.CourseID == courseID)
-                .OrderByDescending(x => x.StartDate)
-                .ToList();
+                .SingleOrDefault(predicate);
+                
         }
     }
 }

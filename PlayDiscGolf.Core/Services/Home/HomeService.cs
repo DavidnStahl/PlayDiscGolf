@@ -6,7 +6,6 @@ using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 
 namespace PlayDiscGolf.Core.Services.Home
 {
@@ -24,28 +23,27 @@ namespace PlayDiscGolf.Core.Services.Home
             _mapper = mapper;
         }
 
-        public List<CourseDto> GetCourseBySearchQuery(SearchFormHomeDto model)
+        public List<SearchResultAjaxFormDto> GetCourseBySearchQuery(SearchFormHomeDto model)
         {
             var courses = new List<Course>();
+            var dto = new List<CourseDto>();
+
             if (model.Type == EnumHelper.SearchType.Area.ToString())
             {
                 courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query)).ToList();
-                return _mapper.Map<List<CourseDto>>(courses);
+                dto = _mapper.Map<List<CourseDto>>(courses);
+                return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
             }
 
             courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query)).ToList();
-            return _mapper.Map<List<CourseDto>>(courses);   
+            dto = _mapper.Map<List<CourseDto>>(courses);
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
         }
 
         public SearchFormHomeDto ConfigureCountriesAndTypes(SearchFormHomeDto model)
         {
-            model.Countries = _unitOfWork.Courses.GetAll().Select(x => new SelectListItem { Value = x.Country, Text = x.Country }).ToList();
-
-            model.Types = new List<SelectListItem>{
-                new SelectListItem{Value = EnumHelper.SearchType.Area.ToString(), Text = EnumHelper.SearchType.Area.ToString() },
-                new SelectListItem{Value = EnumHelper.SearchType.Course.ToString(), Text = EnumHelper.SearchType.Course.ToString() }
-            };
-
+            model.Countries = _unitOfWork.Courses.GetAll().Select(x => x.Country).ToList();
+            model.Types = new List<string> { EnumHelper.SearchType.Area.ToString(), EnumHelper.SearchType.Area.ToString() };
             return model;
         }
     }

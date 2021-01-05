@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using PlayDiscGolf.Services.CoursePage;
+using PlayDiscGolf.Core.Services.CoursePage;
 using PlayDiscGolf.ViewModels.Course;
 
 namespace PlayDiscGolf.Controllers.CoursePage

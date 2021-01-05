@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PlayDiscGolf.Services;
-using PlayDiscGolf.Services.User;
+using PlayDiscGolf.Core.Services.Account;
+using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.ViewModels.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Controllers.User
@@ -69,9 +66,9 @@ namespace PlayDiscGolf.Controllers.User
         {
             var user = await _accountService.GetUserByQueryAsync(query);
 
-            if (user != null) return View(new UserClaimSearchResultModel { UserName = user.UserName });
+            if (user != null) return View(new UserSearchResultViewModel());
 
-            return View(new UserClaimSearchResultModel());
+            return View(new UserSearchResultViewModel());
         }
     }
 }

@@ -6,7 +6,7 @@ namespace PlayDiscGolf.Core.Services.Home
 {
     public interface IHomeService
     {
-        public List<CourseDto> GetCourseBySearchQuery(SearchFormHomeDto model);
+        List<SearchResultAjaxFormDto> GetCourseBySearchQuery(SearchFormHomeDto model);
 
         public SearchFormHomeDto ConfigureCountriesAndTypes(SearchFormHomeDto model);
         

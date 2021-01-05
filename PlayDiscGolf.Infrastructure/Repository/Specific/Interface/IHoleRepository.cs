@@ -8,5 +8,6 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific.Interface
 {
     public interface IHoleRepository : IEntityRepository<Hole>
     {
+        Hole GetCourseHole(Guid courseID, int holeNumber);
     }
 }

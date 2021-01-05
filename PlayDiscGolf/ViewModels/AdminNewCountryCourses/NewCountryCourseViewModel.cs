@@ -9,7 +9,6 @@ namespace PlayDiscGolf.Models.ViewModels.AdminNewCountryCourses
     {
         [Required]
         public string CountryCode { get; set; }
-
         public List<string> AddedCountryCourses { get; set; }
     }
 }

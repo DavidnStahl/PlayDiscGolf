@@ -38,7 +38,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             var course = _unitOfWork.Courses.FindById(courseID);
             var userID = await _accountService.GetInloggedUserIDAsync();
 
-            var scoreCardsEntity = _unitOfWork.ScoreCards.GetScoreCardsByUserNameAndCourseIDAndIncludePlayerCardAndHoleCard(userID, courseID);
+            var scoreCardsEntity = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.UserID == userID && x.CourseID == courseID);
             var scoreCards = _mapper.Map<List<ScoreCardDto>>(scoreCardsEntity);
             var holesEntity = _unitOfWork.Holes.FindBy(x => x.CourseID == courseID);
             var holes = _mapper.Map<List<HoleDto>>(holesEntity);

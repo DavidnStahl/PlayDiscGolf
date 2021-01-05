@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PlayDiscGolf.Business.ViewModelBuilder.ScoreCard;
+using PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard;
 using PlayDiscGolf.Core.Business.Session;
 using PlayDiscGolf.Core.Dtos.Cards;
+using PlayDiscGolf.Core.Dtos.Entities;
 using PlayDiscGolf.Core.Enums;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
@@ -15,33 +18,74 @@ namespace PlayDiscGolf.Core.Services.Score
     public class ScoreCardService : IScoreCardService
     {
         private readonly IMapper _mapper;
-        private readonly IScoreCardViewModelBuilder _scoreCardViewModelBuilder;
+        private readonly IScoreCardDtoBuilder _scoreCardDtoBuilder;
         private readonly string _sessionKey;
         private readonly ISessionStorage<ScoreCardDto> _sessionStorage;
         private readonly IUnitOfwork _unitOfWork;
+        private readonly IHttpContextAccessor _httpContext;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public ScoreCardService(
             ISessionStorage<ScoreCardDto> sessionStorage,
             IMapper mapper,
-            IScoreCardViewModelBuilder scoreCardViewModelBuilder,
-            IUnitOfwork unitOfWork)
+            IScoreCardDtoBuilder scoreCardDtoBuilder,
+            IUnitOfwork unitOfWork,
+            IHttpContextAccessor accessor,
+            UserManager<IdentityUser> userManager)
         {
             _sessionStorage = sessionStorage;
             _mapper = mapper;
-            _scoreCardViewModelBuilder = scoreCardViewModelBuilder;
+            _scoreCardDtoBuilder = scoreCardDtoBuilder;
             _sessionKey = EnumHelper.ScoreCardViewModelSessionKey.ScoreCardViewModel.ToString();
-            _unitOfWork = unitOfWork
+            _unitOfWork = unitOfWork;
+            _httpContext = accessor;
+            _userManager = userManager;
         }
         public ScoreCardDto GetScoreCardCreateInformation(string courseID)
         {
-            _sessionStorage.Save(_sessionKey, _scoreCardViewModelBuilder.BuildScoreCardCreateInformation(courseID));
+            var scoreCardID = Guid.NewGuid();
+
+            var playerCardID = Guid.NewGuid();
+
+            var holeCardDtos = new List<HoleCardDto>();
+
+            var holes = _unitOfWork.Holes.FindBy(x => x.CourseID == Guid.Parse(courseID));
+
+            for (int i = 0; i < holes.Count; i++)
+                holeCardDtos.Add(new HoleCardDto
+                {
+                    HoleCardID = Guid.NewGuid(),
+                    HoleNumber = i + 1,
+                    PlayerCardID = playerCardID,
+                    Score = 0
+                });
+
+
+            var ScoreCardDto = new ScoreCardDto
+            {
+                CourseID = Guid.Parse(courseID),
+                UserName = _httpContext.HttpContext.User.Identity.Name,
+                UserID = _userManager.GetUserId(_httpContext.HttpContext.User),
+                ScoreCardID = scoreCardID,
+                StartDate = DateTime.Now,
+                PlayerCards = new List<PlayerCardDto> {
+                    new PlayerCardDto {
+                        UserID = _userManager.GetUserId(_httpContext.HttpContext.User),
+                        UserName = _httpContext.HttpContext.User.Identity.Name,
+                        PlayerCardID = playerCardID,
+                        ScoreCardID =  scoreCardID,
+                        HoleCards = holeCardDtos
+                    }}
+            };
+
+            _sessionStorage.Save(_sessionKey, ScoreCardDto);
 
             return _sessionStorage.Get(_sessionKey);
         }
 
         public List<PlayerCardDto> AddPlayerToSessionAndReturnUpdatedPlayers(string newName)
         {
-            var sessionModel = _scoreCardViewModelBuilder.BuildUpdatedScoreCardWithUpdatedPlayers(_sessionStorage.Get(_sessionKey), newName);
+            var sessionModel = _scoreCardDtoBuilder.BuildUpdatedScoreCardWithUpdatedPlayers(_sessionStorage.Get(_sessionKey), newName);
 
             _sessionStorage.Save(_sessionKey, sessionModel);
 
@@ -65,8 +109,8 @@ namespace PlayDiscGolf.Core.Services.Score
 
             return new ScoreCardGameOnDto
             {
-                Hole = _unitOfWork.Holes.FindBy(x => x.CourseID == scoreCard.CourseID && x.HoleNumber == 1).FirstOrDefault(),
-                ScoreCardViewModel = _mapper.Map<ScoreCardDto>(scoreCard)
+                Hole = _mapper.Map<HoleDto>(_unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1)),
+                ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
             };
         }
 
@@ -82,36 +126,30 @@ namespace PlayDiscGolf.Core.Services.Score
 
         public ScoreCardGameOnDto UpdateScore(string scoreCardID, string holeNumber, string addOrRemove, string userName)
         {
-            var scoreCard = _scoreCardRepository
-                .GetAll()
-                .Include(x => x.PlayerCards)
-                .ThenInclude(x => x.HoleCards)
-                .Where(x => x.ScoreCardID == Guid.Parse(scoreCardID));
+            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID));
 
-            var hole = _holeRepository
-                .FindBy(x => x.CourseID == scoreCard.Select(x => x.CourseID).SingleOrDefault() && x.HoleNumber == Convert.ToInt32(holeNumber))
-                .FirstOrDefault();
+            var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, Convert.ToInt32(holeNumber));
 
             if (addOrRemove != null)
                 UpdateScoreCard(userName, holeNumber, hole, addOrRemove, scoreCard);
        
             return new ScoreCardGameOnDto 
             {
-                Hole = hole,
-                ScoreCardViewModel = _mapper.Map<ScoreCardDto>(scoreCard.SingleOrDefault())
+                Hole = _mapper.Map<HoleDto>(hole),
+                ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
             };
         }
 
-        private void UpdateScoreCard(string userName, string holeNumber, Hole hole, string addOrRemove, IQueryable<ScoreCard> scoreCard)
+        private void UpdateScoreCard(string userName, string holeNumber, Hole hole, string addOrRemove, ScoreCard scoreCard)
         {
-            var playerCard = scoreCard.SelectMany(x => x.PlayerCards).Where(x => x.UserName == userName);
+            var playerCard = scoreCard.PlayerCards.Where(x => x.UserName == userName);
             var holeCard = playerCard.SelectMany(x => x.HoleCards).Where(x => x.HoleNumber == Convert.ToInt32(holeNumber));
 
-            if (addOrRemove == EnumHelper.PlusAndMinus.Plus.ToString()) IncreaseScoreOnHoleCard(holeCard, scoreCard.SingleOrDefault(), playerCard, hole);
-            else DecreaseScoreOnHoleCard(holeCard, scoreCard.SingleOrDefault(), playerCard, hole);
+            if (addOrRemove == EnumHelper.PlusAndMinus.Plus.ToString()) IncreaseScoreOnHoleCard(holeCard, scoreCard, playerCard, hole);
+            else DecreaseScoreOnHoleCard(holeCard, scoreCard, playerCard, hole);
         }
 
-        private void UpdatePlayerTotalScore(IQueryable<HoleCard> holeCard, ScoreCard scoreCard, IQueryable<PlayerCard> playerCard)
+        private void UpdatePlayerTotalScore(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard)
         {
             var playerTotalThrowsFromStartedHoles = playerCard
                 .SelectMany(x => x.HoleCards)
@@ -119,12 +157,10 @@ namespace PlayDiscGolf.Core.Services.Score
                 .Select(x => x.Score)
                 .Sum();
 
-            var totalParValueFromStartedHoles = _holeRepository
-                .FindBy(x => x.CourseID == scoreCard.CourseID)
+            var totalParValueFromStartedHoles = _unitOfWork.Holes.FindBy(x => x.CourseID == scoreCard.CourseID)
                 .Where(x => holeCard
                             .Where(y => y.Score > 0)
                             .Select(y => y.HoleNumber)
-                            .ToList()
                             .Contains(x.HoleNumber))
                 .Select(x => x.ParValue).Sum();
 
@@ -132,62 +168,58 @@ namespace PlayDiscGolf.Core.Services.Score
 
             playerItem.TotalScore = playerTotalThrowsFromStartedHoles - totalParValueFromStartedHoles;
 
-            _playerCardRepository.Edit(playerItem);
-            _playerCardRepository.Save();
+            _unitOfWork.PlayerCards.Edit(playerItem);
+            _unitOfWork.Complete();
         }
 
-        private void IncreaseScoreOnHoleCard(IQueryable<HoleCard> holeCard, ScoreCard scoreCard, IQueryable<PlayerCard> playerCard, Hole hole)
+        private void IncreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard, Hole hole)
         {
             if (holeCard.SingleOrDefault().Score == 0)
             {
                 var item = holeCard.SingleOrDefault();
                 item.Score = hole.ParValue + 1;
-                _holeCardRepository.Edit(item);
+                _unitOfWork.HoleCards.Edit(item);
             }
             else
             {
                 var item = holeCard.SingleOrDefault();
                 item.Score++;
-                _holeCardRepository.Edit(item);
+                _unitOfWork.HoleCards.Edit(item);
             }
 
-            _holeCardRepository.Save();
+            _unitOfWork.Complete();
             UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
         }
 
-        private void DecreaseScoreOnHoleCard(IQueryable<HoleCard> holeCard, ScoreCard scoreCard, IQueryable<PlayerCard> playerCard, Hole hole)
+        private void DecreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard, Hole hole)
         {
             if (holeCard.SingleOrDefault().Score == 0)
             {
                 var item = holeCard.SingleOrDefault();
                 item.Score = hole.ParValue - 1;
-                _holeCardRepository.Edit(item);
+                _unitOfWork.HoleCards.Edit(item);
             }
             else
             {
                 var item = holeCard.SingleOrDefault();
                 item.Score--;
-                _holeCardRepository.Edit(item);
+                _unitOfWork.HoleCards.Edit(item);
             }
 
-            _holeCardRepository.Save();
+            _unitOfWork.Complete();
             UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
         }
 
         public ScoreCardGameOnDto OpenScoreCard(string scoreCardID)
         {
-            var scoreCard = _scoreCardRepository
-                .GetAll()
-                .Include(x => x.PlayerCards)
-                .ThenInclude(x => x.HoleCards)
-                .SingleOrDefault(x => x.ScoreCardID == Guid.Parse(scoreCardID));
+            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID));
 
-            var hole = _holeRepository.FindBy(x => x.CourseID == scoreCard.CourseID && x.HoleNumber == 1).FirstOrDefault();
+            var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1);
 
             var model =  new ScoreCardGameOnDto
             {
-                Hole = hole,
-                ScoreCardViewModel = _mapper.Map<ScoreCardDto>(scoreCard)
+                Hole = _mapper.Map<HoleDto>(hole),
+                ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
             };
 
             return model;

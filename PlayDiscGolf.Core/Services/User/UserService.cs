@@ -1,4 +1,4 @@
-﻿using PlayDiscGolf.Core.Dtos.ScoreCard;
+﻿using PlayDiscGolf.Core.Dtos.User;
 using PlayDiscGolf.Core.Services.Account;
 using System.Threading.Tasks;
 

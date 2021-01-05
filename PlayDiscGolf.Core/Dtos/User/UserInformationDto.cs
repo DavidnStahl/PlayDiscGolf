@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace PlayDiscGolf.Core.Dtos.ScoreCard
+namespace PlayDiscGolf.Core.Dtos.User
 {
     public class UserInformationDto
     {
@@ -12,6 +12,5 @@ namespace PlayDiscGolf.Core.Dtos.ScoreCard
         public string SearchUsername { get; set; }
         public string YourNameInThoseGames { get; set; }
         public List<PlayerCardDto> PlayerCards { get; set; }
-        public bool ClaimGames { get; set; }
     }
 }

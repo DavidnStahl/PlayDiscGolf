@@ -9,9 +9,7 @@ namespace PlayDiscGolf.Core.Dtos.Home
     {
         public Guid CourseID { get; set; }
         public string FullName { get; set; }
-
-        public string Area { get; set; }
-
         public string Holes { get; set; }
+        public string Area { get; set; }
     }
 }
