@@ -22,7 +22,7 @@ namespace PlayDiscGolf.Core.Dtos.AdminCourse
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public int NumberOfHoles { get; set; }
-        public List<CourseHolesDto> Holes { get; set; }
-        public CreateHolesDto CreateHolesDto { get; set; }
+        public List<CourseHolesDto> Holes { get; set; } = new List<CourseHolesDto>();
+        public CreateHolesDto CreateHoles { get; set; } = new CreateHolesDto();
     }
 }

@@ -10,7 +10,7 @@ namespace PlayDiscGolf.Core.Services.Admin
 {
     public interface IAdminService
     {
-        CourseDto GetCourseByID(Guid id);
+        CourseFormDto GetCourseByID(Guid id);
         void SaveUpdatedCourse(CourseFormDto course);
         List<HoleDto> GetCoursesHoles(Guid id);
         CreateHolesDto ManageNumberOfHolesFromForm(CreateHolesDto model);

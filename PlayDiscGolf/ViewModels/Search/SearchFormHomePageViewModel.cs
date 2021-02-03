@@ -13,9 +13,9 @@ namespace PlayDiscGolf.ViewModels.Home
         public string Country { get; set; }
         [Required(ErrorMessage = "Required")]
         public string Query { get; set; }
-        public List<SelectListItem> Types { get; set; }
+        public List<SelectListItem> Types = new List<SelectListItem>();
         [Display(Name = "Choose country")]
-        public List<SelectListItem> Countries { get; set; }
+        public List<SelectListItem> Countries = new List<SelectListItem>();
         public List<SearchResultAjaxFormViewModel> SearchResultAjaxFormViewModel = new List<SearchResultAjaxFormViewModel>();
     }
 }

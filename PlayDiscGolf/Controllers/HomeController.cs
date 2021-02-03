@@ -35,6 +35,10 @@ namespace PlayDiscGolf.Controllers
         [ValidateAntiForgeryToken]
         public  IActionResult SearchFormAjax([Bind("Type", "Country", "Query", "Types", "Countries")]SearchFormHomePageViewModel model)
         {
+            var searchOptionModel = SetCountriesAndTypesViewModel();
+            model.Types = searchOptionModel.SearchFormHomePageViewModel.Types;
+            model.Countries = searchOptionModel.SearchFormHomePageViewModel.Countries;
+
             if (ModelState.IsValid)
             {
                 model = GetCourseBySearchQuery(model);
@@ -79,7 +83,5 @@ namespace PlayDiscGolf.Controllers
 
             return model;
         }
-
-
     }
 }

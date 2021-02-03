@@ -69,7 +69,11 @@ namespace PlayDiscGolf.Controllers
                 Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(_adminService.GetCoursesHoles(Guid.Parse(courseID)))
             };
 
-            return PartialView("_CreateHoles", model);
+            //Mappning behöver fixas
+            var x = _mapper.Map<CreateHolesViewModel>(_adminService.ManageNumberOfHolesFromForm(_mapper.Map<CreateHolesDto>(model)));
+
+            
+            return PartialView("_CreateHoles", x);
         }
     }
 }

@@ -29,16 +29,17 @@ namespace PlayDiscGolf.Core.Services.Admin
             _createHolesCalcultion = createHolesCalcultion;
         }
 
-        public CourseDto GetCourseByID(Guid id)
+        public CourseFormDto GetCourseByID(Guid id)
         {
             var course = _unitOfWork.Courses.GetCourseByIDAndIncludeHoles(id);
-            return _mapper.Map<CourseDto>(course);
+            var x = MapCourse(course);
+            return x;
         }
 
         public List<CourseDto> GetCoursesBySearch(SearchDto model)
         {
             List<Course> course;
-
+            
             if (!string.IsNullOrWhiteSpace(model.Query) && model.Type == EnumHelper.SearchType.Area.ToString())
             {
                 course = _unitOfWork.Courses.FindBy(x => x.Area.StartsWith(model.Query)).OrderBy(x => x.Area).ToList();
@@ -66,6 +67,16 @@ namespace PlayDiscGolf.Core.Services.Admin
             var editedCourse = _mapper.Map(model, course);
             _unitOfWork.Courses.Edit(editedCourse);
             _unitOfWork.Complete();
+        }
+
+        private CourseFormDto MapCourse(Course course)
+        {
+            var x = _mapper.Map<CourseFormDto>(course);
+            x.CreateHoles.CourseID = x.CourseID;
+            x.CreateHoles.NumberOfHoles = x.HolesTotal;
+            x.Holes = _mapper.Map<List<CourseHolesDto>>(x.Holes);
+
+            return x;
         }
     }
 }

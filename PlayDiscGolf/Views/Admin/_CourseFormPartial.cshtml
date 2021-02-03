@@ -17,13 +17,13 @@
 @if (!string.IsNullOrEmpty(Model.Name))
 {
     <div class="container mb-4">
-        <form method="post" asp-action="EditCourse" asp-controller="AdminCourse">
+        <form method="post" asp-action="EditCourse" asp-controller="Admin">
             @Html.AntiForgeryToken()
-            <input hidden asp-for="@Model.CreateHolesViewModel" value="@Model.CreateHolesViewModel">
-            @if (Model.CreateHolesViewModel != null)
+            <input hidden asp-for="@Model.CreateHoles" value="@Model.CreateHoles">
+            @if (Model.CreateHoles != null)
             {
-                <input hidden asp-for="@Model.CreateHolesViewModel.CourseID" value="@Model.CreateHolesViewModel.CourseID">
-                <input hidden asp-for="@Model.CreateHolesViewModel.Holes" value="@Model.CreateHolesViewModel.Holes">
+                <input hidden asp-for="@Model.CreateHoles.CourseID" value="@Model.CreateHoles.CourseID">
+                <input hidden asp-for="@Model.CreateHoles.Holes" value="@Model.CreateHoles.Holes">
             }
             <input hidden asp-for="@Model.CourseID" value="@Model.CourseID">
             <input hidden asp-for="@Model.ApiID" value="@Model.ApiID">
@@ -62,7 +62,7 @@
                     </button>
                 </p>
                 <div class="collapse" id="partialHoles">
-                    @await Html.PartialAsync("_createHoles", Model.CreateHolesViewModel)
+                    @await Html.PartialAsync("_createHoles", Model.CreateHoles)
                 </div>
             }
             

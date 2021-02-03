@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PlayDiscGolf.Core.Dtos.AdminCourse;
 using PlayDiscGolf.Core.Dtos.Cards;
 using PlayDiscGolf.Core.Dtos.Entities;
 using PlayDiscGolf.Models.Models.DataModels;
@@ -14,6 +15,7 @@ namespace PlayDiscGolf.Core.AutoMapper.Profiles.Entities
         {
             CreateMap<Hole, HoleDto>();
             CreateMap<HoleDto, Hole>();
+            CreateMap<Hole, CourseHolesDto>();
         }
     }
 }

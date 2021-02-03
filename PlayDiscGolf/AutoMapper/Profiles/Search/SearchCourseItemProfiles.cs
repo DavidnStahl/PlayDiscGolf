@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using PlayDiscGolf.Core.Dtos.AdminCourse;
+using PlayDiscGolf.Core.Dtos.Course;
 using PlayDiscGolf.Models.ViewModels;
 
 namespace PlayDiscGolf.AutoMapper.Profiles.AdminCourse
@@ -12,8 +13,8 @@ namespace PlayDiscGolf.AutoMapper.Profiles.AdminCourse
     {
         public SearchCourseItemProfiles()
         {
-            CreateMap<SearchCourseItemViewModel, SearchCourseItemDto>();
-            CreateMap<SearchCourseItemDto, SearchCourseItemViewModel>();
+            CreateMap<SearchCourseItemViewModel, CourseDto>();
+            CreateMap<CourseDto, SearchCourseItemViewModel>();
         }
     }
 }

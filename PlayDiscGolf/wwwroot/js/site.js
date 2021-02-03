@@ -26,7 +26,7 @@
 
     function GetSearchOptions() {
         $.ajax({
-            url: "/AdminCourse/Search",
+            url: "/Admin/Search",
             data: {
                 query: $("#searchText").val(),
                 type: $("#mySelectedSearch").val()
@@ -46,7 +46,7 @@
 
     function CreateHoles() {
         $.ajax({
-            url: "/AdminCourse/GetHoles",
+            url: "/Admin/GetHoles",
             data: {
                 holes: $("#editHoles").val(),
                 courseID: $("#courseID").val()
@@ -92,7 +92,7 @@
 
     function GetCourses(value) {
         $.ajax({
-            url: "/AdminCourse/SelectedLocation",
+            url: "/Admin/SelectedLocation",
             data: {
                 id: value
             },

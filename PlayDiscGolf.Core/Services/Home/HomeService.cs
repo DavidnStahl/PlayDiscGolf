@@ -30,20 +30,20 @@ namespace PlayDiscGolf.Core.Services.Home
 
             if (model.Type == EnumHelper.SearchType.Area.ToString())
             {
-                courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query)).ToList();
+                courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
                 dto = _mapper.Map<List<CourseDto>>(courses);
                 return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
             }
 
-            courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query)).ToList();
+            courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
             dto = _mapper.Map<List<CourseDto>>(courses);
             return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
         }
 
         public SearchFormHomeDto ConfigureCountriesAndTypes(SearchFormHomeDto model)
         {
-            model.Countries = _unitOfWork.Courses.GetAll().Select(x => x.Country).ToList();
-            model.Types = new List<string> { EnumHelper.SearchType.Area.ToString(), EnumHelper.SearchType.Area.ToString() };
+            model.Countries = _unitOfWork.Courses.GetAll().Select(x => x.Country).Distinct().ToList();
+            model.Types = new List<string> { EnumHelper.SearchType.Area.ToString(), EnumHelper.SearchType.Course.ToString() };
             return model;
         }
     }

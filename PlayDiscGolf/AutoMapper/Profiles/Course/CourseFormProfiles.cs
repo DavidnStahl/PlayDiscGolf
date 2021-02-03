@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlayDiscGolf.Core.Dtos.AdminCourse;
+using PlayDiscGolf.Core.Dtos.Course;
 using PlayDiscGolf.Models.ViewModels;
 using System;
 using System.Collections.Generic;

@@ -9,6 +9,8 @@ namespace PlayDiscGolf.Core.Dtos.Course
     {
         public Guid CourseID { get; set; }
 
+        public string Area { get; set; }
+
         public string Name { get; set; }
 
         public string FullName { get; set; }
@@ -28,5 +30,12 @@ namespace PlayDiscGolf.Core.Dtos.Course
         public List<Hole> Holes = null;
 
         public List<ScoreCardDto> ScoreCards = null;
+
+        public string ApiID { get; set; }
+
+        public string ApiParentID { get; set; }
+
+        public bool Main { get; set; }
+
     }
 }

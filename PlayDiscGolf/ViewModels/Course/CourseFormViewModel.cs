@@ -53,7 +53,7 @@ namespace PlayDiscGolf.Models.ViewModels
 
         public List<CourseHolesViewModel> Holes { get; set; }
 
-        public CreateHolesViewModel CreateHolesViewModel { get; set; }
+        public CreateHolesViewModel CreateHoles { get; set; }
 
         public class CourseHolesViewModel
         {
