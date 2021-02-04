@@ -2,12 +2,11 @@
 using PlayDiscGolf.Models.Models.DataModels;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Text;
 
 namespace PlayDiscGolf.Infrastructure.Repository.Specific.Interface
 {
-    public interface IScoreCardRepository : IEntityRepository<ScoreCard>
+    public interface IFriendRepository : IEntityRepository<Friend>
     {
-        IEnumerable<ScoreCard> GetScoreCardAndIncludePlayerCardAndHoleCard(Expression<Func<ScoreCard, bool>> predicate);
     }
 }

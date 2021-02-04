@@ -10,6 +10,6 @@ namespace PlayDiscGolf.Core.Services.CoursePage
 {
     public interface ICoursePageService
     {
-        public Task<CourseInfoDto> GetCoursePageInformationAsync(Guid courseID);
+        public Task<CourseInfoDto> GetCoursePageInformation(Guid courseID);
     }
 }

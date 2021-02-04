@@ -7,5 +7,7 @@ namespace PlayDiscGolf.Core.Services.User
     public interface IUserService
     {
         Task<UserInformationDto> GetUserInformationAsync();
+
+        Task<string> SearchUsersAsync(string query);
     }
 }

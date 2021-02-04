@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PlayDiscGolf.Core.Dtos.Entities;
+using PlayDiscGolf.Core.Dtos.Home;
+using System;
 using System.Collections.Generic;
 
 namespace PlayDiscGolf.Core.Dtos.AdminCourse
@@ -7,6 +9,6 @@ namespace PlayDiscGolf.Core.Dtos.AdminCourse
     {
         public int NumberOfHoles { get; set; }
         public Guid CourseID { get; set; }
-        public List<CourseHolesDto> Holes = new List<CourseHolesDto>();       
+        public List<HoleDto> Holes = new List<HoleDto>();       
     }
 }

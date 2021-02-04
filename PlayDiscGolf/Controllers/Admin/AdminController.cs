@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using PlayDiscGolf.Core.Services.Admin;
 using PlayDiscGolf.Core.Dtos.PostModels;
 using PlayDiscGolf.Core.Dtos.AdminCourse;
+using PlayDiscGolf.Core.Dtos.Entities;
 
 namespace PlayDiscGolf.Controllers
 {
@@ -42,6 +43,11 @@ namespace PlayDiscGolf.Controllers
         {
             var dto = _adminService.GetCourseByID(id);
             var model = _mapper.Map<CourseFormViewModel>(dto);
+            model.Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(_adminService.GetCoursesHoles(model.CourseID));
+            model.CreateHoles.CourseID = dto.CourseID;
+            model.CreateHoles.NumberOfHoles = dto.NumberOfHoles;
+            model.CreateHoles.Holes = model.Holes;
+            model.Name = dto.Name;
 
             return PartialView("_CourseForm", model);
         }
@@ -54,8 +60,7 @@ namespace PlayDiscGolf.Controllers
             if(!ModelState.IsValid) 
                 View("Index", new AdminSearchViewModel { Course = model });
 
-            var dto = _mapper.Map<CourseFormDto>(model);
-            _adminService.SaveUpdatedCourse(dto);
+            MapAndSaveCourse(model);
 
             return RedirectToAction("Index");
         }
@@ -70,10 +75,42 @@ namespace PlayDiscGolf.Controllers
             };
 
             //Mappning behöver fixas
-            var x = _mapper.Map<CreateHolesViewModel>(_adminService.ManageNumberOfHolesFromForm(_mapper.Map<CreateHolesDto>(model)));
+            var dto = _adminService.ManageNumberOfHolesFromForm(_mapper.Map<CreateHolesDto>(model));
 
-            
-            return PartialView("_CreateHoles", x);
+            model.NumberOfHoles = dto.NumberOfHoles;
+            model.CourseID = dto.CourseID;
+            model.Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(dto.Holes);
+
+
+            return PartialView("_CreateHoles", model);
+        }
+
+        private void MapAndSaveCourse(CourseFormViewModel model)
+        {
+            var dto = new CourseFormDto
+            {
+                CountryCode = model.CountryCode,
+                HolesTotal = model.HolesTotal,
+                NumberOfHoles = model.NumberOfHoles,
+                Latitude = model.Latitude,
+                Longitude = model.Longitude,
+                ApiParentID = model.ApiParentID,
+                ApiID = model.ApiID,
+                CourseID = model.CourseID,
+                Area = model.Area,
+                TotalDistance = model.TotalDistance,
+                TotalParValue = model.TotalParValue,
+                Main = model.Main,
+                FullName = model.FullName,
+                Name = model.Name,
+                Holes = _mapper.Map<List<CourseHolesDto>>(model.Holes),
+            };
+
+            dto.CreateHoles.CourseID = model.CreateHoles.CourseID;
+            dto.CreateHoles.NumberOfHoles = model.CreateHoles.NumberOfHoles;
+            dto.CreateHoles.Holes = _mapper.Map<List<HoleDto>>(model.CreateHoles.Holes);
+
+            _adminService.SaveUpdatedCourse(dto);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace PlayDiscGolf.Infrastructure.UnitOfWork
             PlayerCards = new PlayerCardRepository(_context);
             Courses = new CourseRepository(_context);
             ScoreCards = new ScoreCardRepository(_context);
+            Friends = new FriendRepository(_context);
         }
 
         public IHoleCardRepository HoleCards { get; private set; }
@@ -29,6 +30,8 @@ namespace PlayDiscGolf.Infrastructure.UnitOfWork
         public IScoreCardRepository ScoreCards { get; private set; }
 
         public ICourseRepository Courses { get; private set; }
+
+        public IFriendRepository Friends { get; set; }
 
         public int Complete()
         {

@@ -16,6 +16,13 @@ namespace PlayDiscGolf.Core.AutoMapper.Profiles.Entities
             CreateMap<Hole, HoleDto>();
             CreateMap<HoleDto, Hole>();
             CreateMap<Hole, CourseHolesDto>();
+            CreateMap<CourseHolesDto, Hole>()
+                .ForMember(x => x.Distance, source => source.MapFrom(x => x.Distance))
+                .ForMember(x => x.HoleNumber, source => source.MapFrom(x => x.HoleNumber))
+                .ForMember(x => x.ParValue, source => source.MapFrom(x => x.ParValue))
+                .ForMember(x => x.HoleID, source => source.MapFrom(x => x.HoleID))
+                .ForMember(x => x.CourseID, source => source.MapFrom(x => x.CourseID))
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

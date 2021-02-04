@@ -37,7 +37,25 @@ namespace PlayDiscGolf.Core.AutoMapper.Profiles.Entities
                 .ForMember(x => x.TotalParValue, map => map.MapFrom(x => x.TotalParValue))
                 .ForMember(x => x.FullName, map => map.MapFrom(x => x.FullName))
                 .ForAllOtherMembers(x => x.Ignore());
-                
+
+            CreateMap<CourseFormDto, Course>()
+                .ForMember(x => x.ApiID, map => map.MapFrom(x => x.ApiID))
+                .ForMember(x => x.ApiParentID, map => map.MapFrom(x => x.ApiParentID))
+                .ForMember(x => x.Area, map => map.MapFrom(x => x.Area))
+                .ForMember(x => x.CountryCode, map => map.MapFrom(x => x.CountryCode))
+                .ForMember(x => x.CourseID, map => map.MapFrom(x => x.CourseID))
+                .ForMember(x => x.HolesTotal, map => map.MapFrom(x => x.HolesTotal))
+                .ForMember(x => x.Latitude, map => map.MapFrom(x => x.Latitude))
+                .ForMember(x => x.Longitude, map => map.MapFrom(x => x.Longitude))
+                .ForMember(x => x.Main, map => map.MapFrom(x => x.Main))
+                .ForMember(x => x.Name, map => map.MapFrom(x => x.Name))
+                .ForMember(x => x.HolesTotal, map => map.MapFrom(x => x.NumberOfHoles))
+                .ForMember(x => x.TotalDistance, map => map.MapFrom(x => x.TotalDistance))
+                .ForMember(x => x.HolesTotal, map => map.MapFrom(x => x.HolesTotal))
+                .ForMember(x => x.TotalParValue, map => map.MapFrom(x => x.TotalParValue))
+                .ForMember(x => x.FullName, map => map.MapFrom(x => x.FullName))
+                .ForAllOtherMembers(x => x.Ignore());
+
 
 
 

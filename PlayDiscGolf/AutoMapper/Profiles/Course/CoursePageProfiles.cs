@@ -14,6 +14,7 @@ namespace PlayDiscGolf.AutoMapper.Profiles.Course
         {
             CreateMap<CoursePageViewModel, CoursePageDto>();
             CreateMap<CoursePageDto, CoursePageViewModel>();
+            CreateMap<CourseInfoDto, CoursePageViewModel>();
         }
     }
 }

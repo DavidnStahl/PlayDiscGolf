@@ -18,13 +18,13 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific
             _context = context;
         }
 
-        public ScoreCard GetScoreCardAndIncludePlayerCardAndHoleCard(Expression<Func<ScoreCard, bool>> predicate)
+        public IEnumerable<ScoreCard> GetScoreCardAndIncludePlayerCardAndHoleCard(Expression<Func<ScoreCard, bool>> predicate)
         {
             return _context
                 .Set<ScoreCard>()
                 .Include(x => x.PlayerCards)
                 .ThenInclude(x => x.HoleCards)
-                .SingleOrDefault(predicate);
+                .Where(predicate).ToList();
                 
         }
     }

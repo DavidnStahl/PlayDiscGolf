@@ -13,8 +13,9 @@ namespace PlayDiscGolf.ViewModels.User
         public string Username { get; set; }
         public string Email { get; set; }
         public string SearchUsername { get; set; }
-        public string YourNameInThoseGames { get; set; }
-        public List<PlayerCardViewModel> PlayerCards { get; set; }
-        public bool ClaimGames { get; set; }
+        public string SearchResult { get; set; }
+        public List<string> Friends = new List<string>();
+
+        public UserSearchResultViewModel UserSearchResultViewModel = new UserSearchResultViewModel();
     }
 }

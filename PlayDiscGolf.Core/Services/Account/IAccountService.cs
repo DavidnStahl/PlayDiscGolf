@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Core.Dtos.Account;
 using PlayDiscGolf.Dtos;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Core.Services.Account
@@ -24,8 +25,5 @@ namespace PlayDiscGolf.Core.Services.Account
         Task ChangeUserNameAsync(string newUserName);
         Task<bool> IsEmailTakenAsync(string email);
         Task<bool> IsUserNameTakenAsync(string userName);
-
-
-
     }
 }

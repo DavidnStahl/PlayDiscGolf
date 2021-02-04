@@ -33,7 +33,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             _accountService = accountService;
             _unitOfWork = unitOfWork;
         }
-        public async Task<CourseInfoDto> GetCoursePageInformationAsync(Guid courseID)
+        public async Task<CourseInfoDto> GetCoursePageInformation(Guid courseID)
         {
             var course = _unitOfWork.Courses.FindById(courseID);
             var userID = await _accountService.GetInloggedUserIDAsync();
@@ -47,7 +47,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             {
                 CourseID = courseID,
                 TotalDistance = course.TotalDistance,
-                ScoreCards = _mapper.Map<List<ScoreCardDto>>(scoreCards),
+                ScoreCards = scoreCards,
                 FullName = course.FullName,
                 Holes = holes,
                 TotalHoles = course.HolesTotal,

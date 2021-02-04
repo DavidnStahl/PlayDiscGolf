@@ -63,9 +63,9 @@ namespace PlayDiscGolf.Core.Services.Admin
 
         public void SaveUpdatedCourse(CourseFormDto model)
         {
-            var course = _unitOfWork.Courses.FindById(model.CourseID);
-            var editedCourse = _mapper.Map(model, course);
-            _unitOfWork.Courses.Edit(editedCourse);
+            var course = _mapper.Map(model, _unitOfWork.Courses.FindById(model.CourseID));
+            course.Holes = _mapper.Map(model.Holes, _unitOfWork.Holes.FindBy(x => x.CourseID == model.CourseID));
+            _unitOfWork.Courses.Edit(course);
             _unitOfWork.Complete();
         }
 

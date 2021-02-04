@@ -24,6 +24,29 @@
         }
     }
 
+    jQueryAjaxPost = form => {
+        try {
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    console.log(res)
+                    $("#searchUserName").empty().append(res);
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            })
+            //to prevent default form submit event
+            return false;
+        } catch (ex) {
+            console.log(ex)
+        }
+    }
+
     function GetSearchOptions() {
         $.ajax({
             url: "/Admin/Search",

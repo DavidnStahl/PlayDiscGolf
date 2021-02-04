@@ -28,6 +28,19 @@ namespace PlayDiscGolf.Controllers.User
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SearchUser([Bind("SearchUsername")] UserInformationViewModel formModel)
+        {
+            var userName = await _userService.SearchUsersAsync(formModel.SearchUsername);
+
+            var model = new UserSearchResultViewModel
+            {
+                UserName = userName
+            };
+
+            return PartialView("_SearchUserNameResult", model);
+        }
+
         public async Task<IActionResult> SaveUserInformation(UserUpdateInformationViewModel model)
         {
             if (ModelState.IsValid)
@@ -62,13 +75,13 @@ namespace PlayDiscGolf.Controllers.User
             return View(model);
         }
 
-        public async Task<IActionResult> SearchUser(string query)
+        /*public async Task<IActionResult> SearchUser(string query)
         {
             var user = await _accountService.GetUserByQueryAsync(query);
 
             if (user != null) return View(new UserSearchResultViewModel());
 
             return View(new UserSearchResultViewModel());
-        }
+        }*/
     }
 }

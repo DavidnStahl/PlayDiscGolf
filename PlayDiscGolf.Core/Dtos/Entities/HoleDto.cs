@@ -11,6 +11,7 @@ namespace PlayDiscGolf.Core.Dtos.Entities
         public int HoleNumber { get; set; }
         public int ParValue { get; set; }
         public int Distance { get; set; }
-        public CourseDto Course = null;
+
+        public CourseDto Course = new CourseDto();
     }
 }

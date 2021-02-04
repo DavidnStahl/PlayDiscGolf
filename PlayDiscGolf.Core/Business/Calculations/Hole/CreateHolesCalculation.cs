@@ -1,4 +1,5 @@
 ﻿using PlayDiscGolf.Core.Dtos.AdminCourse;
+using PlayDiscGolf.Core.Dtos.Entities;
 using System;
 
 namespace PlayDiscGolf.Core.Business.Calculations.Hole
@@ -18,9 +19,8 @@ namespace PlayDiscGolf.Core.Business.Calculations.Hole
         private CreateHolesDto CreateNewHoles(CreateHolesDto model)
         {
             for (int i = model.Holes.Count; i < model.NumberOfHoles; i++)
-                model.Holes.Add(new CourseHolesDto
+                model.Holes.Add(new HoleDto
                 {
-                    CourseID = model.CourseID,
                     HoleNumber = i + 1,
                     HoleID = Guid.NewGuid(),
                     ParValue = 1,

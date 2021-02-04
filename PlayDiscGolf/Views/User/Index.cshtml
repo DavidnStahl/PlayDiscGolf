@@ -1,0 +1,72 @@
+﻿@model PlayDiscGolf.ViewModels.User.UserInformationViewModel
+
+<div class="card" style="width: auto;">
+    <div class="card-body">
+        <h4 class="card-title">Username: @Model.Username</h4>
+        <h4 class="card-title">Email: @Model.Email</h4>
+    </div>
+    <form asp-action="SearchUser" onsubmit="return jQueryAjaxPost(this);">
+        <div class="form-group row">
+            <div class="col-sm-4 ml-xl-2 pb-4">
+                <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
+                <input placeholder="Search user here.." class="form-control" id="searchUser" asp-for="@Model.SearchUsername">
+            </div>
+            <div class="col-sm-2 ml-xl-2 pb-4">
+                <input type="submit" class="btn btn-primary mb-2 form-control" value="Search" />
+            </div>
+        </div>
+    </form>
+    <div id="searchUserName">
+        @await Html.PartialAsync("_SearchUserNameResult", Model.UserSearchResultViewModel)
+    </div>
+    <ul class="list-group list-group-flush">
+
+        @if (Model.Friends.Count > 0)
+        {
+            <li class="list-group-item">Friends</li>
+        }
+
+        @for (int i = 0; i < Model.Friends.Count; i++)
+        {
+            <li class="list-group-item">@Model.Friends[i] <a class="btn btn-success" asp-route-Username="@Model.Friends[i]" asp-action="RemoveFriend" asp-controller="User">Remove</a></li>
+        }
+    </ul>
+    <div class="card-body">
+        <p>
+            <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeUserName" role="button" aria-expanded="false" aria-controls="collapseExampleChangeUserName">
+                Change Username
+            </a>
+        </p>
+        <div class="collapse" id="collapseExampleChangeUserName">
+            <div class="card card-body">
+                <input class="list-group-item" placeholder="Write your new username" />
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <p>
+            <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeEmail" role="button" aria-expanded="false" aria-controls="collapseExampleChangeEmail">
+                Change Email
+            </a>
+        </p>
+        <div class="collapse" id="collapseExampleChangeEmail">
+            <div class="card card-body">
+                <input class="list-group-item" placeholder="Write your new Email" />
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <p>
+            <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangePassword" role="button" aria-expanded="false" aria-controls="collapseExampleChangePassword">
+                Change Password
+            </a>
+        </p>
+        <div class="collapse" id="collapseExampleChangePassword">
+            <div class="card card-body">
+                <input class="list-group-item" placeholder="Old password.." />
+                <input class="list-group-item" placeholder="New password.." />
+                <input class="list-group-item" placeholder="Confirm new password" />
+            </div>
+        </div>
+    </div>
+</div>

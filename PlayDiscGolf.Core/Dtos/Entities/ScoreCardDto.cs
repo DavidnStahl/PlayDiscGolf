@@ -14,6 +14,9 @@ namespace PlayDiscGolf.Core.Dtos.Cards
         public string UserName { get; set; }
         public string UserID { get; set; }
         public Guid CourseID { get; set; }
+
+        public Models.Models.DataModels.Course Course { get; set; }
+
         public List<PlayerCardDto> PlayerCards = null;
     }
 }

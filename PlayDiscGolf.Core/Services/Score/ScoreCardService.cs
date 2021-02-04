@@ -126,7 +126,7 @@ namespace PlayDiscGolf.Core.Services.Score
 
         public ScoreCardGameOnDto UpdateScore(string scoreCardID, string holeNumber, string addOrRemove, string userName)
         {
-            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID));
+            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID)).FirstOrDefault();
 
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, Convert.ToInt32(holeNumber));
 
@@ -212,7 +212,7 @@ namespace PlayDiscGolf.Core.Services.Score
 
         public ScoreCardGameOnDto OpenScoreCard(string scoreCardID)
         {
-            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID));
+            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID)).FirstOrDefault();
 
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1);
 

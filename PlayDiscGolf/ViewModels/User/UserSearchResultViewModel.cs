@@ -7,5 +7,6 @@ namespace PlayDiscGolf.ViewModels.User
 {
     public class UserSearchResultViewModel
     {
+        public string UserName { get; set; }
     }
 }

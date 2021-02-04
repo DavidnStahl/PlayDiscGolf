@@ -11,6 +11,7 @@ namespace PlayDiscGolf.Core.Dtos.Cards
         public int HoleNumber { get; set; }
         public int Score { get; set; }
         public Guid PlayerCardID { get; set; }
+
         public PlayerCardDto PlayerCard = null;
     }
 }

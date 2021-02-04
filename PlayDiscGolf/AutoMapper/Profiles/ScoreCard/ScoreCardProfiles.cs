@@ -13,7 +13,15 @@ namespace PlayDiscGolf.AutoMapper.Profiles.ScoreCard
         public ScoreCardProfiles()
         {
             CreateMap<ScoreCardViewModel, ScoreCardDto>();
-            CreateMap<ScoreCardDto, ScoreCardViewModel>();
+            CreateMap<ScoreCardDto, ScoreCardViewModel>()
+                .ForMember(x => x.CourseID, source => source.MapFrom(x => x.CourseID))
+                .ForMember(x => x.UserName, source => source.MapFrom(x => x.UserName))
+                .ForMember(x => x.ScoreCardID, source => source.MapFrom(x => x.ScoreCardID))
+                .ForMember(x => x.StartDate, source => source.MapFrom(x => x.StartDate))
+                .ForMember(x => x.EndDate, source => source.MapFrom(x => x.EndDate))
+                .ForMember(x => x.UserID, source => source.MapFrom(x => x.UserID))
+                .ForMember(x => x.PlayerCards, source => source.MapFrom(x => x.PlayerCards))
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

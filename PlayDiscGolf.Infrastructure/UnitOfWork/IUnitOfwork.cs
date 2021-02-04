@@ -12,6 +12,8 @@ namespace PlayDiscGolf.Infrastructure.UnitOfWork
         IHoleRepository Holes { get; }
         IPlayerCardRepository PlayerCards { get; }
         IScoreCardRepository ScoreCards { get; }
+
+        IFriendRepository Friends { get; }
         int Complete();
     }
 }

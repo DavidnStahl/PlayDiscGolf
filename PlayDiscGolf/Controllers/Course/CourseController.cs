@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Core.Services.CoursePage;
 using PlayDiscGolf.ViewModels.Course;
+using PlayDiscGolf.ViewModels.ScoreCard;
 
 namespace PlayDiscGolf.Controllers.CoursePage
 {
@@ -19,8 +20,27 @@ namespace PlayDiscGolf.Controllers.CoursePage
             _coursePageService = coursePageService;
             _mapper = mapper;
         }
-        public async Task<IActionResult> Index(string courseID) =>
-            View(_mapper.Map<CoursePageViewModel>(await _coursePageService.GetCoursePageInformationAsync(new Guid(courseID))));
+        public async Task<IActionResult> Index(string courseID)
+        {
+            var dto = _mapper.Map<CoursePageViewModel>(await _coursePageService.GetCoursePageInformation(new Guid(courseID)));
+
+            var model = new CoursePageViewModel
+            {
+                CourseID = dto.CourseID,
+                TotalDistance = dto.TotalDistance,
+                AverageRound = dto.AverageRound,
+                BestRound = dto.BestRound,
+                FullName = dto.FullName,
+                Holes = _mapper.Map<List<HoleViewModel>>(dto.Holes),
+                Name = dto.Name,
+                NumberOfRounds = dto.NumberOfRounds,
+                ScoreCards = _mapper.Map<List<ScoreCardViewModel>>(dto.ScoreCards),
+                TotalHoles = dto.TotalHoles,
+                TotalParValue = dto.TotalParValue
+            };
+
+            return View(model);
+        }
       
     }
 }
