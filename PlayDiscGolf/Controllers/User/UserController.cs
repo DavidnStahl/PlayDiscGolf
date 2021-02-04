@@ -63,6 +63,29 @@ namespace PlayDiscGolf.Controllers.User
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEmail(UserChangeEmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var isEmailTaken = await _accountService.IsEmailTakenAsync(model.Email);
+
+                if (!isEmailTaken)
+                {
+                    await _accountService.ChangeEmailAsync(model.Email);
+
+                    return Json(new { success = true, responseText = "Your message successfuly sent!", email = "Email: " + model.Email });
+
+                    //return RedirectToAction("Index");
+                }
+
+                if (isEmailTaken) ModelState.AddModelError("Email", "Email is Taken");
+            }
+
+            return PartialView("_ChangeEmail", model);
+        }
+
         public async Task<IActionResult> ChangePassword(UserChangePasswordViewModel model)
         {
             if (ModelState.IsValid)

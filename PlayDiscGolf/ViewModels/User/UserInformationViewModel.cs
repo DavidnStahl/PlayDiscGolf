@@ -17,5 +17,8 @@ namespace PlayDiscGolf.ViewModels.User
         public List<string> Friends = new List<string>();
 
         public UserSearchResultViewModel UserSearchResultViewModel = new UserSearchResultViewModel();
+
+        public UserChangeEmailViewModel UserChangeEmailViewModel = new UserChangeEmailViewModel();
+
     }
 }

@@ -79,7 +79,7 @@ namespace PlayDiscGolf.Core.Services.Account
         }      
 
         public async Task<bool> IsEmailTakenAsync(string email) =>
-            await _userManager.FindByNameAsync(email) != null;
+            await _userManager.FindByEmailAsync(email) != null;
 
         public async Task<bool> IsUserNameTakenAsync(string userName) =>
             await _userManager.FindByNameAsync(userName) != null;

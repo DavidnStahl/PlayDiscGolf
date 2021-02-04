@@ -2,6 +2,7 @@
 
 
     jQueryAjaxPost = form => {
+        console.log(form.id)
         try {
             $.ajax({
                 type: 'POST',
@@ -10,8 +11,25 @@
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    console.log(res)
-                    $("#searchFormHome").empty().append(res);
+                    console.log(res)  
+                    if (form.id === "SearchFormAjax") {
+                        console.log(form.id)
+                        $("#searchFormHome").empty().append(res);
+                    }
+                    if (form.id === "SearchUser") {
+                        console.log(form.id)
+                        $("#searchUserName").empty().append(res);
+                    }
+                    if (form.id === "ChangeEmail") {
+                        console.log(form.id)
+                        console.log(res.email)
+                        if (res.success) {
+                            $("#emailLabel").text = res.email;
+                            $("#collapseExampleChangeEmail").toggle();
+                        }
+                        $("#ChangeEmail").empty().append(res);
+                        $("#collapseExampleChangeEmail").toggle();
+                    } 
                 },
                 error: function (err) {
                     console.log(err)
@@ -24,29 +42,9 @@
         }
     }
 
-    jQueryAjaxPost = form => {
-        try {
-            $.ajax({
-                type: 'POST',
-                url: form.action,
-                data: new FormData(form),
-                contentType: false,
-                processData: false,
-                success: function (res) {
-                    console.log(res)
-                    $("#searchUserName").empty().append(res);
-                },
-                error: function (err) {
-                    console.log(err)
-                }
-            })
-            //to prevent default form submit event
-            return false;
-        } catch (ex) {
-            console.log(ex)
-        }
-    }
 
+
+    
     function GetSearchOptions() {
         $.ajax({
             url: "/Admin/Search",

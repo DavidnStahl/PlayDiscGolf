@@ -3,9 +3,9 @@
 <div class="card" style="width: auto;">
     <div class="card-body">
         <h4 class="card-title">Username: @Model.Username</h4>
-        <h4 class="card-title">Email: @Model.Email</h4>
+        <h4 id="#emailLabel" class="card-title">Email: @Model.Email</h4>
     </div>
-    <form asp-action="SearchUser" onsubmit="return jQueryAjaxPost(this);">
+    <form id="SearchUser" asp-action="SearchUser" onsubmit="return jQueryAjaxPost(this);">
         <div class="form-group row">
             <div class="col-sm-4 ml-xl-2 pb-4">
                 <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
@@ -49,11 +49,10 @@
                 Change Email
             </a>
         </p>
-        <div class="collapse" id="collapseExampleChangeEmail">
-            <div class="card card-body">
-                <input class="list-group-item" placeholder="Write your new Email" />
-            </div>
+        <div id="ChangeEmail">
+            @await Html.PartialAsync("_ChangeEmail", Model.UserChangeEmailViewModel)
         </div>
+
     </div>
     <div class="card-body">
         <p>
@@ -63,8 +62,11 @@
         </p>
         <div class="collapse" id="collapseExampleChangePassword">
             <div class="card card-body">
+                <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
                 <input class="list-group-item" placeholder="Old password.." />
+                <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
                 <input class="list-group-item" placeholder="New password.." />
+                <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
                 <input class="list-group-item" placeholder="Confirm new password" />
             </div>
         </div>
