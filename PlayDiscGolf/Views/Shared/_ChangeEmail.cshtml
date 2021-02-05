@@ -1,6 +1,10 @@
 ﻿@model PlayDiscGolf.ViewModels.User.UserChangeEmailViewModel
 
-
+<p>
+    <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeEmail" role="button" aria-expanded="false" aria-controls="collapseExampleChangeEmail">
+        Change Email
+    </a>
+</p>
 <div class="collapse" id="collapseExampleChangeEmail">
     <form id="ChangeEmail" asp-action="ChangeEmail" onsubmit="return jQueryAjaxPost(this);">
         <div class="form-group">
@@ -12,3 +16,6 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+
+
+

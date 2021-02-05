@@ -75,9 +75,14 @@ namespace PlayDiscGolf.Controllers.User
                 {
                     await _accountService.ChangeEmailAsync(model.Email);
 
-                    return Json(new { success = true, responseText = "Your message successfuly sent!", email = "Email: " + model.Email });
+                    return Json(new { success = true, responseText = "Your message successfuly sent!", email = "Email: " + model.Email});
 
                     //return RedirectToAction("Index");
+
+                    //var modelx = new UserUpdateInformationViewModel { Username = User.Identity.Name, Email = model.Email };
+
+                    //return PartialView("_UserInformation", modelx);
+
                 }
 
                 if (isEmailTaken) ModelState.AddModelError("Email", "Email is Taken");

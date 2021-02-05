@@ -10,25 +10,21 @@
                 data: new FormData(form),
                 contentType: false,
                 processData: false,
-                success: function (res) {
-                    console.log(res)  
+                success: function (res) { 
                     if (form.id === "SearchFormAjax") {
-                        console.log(form.id)
                         $("#searchFormHome").empty().append(res);
                     }
                     if (form.id === "SearchUser") {
-                        console.log(form.id)
                         $("#searchUserName").empty().append(res);
                     }
                     if (form.id === "ChangeEmail") {
-                        console.log(form.id)
-                        console.log(res.email)
+
                         if (res.success) {
-                            $("#emailLabel").text = res.email;
-                            $("#collapseExampleChangeEmail").toggle();
+                            window.location.href = 'User/Index';
                         }
-                        $("#ChangeEmail").empty().append(res);
-                        $("#collapseExampleChangeEmail").toggle();
+                        
+                         $("#ChangeEmail").empty().append(res);
+                         $("#collapseExampleChangeEmail").toggle();  
                     } 
                 },
                 error: function (err) {
