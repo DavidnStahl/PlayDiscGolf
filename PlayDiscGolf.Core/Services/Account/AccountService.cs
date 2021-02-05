@@ -26,10 +26,15 @@ namespace PlayDiscGolf.Core.Services.Account
 
         public async Task<RegisterUserDto> UserRegisterAsync(RegisterDto model)
         {
+            var ErrorMessegeEmaiResult = await IsEmailTakenAsync(model.Email);
+            var ErrorMessegeUsernameResult = await IsUserNameTakenAsync(model.Username);
+
             var registerUserDto = new RegisterUserDto
             {
-                ErrorMessegeEmail = await IsEmailTakenAsync(model.Email),
-                ErrorMessegeUsername = await IsUserNameTakenAsync(model.Username)
+                ErrorMessegeEmail = ErrorMessegeEmaiResult,
+                ErrorMessegeUsername = ErrorMessegeUsernameResult,
+                CreateUserSucceded = ErrorMessegeEmaiResult == false & ErrorMessegeUsernameResult == false
+
             };
 
             if(registerUserDto.CreateUserSucceded == true)
@@ -88,7 +93,7 @@ namespace PlayDiscGolf.Core.Services.Account
         {
             var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ChangePasswordAsync(user, token, newPassword);
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
 
             if(result.Succeeded)
                 await _signInManager.RefreshSignInAsync(user);
@@ -107,8 +112,12 @@ namespace PlayDiscGolf.Core.Services.Account
         public async Task ChangeUserNameAsync(string newUserName)
         {
             var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+            user.UserName = newUserName;
             user.NormalizedUserName = newUserName;
-            await _userManager.UpdateNormalizedUserNameAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+
+            if(result.Succeeded)
+                await _signInManager.RefreshSignInAsync(user);
         }
 
         public async Task<IdentityUser> GetUserByQueryAsync(string query)

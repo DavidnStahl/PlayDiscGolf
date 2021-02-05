@@ -12,20 +12,41 @@
                 processData: false,
                 success: function (res) { 
                     if (form.id === "SearchFormAjax") {
+
                         $("#searchFormHome").empty().append(res);
                     }
                     if (form.id === "SearchUser") {
+
                         $("#searchUserName").empty().append(res);
+
                     }
                     if (form.id === "ChangeEmail") {
 
                         if (res.success) {
-                            window.location.href = 'User/Index';
+                            location.reload();
                         }
                         
                          $("#ChangeEmail").empty().append(res);
                          $("#collapseExampleChangeEmail").toggle();  
                     } 
+                    if (form.id === "ChangeUsername") {
+
+                        if (res.success) {
+                            location.reload();
+                        }
+
+                        $("#ChangeUsername").empty().append(res);
+                        $("#collapseExampleChangeUsername").toggle();
+                    }
+                    if (form.id === "ChangePassword") {
+
+                        if (res.success) {
+                            location.reload();
+                        }
+
+                        $("#ChangePassword").empty().append(res);
+                        $("#collapseExampleChangePassword").toggle();
+                    }
                 },
                 error: function (err) {
                     console.log(err)

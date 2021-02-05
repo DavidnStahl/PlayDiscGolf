@@ -13,7 +13,7 @@ namespace PlayDiscGolf.ViewModels.User
         [StringLength(100, ErrorMessage = "Must be between 5 and 100 characters", MinimumLength = 5)]
         [DataType(DataType.Password)]
         [RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$",
-            ErrorMessage = "Password must be at least 8 characters and contain at least 1 of the following: upper case (A-Z), lower case (a-z), number (0-9) and special character (e.g. !@#$%^&*)")]
+            ErrorMessage = "Min 8 characters ,one upper case (A-Z), one lower case (a-z), one number (0-9) and one special character (e.g. !@#$%^&*)")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

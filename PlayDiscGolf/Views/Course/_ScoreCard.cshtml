@@ -21,4 +21,4 @@
     </div>
 }
 <a type="button" class="btn btn-primary" asp-action="OpenScoreCard" asp-controller="ScoreCard"
-   asp-route-scoreCardID="@Model.ScoreCardID" asp-route-courseID="@Model.CourseID">Open Scorecard</a>
+   asp-route-scoreCardID="@Model.ScoreCardID" asp-route-holeNumber="@Model.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count()">Open Scorecard</a>

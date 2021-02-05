@@ -32,15 +32,8 @@
         }
     </ul>
     <div class="card-body">
-        <p>
-            <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeUserName" role="button" aria-expanded="false" aria-controls="collapseExampleChangeUserName">
-                Change Username
-            </a>
-        </p>
-        <div class="collapse" id="collapseExampleChangeUserName">
-            <div class="card card-body">
-                <input class="list-group-item" placeholder="Write your new username" />
-            </div>
+        <div id="ChangeUsername">
+            @await Html.PartialAsync("_ChangeUsername", Model.UserChangeUsernameViewModel)
         </div>
     </div>
     <div class="card-body">
@@ -49,20 +42,8 @@
         </div>
     </div>
         <div class="card-body">
-            <p>
-                <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangePassword" role="button" aria-expanded="false" aria-controls="collapseExampleChangePassword">
-                    Change Password
-                </a>
-            </p>
-            <div class="collapse" id="collapseExampleChangePassword">
-                <div class="card card-body">
-                    <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
-                    <input class="list-group-item" placeholder="Old password.." />
-                    <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
-                    <input class="list-group-item" placeholder="New password.." />
-                    <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
-                    <input class="list-group-item" placeholder="Confirm new password" />
-                </div>
+            <div id="ChangePassword">
+                @await Html.PartialAsync("_ChangePassword", Model.UserChangePasswordViewModel)
             </div>
         </div>
     </div>

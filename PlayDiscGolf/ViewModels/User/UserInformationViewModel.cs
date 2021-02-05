@@ -20,5 +20,9 @@ namespace PlayDiscGolf.ViewModels.User
 
         public UserChangeEmailViewModel UserChangeEmailViewModel = new UserChangeEmailViewModel();
 
+        public UserChangeUsernameViewModel UserChangeUsernameViewModel = new UserChangeUsernameViewModel();
+
+        public UserChangePasswordViewModel UserChangePasswordViewModel = new UserChangePasswordViewModel();
+
     }
 }

@@ -41,28 +41,6 @@ namespace PlayDiscGolf.Controllers.User
             return PartialView("_SearchUserNameResult", model);
         }
 
-        public async Task<IActionResult> SaveUserInformation(UserUpdateInformationViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var isEmailTaken = await _accountService.IsEmailTakenAsync(model.Email);
-                var isUserNameTaken = await _accountService.IsUserNameTakenAsync(model.Username);
-
-                if (!isEmailTaken && !isUserNameTaken)
-                {
-                    await _accountService.ChangeEmailAsync(model.Email);
-                    await _accountService.ChangeUserNameAsync(model.Username);
-
-                    return RedirectToAction("Index");
-                }
-
-                if (isEmailTaken) ModelState.AddModelError("Email", "Email is Taken");
-                if (isUserNameTaken) ModelState.AddModelError("UserName", "UserName is Taken");
-            }
-
-            return View(model);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail(UserChangeEmailViewModel model)
@@ -75,14 +53,7 @@ namespace PlayDiscGolf.Controllers.User
                 {
                     await _accountService.ChangeEmailAsync(model.Email);
 
-                    return Json(new { success = true, responseText = "Your message successfuly sent!", email = "Email: " + model.Email});
-
-                    //return RedirectToAction("Index");
-
-                    //var modelx = new UserUpdateInformationViewModel { Username = User.Identity.Name, Email = model.Email };
-
-                    //return PartialView("_UserInformation", modelx);
-
+                    return Json(new { success = true, responseText = "Your message successfuly sent!"});
                 }
 
                 if (isEmailTaken) ModelState.AddModelError("Email", "Email is Taken");
@@ -91,25 +62,39 @@ namespace PlayDiscGolf.Controllers.User
             return PartialView("_ChangeEmail", model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(UserChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
             {
                 await _accountService.ChangePasswordAsync(model.Password);
 
-                return RedirectToAction("Index");
+                return Json(new { success = true, responseText = "Your message successfuly sent!"});
             }
 
-            return View(model);
+            return PartialView("_ChangePassword", model);
         }
 
-        /*public async Task<IActionResult> SearchUser(string query)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUsername(UserChangeUsernameViewModel model)
         {
-            var user = await _accountService.GetUserByQueryAsync(query);
+            if (ModelState.IsValid)
+            {
+                var isUserNameTaken = await _accountService.IsUserNameTakenAsync(model.Username);
 
-            if (user != null) return View(new UserSearchResultViewModel());
+                if (!isUserNameTaken)
+                {
+                    await _accountService.ChangeUserNameAsync(model.Username);
 
-            return View(new UserSearchResultViewModel());
-        }*/
+                    return Json(new { success = true, responseText = "Your message successfuly sent!" });
+                }
+
+                if (isUserNameTaken) ModelState.AddModelError("Username", "Username is Taken");
+            }
+
+            return PartialView("_ChangeUsername", model);
+        }
     }
 }
