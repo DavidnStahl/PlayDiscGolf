@@ -20,9 +20,9 @@ namespace PlayDiscGolf.Controllers.User
             _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = _mapper.Map<FriendViewModel>(_userService.GetFriendRequests());
+            var model = _mapper.Map<List<FriendViewModel>>(await _userService.GetFriendRequestsAsync());
 
             return View(model);
         }
@@ -30,17 +30,15 @@ namespace PlayDiscGolf.Controllers.User
         public IActionResult DeclineFriendRequest(string friendID)
         {
             _userService.DeclineFriendRequest(friendID);
-            var model = _mapper.Map<FriendViewModel>(_userService.GetFriendRequests());
 
-            return View(model);
+            return RedirectToAction("Index");
         }
 
         public IActionResult AcceptFriendRequest(string friendID)
         {
             _userService.AcceptFriendRequest(friendID);
-            var model = _mapper.Map<FriendViewModel>(_userService.GetFriendRequests());
 
-            return View(model);
+            return RedirectToAction("Index");
         }
         
     }

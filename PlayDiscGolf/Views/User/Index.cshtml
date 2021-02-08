@@ -38,7 +38,7 @@
         {
             <p class="text-success">Friend request accepted</p>
         }
-        <a class="btn btn-success" asp-route-Username="@Model.Friends[i]" asp-action="RemoveFriend" asp-controller="User">Remove</a>
+        <a class="btn btn-danger" asp-route-friendID="@Model.Friends[i].FriendID" asp-action="RemoveFriend" asp-controller="User">Remove</a>
     </li>
         }
     </ul>

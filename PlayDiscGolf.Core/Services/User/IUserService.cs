@@ -7,8 +7,6 @@ namespace PlayDiscGolf.Core.Services.User
 {
     public interface IUserService
     {
-        //Task<UserInformationDto> GetUserInformationAsync();
-
         Task<string> SearchUsersAsync(string query);
 
         Task<List<FriendDto>> GetFriendsAsync();
@@ -17,7 +15,7 @@ namespace PlayDiscGolf.Core.Services.User
 
         Task RemoveFriendAsync(string username);
 
-        Task<List<FriendDto>> GetFriendRequests();
+        Task<List<FriendDto>> GetFriendRequestsAsync();
 
         void AcceptFriendRequest(string friendID);
 

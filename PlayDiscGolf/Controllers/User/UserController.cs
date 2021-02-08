@@ -110,9 +110,9 @@ namespace PlayDiscGolf.Controllers.User
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> RemoveFriend(string username)
+        public async Task<IActionResult> RemoveFriend(string friendID)
         {
-            await _userService.RemoveFriendAsync(username);
+            await _userService.RemoveFriendAsync(friendID);
 
             return RedirectToAction("Index");
         }

@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity;
+@using PlayDiscGolf.Core.Services.User
 
 @inject SignInManager<IdentityUser> signInManager;
 @inject RoleManager<IdentityRole> roleManager;
+@inject IUserService _userService;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +44,22 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-black-50" asp-area="" asp-controller="User" asp-action="Index">MyPage</a>
+                            </li>
+
+
+                            var model = await _userService.GetFriendRequestsAsync();
+
+                            var notificationCount = "0";
+
+                            if (model.Count() > 0)
+                            {
+                                notificationCount = model.Count().ToString();
+                            }
+
+
+
+                            <li class="nav-item">
+                                <a class="nav-link text-black-50" asp-area="" asp-controller="Notification" asp-action="Index">Notification (@notificationCount)</a>
                             </li>
                             <li class="nav-item ml-lg-2">
                                 <a class="nav-link text-black-50" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>

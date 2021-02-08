@@ -1,0 +1,17 @@
+﻿@model List<PlayDiscGolf.ViewModels.User.FriendViewModel>
+
+<div class="card" style="width: auto;">
+    <div id="userInformation" class="card-body">
+        <h3>Friend Requests</h3>
+        <ul class="list-group list-group-flush">
+            @foreach (var friend in Model)
+            {
+            <li class="list-group-item">
+                @friend.UserName
+                <a class="btn btn-success" asp-route-friendID="@friend.FriendID" asp-action="AcceptFriendRequest" asp-controller="Notification">Accept</a>
+                <a class="btn btn-danger" asp-route-friendID="@friend.FriendID" asp-action="DeclineFriendRequest" asp-controller="Notification">Decline</a>
+            </li>
+            }
+        </ul>
+        </div>
+</div>

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using PlayDiscGolf.Core.Dtos.User;
 using PlayDiscGolf.Core.Services.Account;
-using PlayDiscGolf.Infrastructure.Repository.Specific.Interface;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
 using System;
@@ -27,50 +26,60 @@ namespace PlayDiscGolf.Core.Services.User
         public async Task<List<FriendDto>> GetFriendsAsync()
         {
             var inloggedUserID = await _accountService.GetInloggedUserIDAsync();
-            var friends = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(inloggedUserID)).ToList();
+            var username = _accountService.GetUserName();
+            var friends = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(inloggedUserID) || (x.UserName.ToLower() == username && x.FriendRequestAccepted == true)).ToList();
 
-            return _mapper.Map<List<FriendDto>>(friends);
+            var remappedFriends = new List<Friend>();
+
+            foreach (var friend in friends)
+            {
+                if(friend.UserID != Guid.Parse(inloggedUserID))
+                {
+                    var user = await _accountService.GetUserByID(friend.UserID.ToString());
+                    friend.UserName = user.UserName;
+                }
+
+
+                remappedFriends.Add(friend);
+            }
+
+            return _mapper.Map<List<FriendDto>>(remappedFriends);
         }
 
-        /*public async Task<UserInformationDto> GetUserInformationAsync()
+        public async Task RemoveFriendAsync(string friendID)
         {
-            var inloggedUserID = await _accountService.GetInloggedUserIDAsync();
-
-            return new UserInformationDto
-            {
-                UserID = inloggedUserID,
-                Email = await _accountService.GetEmailAsync(),
-                Username = _accountService.GetUserName(),
-                Friends = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(inloggedUserID)).Select(x => x.UserName).ToList()
-            };
-        }*/
-
-        public async Task RemoveFriendAsync(string username)
-        {
-            var inloggedUser = await _accountService.GetUserByQueryAsync(username);
-            var friend = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(inloggedUser.Id) && x.UserName == username).SingleOrDefault();
-
-            if(friend.FriendRequestAccepted == true)
-            {
-                var inloggedUserAsFriend = _unitOfWork.Friends.FindBy(x => x.UserID == friend.FriendUserID && x.UserName == inloggedUser.UserName).SingleOrDefault();
-                _unitOfWork.Friends.Delete(inloggedUserAsFriend);
-            }
+            var inloggedUsername = _accountService.GetUserName();
+            var inloggedUser = await _accountService.GetUserByQueryAsync(inloggedUsername);
+            var friend = _unitOfWork.Friends.FindBy(x => x.FriendID == Guid.Parse(friendID)).SingleOrDefault();
 
             _unitOfWork.Friends.Delete(friend);
             _unitOfWork.Complete();
         }
 
-        public async Task<List<FriendDto>> GetFriendRequests()
+        public async Task<List<FriendDto>> GetFriendRequestsAsync()
         {
             var username = _accountService.GetUserName();
             var user = await _accountService.GetUserByQueryAsync(username);
 
-            return _mapper.Map<List<FriendDto>>(_unitOfWork.Friends.FindBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false).ToList());
+            var friendRequests = _unitOfWork.Friends.FindBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false).ToList();
+
+            var friendDto = new List<FriendDto>();
+
+            foreach (var request in friendRequests)
+            {
+                var requestedUsername = await _accountService.GetUserByID(request.UserID.ToString());
+                request.UserName = requestedUsername.UserName;
+
+                friendDto.Add(_mapper.Map<FriendDto>(request));
+            }
+
+            return friendDto;
         }
 
         public void AcceptFriendRequest(string friendID)
         {
             var friend = _unitOfWork.Friends.FindById(Guid.Parse(friendID));
+            friend.FriendRequestAccepted = true;
 
             _unitOfWork.Friends.Edit(friend);
             _unitOfWork.Complete();
@@ -93,9 +102,9 @@ namespace PlayDiscGolf.Core.Services.User
                 return null;
 
             return _unitOfWork.Friends
-                .FindBy(x => x.UserID == Guid.Parse(inloggedUserID) && x.UserName == user.NormalizedUserName).SingleOrDefault() != null 
+                .FindBy(x => x.UserID == Guid.Parse(inloggedUserID) && x.UserName.ToLower() == user.NormalizedUserName.ToLower()).SingleOrDefault() != null 
                 ? null 
-                : user.NormalizedUserName;
+                : user.UserName;
         }
 
         public async Task SendFriendRequestAsync(string username)
