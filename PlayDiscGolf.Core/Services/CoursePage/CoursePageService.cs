@@ -37,18 +37,27 @@ namespace PlayDiscGolf.Core.Services.CoursePage
         {
             var course = _unitOfWork.Courses.FindById(courseID);
             var userID = await _accountService.GetInloggedUserIDAsync();
+            var username = _accountService.GetUserName();
 
             var scoreCardsEntity = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.UserID == userID && x.CourseID == courseID).ToList();
-            var scoreCardIDToInclude = _unitOfWork.PlayerCards.FindBy(x => x.UserID == userID).ToList().Select(x => x.Scorecard).Select(x => x.ScoreCardID).ToList();
+            var scoreCardIDToInclude = _unitOfWork.PlayerCards.FindBy(x => !scoreCardsEntity.Select(x => x.ScoreCardID).ToList().Contains(x.ScoreCardID) && x.UserName == username).Select( x => x.ScoreCardID).ToList();
+            var extraScoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => scoreCardIDToInclude.Contains(x.ScoreCardID)).ToList();
 
-            var toInclude = scoreCardIDToInclude.Where(x => !scoreCardsEntity.Select(x => x.ScoreCardID).Contains(x)).ToList();
-                
-            if(toInclude.Count > 0 || toInclude == null)
+            var isFriend = _unitOfWork.Friends
+                .FindBy(x => x.UserID == Guid.Parse(userID)
+                && extraScoreCard.Select(x => x.UserName).ToList().Contains(x.UserName)).ToList().Count > 0 ? true : false;
+                //|| (extraScoreCard.Select(x => x.UserID).ToList().Contains(x.FriendUserID.ToString())
+               // && x.FriendRequestAccepted == true)).ToList().Count > 0 ? true : false;
+
+            var isfriendToo = _unitOfWork.Friends.FindBy(x => x.FriendUserID == Guid.Parse(userID)
+                && extraScoreCard.Select(x => x.UserName).ToList().Contains(x.UserName)).ToList().Count > 0 ? true : false;
+
+            if (isFriend)
             {
-                var AdditionalScorecards = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => scoreCardIDToInclude.Contains(x.ScoreCardID)).ToList();
-                scoreCardsEntity.AddRange(AdditionalScorecards);
+                scoreCardsEntity.AddRange(extraScoreCard);
             }
 
+            
 
             scoreCardsEntity = scoreCardsEntity.OrderByDescending(x => x.StartDate).ToList();
 
