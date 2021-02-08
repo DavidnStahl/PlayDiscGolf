@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace PlayDiscGolf.Models.Models.DataModels
+namespace PlayDiscGolf.Core.Dtos.User
 {
-    public class Friend
+    public class FriendDto
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid FriendID { get; set; }
         public Guid UserID { get; set; }
         public string UserName { get; set; }

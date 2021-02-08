@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Infrastructure.Repository.Generic
 {
@@ -29,7 +30,8 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
         public virtual bool Add(T entity)
         {
             _context.Set<T>().Add(entity);
-            return true;
+
+            return true;            
         }
 
         public virtual bool Delete(T entity)
@@ -53,6 +55,12 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
         public virtual T FindById(Guid id)
         {
             return _context.Set<T>().Find(id);
+        }
+
+        public bool AddRange(List<T> entities)
+        {
+            _context.Set<T>().AddRange(entities);
+            return true;
         }
     }
 }

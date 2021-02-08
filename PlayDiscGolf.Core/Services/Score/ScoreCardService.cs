@@ -114,11 +114,26 @@ namespace PlayDiscGolf.Core.Services.Score
             };
         }
 
+        private ScoreCard CheckIfAnyPlayerIsFriend(ScoreCard scorecard)
+        {
+            var players = scorecard.PlayerCards.Select(x => x.UserName).ToList();
+
+            var friends = _unitOfWork.Friends.FindBy(x => players.Contains(x.UserName)).ToList();
+
+            foreach (var friend in friends)
+            {
+                scorecard.PlayerCards.SingleOrDefault(x => x.UserName == friend.UserName).UserID = friend.FriendUserID.ToString();
+            }
+
+            return scorecard;
+        }
+
         private ScoreCard CreateScoreCard()
         {
             var cachedScoreCard = _sessionStorage.Get(_sessionKey);
             var scoreCard = _mapper.Map<ScoreCard>(cachedScoreCard);
-            _unitOfWork.ScoreCards.Add(scoreCard);
+
+            _unitOfWork.ScoreCards.Add(CheckIfAnyPlayerIsFriend(scoreCard));
             _unitOfWork.Complete();
 
             return scoreCard;

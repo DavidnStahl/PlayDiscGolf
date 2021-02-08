@@ -9,5 +9,7 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific.Interface
     public interface IScoreCardRepository : IEntityRepository<ScoreCard>
     {
         IEnumerable<ScoreCard> GetScoreCardAndIncludePlayerCardAndHoleCard(Expression<Func<ScoreCard, bool>> predicate);
+
+        IEnumerable<ScoreCard> GetScoreCardAndIncludeWhenNotTheOwner(string userID, Guid courseID);
     }
 }

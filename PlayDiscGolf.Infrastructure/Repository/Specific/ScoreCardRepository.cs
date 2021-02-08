@@ -27,5 +27,19 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific
                 .Where(predicate).ToList();
                 
         }
+
+        public IEnumerable<ScoreCard> GetScoreCardAndIncludeWhenNotTheOwner(string userID, Guid courseID)
+        {
+            return _context.Set<ScoreCard>()
+                .Include(x => x.PlayerCards)
+                .ThenInclude(x => x.HoleCards)
+                .Where(x => x.CourseID == courseID && x.UserID == userID)                
+                .SelectMany(x => x.PlayerCards)
+                .Where(x => x.UserID == userID)
+                .Select(x => x.Scorecard)
+                .OrderByDescending(x => x.StartDate)
+                .Distinct()
+                .ToList();
+        }
     }
 }

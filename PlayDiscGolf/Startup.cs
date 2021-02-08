@@ -21,6 +21,8 @@ using PlayDiscGolf.Core.Services.Home;
 using PlayDiscGolf.Core.Services.Score;
 using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.Infrastructure.Repository.Generic;
+using PlayDiscGolf.Infrastructure.Repository.Specific;
+using PlayDiscGolf.Infrastructure.Repository.Specific.Interface;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
 using PlayDiscGolf.ViewModels.ScoreCard;

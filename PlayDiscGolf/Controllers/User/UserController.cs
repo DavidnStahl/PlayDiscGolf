@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using PlayDiscGolf.Core.Dtos.User;
 using PlayDiscGolf.Core.Services.Account;
 using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.ViewModels.User;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Controllers.User
@@ -10,11 +13,13 @@ namespace PlayDiscGolf.Controllers.User
     {
         private readonly IUserService _userService;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IAccountService accountService)
+        public UserController(IUserService userService, IAccountService accountService, IMapper mapper)
         {
             _userService = userService;
             _accountService = accountService;
+            _mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
@@ -22,7 +27,8 @@ namespace PlayDiscGolf.Controllers.User
             {
                 UserID = await _accountService.GetInloggedUserIDAsync(),
                 Email = await _accountService.GetEmailAsync(),
-                Username = _accountService.GetUserName()
+                Username = _accountService.GetUserName(),
+                Friends = _mapper.Map<List<FriendViewModel>>(await _userService.GetFriendsAsync())                
             };
 
             return View(model);
@@ -95,6 +101,20 @@ namespace PlayDiscGolf.Controllers.User
             }
 
             return PartialView("_ChangeUsername", model);
+        }
+
+        public async Task<IActionResult> AddFriend(string username)
+        {
+            await _userService.SendFriendRequestAsync(username);
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> RemoveFriend(string username)
+        {
+            await _userService.RemoveFriendAsync(username);
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -38,7 +38,20 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             var course = _unitOfWork.Courses.FindById(courseID);
             var userID = await _accountService.GetInloggedUserIDAsync();
 
-            var scoreCardsEntity = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.UserID == userID && x.CourseID == courseID);
+            var scoreCardsEntity = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.UserID == userID && x.CourseID == courseID).ToList();
+            var scoreCardIDToInclude = _unitOfWork.PlayerCards.FindBy(x => x.UserID == userID).ToList().Select(x => x.Scorecard).Select(x => x.ScoreCardID).ToList();
+
+            var toInclude = scoreCardIDToInclude.Where(x => !scoreCardsEntity.Select(x => x.ScoreCardID).Contains(x)).ToList();
+                
+            if(toInclude.Count > 0 || toInclude == null)
+            {
+                var AdditionalScorecards = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => scoreCardIDToInclude.Contains(x.ScoreCardID)).ToList();
+                scoreCardsEntity.AddRange(AdditionalScorecards);
+            }
+
+
+            scoreCardsEntity = scoreCardsEntity.OrderByDescending(x => x.StartDate).ToList();
+
             var scoreCards = _mapper.Map<List<ScoreCardDto>>(scoreCardsEntity);
             var holesEntity = _unitOfWork.Holes.FindBy(x => x.CourseID == courseID);
             var holes = _mapper.Map<List<HoleDto>>(holesEntity);

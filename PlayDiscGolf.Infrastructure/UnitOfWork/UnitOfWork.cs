@@ -31,7 +31,7 @@ namespace PlayDiscGolf.Infrastructure.UnitOfWork
 
         public ICourseRepository Courses { get; private set; }
 
-        public IFriendRepository Friends { get; set; }
+        public IFriendRepository Friends { get; private set; }
 
         public int Complete()
         {
