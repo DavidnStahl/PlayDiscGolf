@@ -14,7 +14,7 @@ namespace PlayDiscGolf.Core.Services.Account
 
         Task<IdentityUser> GetUserByQueryAsync(string query);
 
-        Task<IdentityUser> GetUserByID(string userID);
+        Task<IdentityUser> GetUserByIDAsync(string userID);
 
         Task<string> GetEmailAsync();
 

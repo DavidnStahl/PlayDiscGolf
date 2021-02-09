@@ -127,7 +127,7 @@ namespace PlayDiscGolf.Core.Services.Account
             return user;
         }
 
-        public async Task<IdentityUser> GetUserByID(string userID)
+        public async Task<IdentityUser> GetUserByIDAsync(string userID)
         {
             return await _userManager.FindByIdAsync(userID);
         }

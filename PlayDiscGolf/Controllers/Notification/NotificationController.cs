@@ -34,9 +34,9 @@ namespace PlayDiscGolf.Controllers.User
             return RedirectToAction("Index");
         }
 
-        public IActionResult AcceptFriendRequest(string friendID)
+        public async Task<IActionResult> AcceptFriendRequest(string friendID)
         {
-            _userService.AcceptFriendRequest(friendID);
+            await _userService.AcceptFriendRequestAsync(friendID);
 
             return RedirectToAction("Index");
         }

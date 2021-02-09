@@ -43,21 +43,11 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             var scoreCardIDToInclude = _unitOfWork.PlayerCards.FindBy(x => !scoreCardsEntity.Select(x => x.ScoreCardID).ToList().Contains(x.ScoreCardID) && x.UserName == username).Select( x => x.ScoreCardID).ToList();
             var extraScoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => scoreCardIDToInclude.Contains(x.ScoreCardID)).ToList();
 
-            var isFriend = _unitOfWork.Friends
-                .FindBy(x => x.UserID == Guid.Parse(userID)
-                && extraScoreCard.Select(x => x.UserName).ToList().Contains(x.UserName)).ToList().Count > 0 ? true : false;
-                //|| (extraScoreCard.Select(x => x.UserID).ToList().Contains(x.FriendUserID.ToString())
-               // && x.FriendRequestAccepted == true)).ToList().Count > 0 ? true : false;
+            var isScoreCardOwnerFriendAndPlayer = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(userID) && extraScoreCard.Select(x => x.UserID).ToList().Contains(x.FriendUserID.ToString())).Select(x => x.FriendUserID).ToList();
 
-            var isfriendToo = _unitOfWork.Friends.FindBy(x => x.FriendUserID == Guid.Parse(userID)
-                && extraScoreCard.Select(x => x.UserName).ToList().Contains(x.UserName)).ToList().Count > 0 ? true : false;
+            var additionScoreCards = extraScoreCard.Where(x => isScoreCardOwnerFriendAndPlayer.Contains(Guid.Parse(x.UserID)));
 
-            if (isFriend)
-            {
-                scoreCardsEntity.AddRange(extraScoreCard);
-            }
-
-            
+            scoreCardsEntity.AddRange(additionScoreCards);            
 
             scoreCardsEntity = scoreCardsEntity.OrderByDescending(x => x.StartDate).ToList();
 

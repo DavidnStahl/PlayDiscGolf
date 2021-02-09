@@ -17,7 +17,7 @@ namespace PlayDiscGolf.Core.Services.User
 
         Task<List<FriendDto>> GetFriendRequestsAsync();
 
-        void AcceptFriendRequest(string friendID);
+        Task AcceptFriendRequestAsync(string friendID);
 
         void DeclineFriendRequest(string friendID);
     }
