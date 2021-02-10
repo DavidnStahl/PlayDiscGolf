@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,13 +12,18 @@ namespace PlayDiscGolf.Models.Models.DataModels
 {
     public class DataBaseContext : IdentityDbContext
     {
+        private readonly IConfiguration _configuration;
+        private IDbConnection DbConnection { get; }
         public DataBaseContext()
         {
         }
 
-        public DataBaseContext(DbContextOptions<DataBaseContext> options)
+        public DataBaseContext(DbContextOptions<DataBaseContext> options, IConfiguration configuration)
             : base(options)
-        { }
+        {
+            _configuration = configuration;
+            DbConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        }
 
         public DbSet<Hole> Holes { get; set; }
         public DbSet<Course> Courses { get; set; }
@@ -28,7 +35,10 @@ namespace PlayDiscGolf.Models.Models.DataModels
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-CEEMT81\\SQLEXPRESS;Initial Catalog=PlayDiscGolfDB;Integrated Security=True;MultipleActiveResultSets=True;");
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(DbConnection.ToString());
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
