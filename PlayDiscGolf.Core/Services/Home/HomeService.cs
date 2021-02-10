@@ -32,6 +32,7 @@ namespace PlayDiscGolf.Core.Services.Home
             {
                 courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
                 dto = _mapper.Map<List<CourseDto>>(courses);
+
                 return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
             }
 

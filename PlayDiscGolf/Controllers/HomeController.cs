@@ -58,7 +58,7 @@ namespace PlayDiscGolf.Controllers
                 Types = model.Types.Select(x => x.Text).ToList(),
                 Country = model.Country,
                 Query = model.Query,
-                Type = model.Type
+                Type = model.Type,
             });
 
             model.SearchResultAjaxFormViewModel = _mapper.Map<List<SearchResultAjaxFormViewModel>>(dto);

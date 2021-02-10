@@ -58,6 +58,7 @@ button.accept-policy {
 html {
     position: relative;
     min-height: 100%;
+    margin: 0;
 }
 
 body {
@@ -73,43 +74,19 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
-.dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
+body {
+    background-image: url("https://m.discgolfscene.com/courses/2589/08c984e65009.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
-.dropdown {
-    position: relative;
-    display: inline-block;
+.custom-toggler.navbar-toggler {
+    border-color: rgba(246,246,246,0.3);
+    background-color: rgba(246,246,246,0.3);
+    
 }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+a:hover {
+    background-color: rgba(186,58,68,0.3);
 }
 
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.dropdown:hover .dropbtn {
-    background-color: #3e8e41;
-}
