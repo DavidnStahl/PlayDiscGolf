@@ -1,23 +1,33 @@
 ﻿@model PlayDiscGolf.ViewModels.Course.CoursePageViewModel
 
-@await Html.PartialAsync("_CourseInformation", Model) 
+
+    @await Html.PartialAsync("_CourseInformation", Model)
+
+
+
 
 @if (Model.ScoreCards.Count > 0)
 {
-    <div class="card" style="width: 18rem;">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Scorecards:</li>
-        </ul>
-    </div>
-    @foreach (var scoreCard in Model.ScoreCards)
-    {
-        <div class="card" style="width: 18rem;">
+    <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleScorecard" role="button" aria-expanded="false" aria-controls="collapseExampleScorecard">
+        History
+    </a>
+
+
+    <div class="card collapse" id="collapseExampleScorecard" style="width: auto;">
+        <div class="card-body" style="width: 18rem;">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Start: @scoreCard.StartDate</li>
-                <li class="list-group-item">Holes played: @scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count() / @Model.TotalHoles</li>
+                <li class="list-group-item">Scorecards:</li>
             </ul>
         </div>
-        @await Html.PartialAsync("_ScoreCard", scoreCard);
-
-    }
+        @foreach (var scoreCard in Model.ScoreCards)
+        {
+            <div class="card-body" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Start: @scoreCard.StartDate</li>
+                    <li class="list-group-item">Holes played: @scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count() / @Model.TotalHoles</li>
+                </ul>
+            </div>
+            @await Html.PartialAsync("_ScoreCard", scoreCard);
+        }
+    </div>
 }

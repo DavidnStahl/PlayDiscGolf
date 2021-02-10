@@ -13,14 +13,15 @@
     <title>@ViewData["Title"] - PlayDiscGolf</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
 </head>
 <body>
     
     <header>
-        <nav class=" navs navbar navbar-expand-sm navbar-toggleable-sm bg-transparent navbar-light badge-secondary box-shadow mb-5">
-            <div class="container">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-transparent navbar-light badge-secondary box-shadow mb-5">
+            <div class="container fixed-top">
                 <a class="navbar-brand hover-shadow text-white h5 pl-2 pr-2" asp-area="" asp-controller="Home" asp-action="Index">PlayDiscGolf</a>
                 <button id="ToggleNavbar" class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">

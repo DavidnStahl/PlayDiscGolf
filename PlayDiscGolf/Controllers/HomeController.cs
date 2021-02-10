@@ -62,6 +62,7 @@ namespace PlayDiscGolf.Controllers
             });
 
             model.SearchResultAjaxFormViewModel = _mapper.Map<List<SearchResultAjaxFormViewModel>>(dto);
+            var y = model;
 
             return model;
         }

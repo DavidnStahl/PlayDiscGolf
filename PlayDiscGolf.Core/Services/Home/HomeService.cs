@@ -31,14 +31,13 @@ namespace PlayDiscGolf.Core.Services.Home
             if (model.Type == EnumHelper.SearchType.Area.ToString())
             {
                 courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
-                dto = _mapper.Map<List<CourseDto>>(courses);
 
-                return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
+                return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
             }
 
             courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
-            dto = _mapper.Map<List<CourseDto>>(courses);
-            return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
+
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
         }
 
         public SearchFormHomeDto ConfigureCountriesAndTypes(SearchFormHomeDto model)

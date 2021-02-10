@@ -33,25 +33,27 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             _accountService = accountService;
             _unitOfWork = unitOfWork;
         }
+
+        private List<ScoreCard> GetScoreCards(string userID, string username, Guid courseID)
+        {
+            var myfriends = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(userID)).ToList();
+
+            return _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x =>
+                     (x.CourseID == courseID && x.UserName == username) 
+                     || 
+                     (x.CourseID == courseID && myfriends.Select(x => x.UserName).Contains(x.UserName)))
+                .SelectMany(x => x.PlayerCards)
+                .Where(x => x.UserID == userID)
+                .Select(x => x.Scorecard)
+                .OrderByDescending(x => x.StartDate)
+                .ToList();
+
+        }
         public async Task<CourseInfoDto> GetCoursePageInformation(Guid courseID)
         {
             var course = _unitOfWork.Courses.FindById(courseID);
             var userID = await _accountService.GetInloggedUserIDAsync();
-            var username = _accountService.GetUserName();
-
-            var scoreCardsEntity = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.UserID == userID && x.CourseID == courseID).ToList();
-            var scoreCardIDToInclude = _unitOfWork.PlayerCards.FindBy(x => !scoreCardsEntity.Select(x => x.ScoreCardID).ToList().Contains(x.ScoreCardID) && x.UserName == username).Select( x => x.ScoreCardID).ToList();
-            var extraScoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => scoreCardIDToInclude.Contains(x.ScoreCardID)).ToList();
-
-            var isScoreCardOwnerFriendAndPlayer = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(userID) && extraScoreCard.Select(x => x.UserID).ToList().Contains(x.FriendUserID.ToString())).Select(x => x.FriendUserID).ToList();
-
-            var additionScoreCards = extraScoreCard.Where(x => isScoreCardOwnerFriendAndPlayer.Contains(Guid.Parse(x.UserID)));
-
-            scoreCardsEntity.AddRange(additionScoreCards);            
-
-            scoreCardsEntity = scoreCardsEntity.OrderByDescending(x => x.StartDate).ToList();
-
-            var scoreCards = _mapper.Map<List<ScoreCardDto>>(scoreCardsEntity);
+            var scoreCards = _mapper.Map <List<ScoreCardDto>>(GetScoreCards(userID, _accountService.GetUserName(), courseID));            
             var holesEntity = _unitOfWork.Holes.FindBy(x => x.CourseID == courseID);
             var holes = _mapper.Map<List<HoleDto>>(holesEntity);
 

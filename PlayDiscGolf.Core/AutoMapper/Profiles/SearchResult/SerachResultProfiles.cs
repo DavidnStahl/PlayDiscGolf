@@ -12,7 +12,7 @@ namespace PlayDiscGolf.Core.AutoMapper.Profiles.SearchResult
         public SerachResultProfiles()
         {
             CreateMap<CourseDto, SearchResultAjaxFormDto>()
-                .ForMember(x => x.Holes, source => source.MapFrom(x => x.Holes.Count.ToString()))
+                .ForMember(x => x.Holes, source => source.MapFrom(x => x.TotalHoles.ToString()))
                 .ForMember(x => x.FullName, source => source.MapFrom(x => x.FullName))
                 .ForMember(x => x.CourseID, source => source.MapFrom(x => x.CourseID))
                 .ForMember(x => x.Area, source => source.MapFrom(x => x.Area));

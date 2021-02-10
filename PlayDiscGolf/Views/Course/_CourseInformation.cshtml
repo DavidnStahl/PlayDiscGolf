@@ -17,7 +17,7 @@
 
 
 }
-<div class="card" style="width: 18rem;">
+<div class="container card bg-warning mb-2" style="width:auto;">
     <ul class="list-group list-group-flush">
         <li class="list-group-item">Name: @Model.FullName</li>
         <li class="list-group-item">Holes: @Model.TotalHoles</li>
@@ -27,6 +27,136 @@
         <li class="list-group-item">Best Round: @bestRound</li>
         <li class="list-group-item">Average Round: @averageRound</li>
     </ul>
+    <a style="width:25%" type="button" class="btn btn-success" asp-action="CreateScoreCard" asp-controller="ScoreCard"
+       asp-route-courseID="@Model.CourseID.ToString()">Create Scorecard</a>
 </div>
-<a type="button" class="btn btn-success" asp-action="CreateScoreCard" asp-controller="ScoreCard"
-   asp-route-courseID="@Model.CourseID.ToString()">Create Scorecard</a>
+
+<div class="container">
+    <div class="row pt-5 m-auto">
+        <div class="col-md-6 col-lg-8 pb-3">
+
+            <!-- Copy the content below until next comment -->
+            <div class="card card-custom bg-white border-white border-0">
+                <div class="card-custom-img" style="background-image: url(http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg);"></div>
+                <div class="card-custom-avatar">
+                    <img class="img-fluid" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar" />
+                </div>
+                <div class="card-body" style="overflow-y: auto">
+                    <h4 class="card-title">@Model.FullName</h4>
+                    <p class="card-text">Holes: @Model.TotalHoles</p>
+                    <p class="card-text">Par: @Model.TotalParValue</p>
+                    <p class="card-text">Distance: @Model.TotalDistance</p>
+                    <p class="card-text">Played: @Model.NumberOfRounds.ToString()</p>
+                    <p class="card-text">Best round: @bestRound</p>
+                    <p class="card-text">Average round: @averageRound</p>
+                </div>
+                <div class="card-footer" style="background: inherit; border-color: inherit;">
+                    <a href="#" class="btn btn-primary">Option</a>
+                    <a href="#" class="btn btn-outline-primary">Other option</a>
+                </div>
+            </div>
+            <!-- Copy until here -->
+
+        </div>
+    </div>
+    <div class="row pt-5 m-auto">
+
+        <div class="col-md-6 col-lg-4 pb-3">
+
+            <!-- Add a style="height: XYZpx" to div.card to limit the card height and display scrollbar instead -->
+            <div class="card card-custom bg-white border-white border-0" style="height: 450px">
+                <div class="card-custom-img" style="background-image: url(http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg);"></div>
+                <div class="card-custom-avatar">
+                    <img class="img-fluid" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar" />
+                </div>
+                <div class="card-body" style="overflow-y: auto">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">You can also set maximum height on and the card will not expand, instead a scrollbar in the card body will appear.</p>
+                    <p class="card-text">Some example text to show the scrollbar.</p>
+                    <p class="card-text">
+                        Lorem ipsum dolor sit amet, te vix omittam fastidii, enim paulo omnes ea has, illud luptatum no qui. Sed ea qualisque urbanitas, purto elit nec te. Possim inermis antiopam ut eum. Eos te zril labore laboramus, quem erant nam in. Ut sed molestie
+                        antiopam. At altera facilisis mel.
+                    </p>
+                </div>
+                <div class="card-footer" style="background: inherit; border-color: inherit;">
+                    <a href="#" class="btn btn-primary">Option</a>
+                    <a href="#" class="btn btn-outline-primary">Other option</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6 col-lg-4 pb-3">
+
+            <!-- Add a style="height: XYZpx" to div.card to limit the card height and display scrollbar instead -->
+            <div class="card card-custom bg-white border-white border-0" style="height: 450px">
+                <div class="card-custom-img" style="background-image: url(http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg);"></div>
+                <div class="card-custom-avatar">
+                    <img class="img-fluid" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar" />
+                </div>
+                <div class="card-body" style="overflow-y: auto">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">You can also set maximum height on and the card will not expand, instead a scrollbar in the card body will appear.</p>
+                    <p class="card-text">Some example text to show the scrollbar.</p>
+                    <p class="card-text">
+                        Lorem ipsum dolor sit amet, te vix omittam fastidii, enim paulo omnes ea has, illud luptatum no qui. Sed ea qualisque urbanitas, purto elit nec te. Possim inermis antiopam ut eum. Eos te zril labore laboramus, quem erant nam in. Ut sed molestie
+                        antiopam. At altera facilisis mel.
+                    </p>
+                </div>
+                <div class="card-footer" style="background: inherit; border-color: inherit;">
+                    <a href="#" class="btn btn-primary">Option</a>
+                    <a href="#" class="btn btn-outline-primary">Other option</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6 col-lg-4 pb-3">
+
+            <!-- Add a style="height: XYZpx" to div.card to limit the card height and display scrollbar instead -->
+            <div class="card card-custom bg-white border-white border-0" style="height: 450px">
+                <div class="card-custom-img" style="background-image: url(http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg);"></div>
+                <div class="card-custom-avatar">
+                    <img class="img-fluid" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar" />
+                </div>
+                <div class="card-body" style="overflow-y: auto">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">You can also set maximum height on and the card will not expand, instead a scrollbar in the card body will appear.</p>
+                    <p class="card-text">Some example text to show the scrollbar.</p>
+                    <p class="card-text">
+                        Lorem ipsum dolor sit amet, te vix omittam fastidii, enim paulo omnes ea has, illud luptatum no qui. Sed ea qualisque urbanitas, purto elit nec te. Possim inermis antiopam ut eum. Eos te zril labore laboramus, quem erant nam in. Ut sed molestie
+                        antiopam. At altera facilisis mel.
+                    </p>
+                </div>
+                <div class="card-footer" style="background: inherit; border-color: inherit;">
+                    <a href="#" class="btn btn-primary">Option</a>
+                    <a href="#" class="btn btn-outline-primary">Other option</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6 col-lg-4 pb-3">
+
+            <!-- Add a style="height: XYZpx" to div.card to limit the card height and display scrollbar instead -->
+            <div class="card card-custom bg-white border-white border-0" style="height: 450px">
+                <div class="card-custom-img" style="background-image: url(http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg);"></div>
+                <div class="card-custom-avatar">
+                    <img class="img-fluid" src="http://res.cloudinary.com/d3/image/upload/c_pad,g_center,h_200,q_auto:eco,w_200/bootstrap-logo_u3c8dx.jpg" alt="Avatar" />
+                </div>
+                <div class="card-body" style="overflow-y: auto">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">You can also set maximum height on and the card will not expand, instead a scrollbar in the card body will appear.</p>
+                    <p class="card-text">Some example text to show the scrollbar.</p>
+                    <p class="card-text">
+                        Lorem ipsum dolor sit amet, te vix omittam fastidii, enim paulo omnes ea has, illud luptatum no qui. Sed ea qualisque urbanitas, purto elit nec te. Possim inermis antiopam ut eum. Eos te zril labore laboramus, quem erant nam in. Ut sed molestie
+                        antiopam. At altera facilisis mel.
+                    </p>
+                </div>
+                <div class="card-footer" style="background: inherit; border-color: inherit;">
+                    <a href="#" class="btn btn-primary">Option</a>
+                    <a href="#" class="btn btn-outline-primary">Other option</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
