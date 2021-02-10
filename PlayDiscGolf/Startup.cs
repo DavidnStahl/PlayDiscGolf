@@ -37,8 +37,9 @@ namespace PlayDiscGolf
 
         public void ConfigureServices(IServiceCollection services)
         {
-            IConfigurationSection  configurationSection = Configuration.GetSection("ConnectionStrings:DefaultConnection");
-            services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));
+            services.AddSingleton(provider => Configuration);
+            services.AddDbContext<DataBaseContext>
+                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDistributedMemoryCache();
 
