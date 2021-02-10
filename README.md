@@ -1,3 +1,3 @@
-Discgol application
+Discgolf application
 
 Author: David Ståhl
