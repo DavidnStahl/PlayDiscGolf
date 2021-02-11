@@ -22,7 +22,9 @@ namespace PlayDiscGolf.Controllers.CoursePage
         }
         public async Task<IActionResult> Index(string courseID)
         {
-            var dto = _mapper.Map<CoursePageViewModel>(await _coursePageService.GetCoursePageInformation(new Guid(courseID)));
+            var dto = await _coursePageService.GetCoursePageInformation(new Guid(courseID));
+
+
 
             var model = new CoursePageViewModel
             {
@@ -36,7 +38,10 @@ namespace PlayDiscGolf.Controllers.CoursePage
                 NumberOfRounds = dto.NumberOfRounds,
                 ScoreCards = _mapper.Map<List<ScoreCardViewModel>>(dto.ScoreCards),
                 TotalHoles = dto.TotalHoles,
-                TotalParValue = dto.TotalParValue
+                TotalParValue = dto.TotalParValue,
+                Latitude = dto.Latitude,
+                Longitude = dto.Longitude
+
             };
 
             return View(model);

@@ -1,33 +1,87 @@
 ﻿@model PlayDiscGolf.ViewModels.Course.CoursePageViewModel
 
 
-    @await Html.PartialAsync("_CourseInformation", Model)
+@{
+    var bestRound = "None";
+    var averageRound = "None";
+    var gamesCount = 0;
 
 
 
+    if (Model.BestRound == "None")
+    {
 
-@if (Model.ScoreCards.Count > 0)
-{
-    <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleScorecard" role="button" aria-expanded="false" aria-controls="collapseExampleScorecard">
-        History
-    </a>
+    }
+    else
+    {
+        bestRound = Convert.ToInt32(Model.BestRound) > 0 ? "+" + Model.BestRound : Model.BestRound;
+        averageRound = Convert.ToInt32(Model.AverageRound) > 0 ? "+" + Model.AverageRound : Model.AverageRound;
+
+    }
 
 
-    <div class="card collapse" id="collapseExampleScorecard" style="width: auto;">
-        <div class="card-body" style="width: 18rem;">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Scorecards:</li>
-            </ul>
+}
+
+
+<div class="container">
+    <div class="row pt-5 m-auto row justify-content-md-center">
+        <div class="col-md-6 col-lg-6 pb-3">
+
+            <div class="card card-custom bg-white border-white border-0">
+                <div style="width: 100%"><iframe width="600" height="400" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=@Model.Latitude,@Model.Longitude+(My%20Business%20Name)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe></div>
+                <div class="card-body" style="overflow-y: auto">
+                    <h4 class="card-title">@Model.FullName</h4>
+                    <p class="card-text">Holes: @Model.TotalHoles</p>
+                    <p class="card-text">Par: @Model.TotalParValue</p>
+                    <p class="card-text">Distance: @Model.TotalDistance</p>
+                    <p class="card-text">Played: @Model.NumberOfRounds.ToString()</p>
+                    <p class="card-text">Best round: @bestRound</p>
+                    <p class="card-text">Average round: @averageRound</p>
+                </div>
+                <div class="card-footer" style="background: inherit; border-color: inherit;">
+                    <a asp-action="CreateScoreCard" asp-controller="ScoreCard" asp-route-courseID="@Model.CourseID.ToString()" class="btn btn-primary">Start Course</a>
+                    @if (Model.ScoreCards.Count > 0)
+                    {
+                        <a data-toggle="collapse" href="#collapseExampleScorecard" role="button" aria-expanded="false" aria-controls="collapseExampleScorecard" class="btn btn-outline-primary">History</a>
+                    }
+                </div>
+            </div>
+            <!-- Copy until here -->
+
         </div>
+    </div>
+    <div class="row pt-5 m-auto collapse" id="collapseExampleScorecard">
         @foreach (var scoreCard in Model.ScoreCards)
         {
-            <div class="card-body" style="width: 18rem;">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Start: @scoreCard.StartDate</li>
-                    <li class="list-group-item">Holes played: @scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count() / @Model.TotalHoles</li>
-                </ul>
+            gamesCount++;
+            <div class="col-md-6 col-lg-4 pb-3">
+                <div class="card card-custom bg-white border-white border-0" style="height: 450px">
+
+                    <div class="card-body" style="overflow-y: auto">
+                        <h4 class="card-title">Game: @gamesCount</h4>
+                        <p class="card-text">Start: @scoreCard.StartDate</p>
+                        <p class="card-text">Holes played: @scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count() / @Model.TotalHoles</p>
+                        @foreach (var playerCard in scoreCard.PlayerCards)
+                        {
+                            <p class="card-text">Name: @playerCard.UserName</p>
+                            @if (playerCard.TotalScore > 0)
+                            {
+                                <p class="card-text">Score: +@playerCard.TotalScore</p>
+                            }
+                            else
+                            {
+                                <p class="card-text">Score: @playerCard.TotalScore</p>
+                            }
+                        }
+
+                    </div>
+                    <div class="card-footer" style="background: inherit; border-color: inherit;">
+                        <a type="button" class="btn btn-primary" asp-action="OpenScoreCard" asp-controller="ScoreCard"
+                           asp-route-scoreCardID="@scoreCard.ScoreCardID" asp-route-holeNumber="@scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count()">Open game</a>
+                    </div>
+                </div>
+
             </div>
-            @await Html.PartialAsync("_ScoreCard", scoreCard);
         }
     </div>
-}
+</div>

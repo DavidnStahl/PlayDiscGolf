@@ -69,7 +69,11 @@ namespace PlayDiscGolf.Core.Services.CoursePage
                 TotalParValue = course.TotalParValue,
                 NumberOfRounds = scoreCards.Count,
                 BestRound = scoreCards.Count > 0 ? _scoreCardCalculation.BestRound(scoreCards, userID).ToString() : EnumHelper.BestRound.None.ToString(),
-                AverageRound = scoreCards.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCards, userID).ToString() : EnumHelper.AverageRound.None.ToString()
+                AverageRound = scoreCards.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCards, userID).ToString() : EnumHelper.AverageRound.None.ToString(),
+                Latitude = course.Latitude,
+                Longitude = course.Longitude
+                
+           
             };
         }        
     }
