@@ -24,11 +24,11 @@
 
 
 <div class="container">
-    <div class="row pt-5 m-auto row justify-content-md-center">
+    <div class="row pt-5 m-auto row justify-content-md-center" >
         <div class="col-md-6 col-lg-6 pb-3">
 
-            <div class="card card-custom bg-white border-white border-0">
-                <div style="width: 100%"><iframe width="600" height="400" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=@Model.Latitude,@Model.Longitude+(My%20Business%20Name)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe></div>
+            <div class="card card-custom border-primary border-0 border-left-0 border-right-0 border-top-0 bg-white text-primary">
+                <div style="width: 100%"><iframe frameborder="0" scrolling="yes" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=@Model.Latitude,@Model.Longitude+(My%20Business%20Name)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe></div>
                 <div class="card-body" style="overflow-y: auto">
                     <h4 class="card-title">@Model.FullName</h4>
                     <p class="card-text">Holes: @Model.TotalHoles</p>
@@ -42,7 +42,7 @@
                     <a asp-action="CreateScoreCard" asp-controller="ScoreCard" asp-route-courseID="@Model.CourseID.ToString()" class="btn btn-primary">Start Course</a>
                     @if (Model.ScoreCards.Count > 0)
                     {
-                        <a data-toggle="collapse" href="#collapseExampleScorecard" role="button" aria-expanded="false" aria-controls="collapseExampleScorecard" class="btn btn-outline-primary">History</a>
+                        <a type="button" data-toggle="collapse" href="#collapseExampleScorecard" role="button" aria-expanded="false" aria-controls="collapseExampleScorecard" class="btn btn-outline-primary">History</a>
                     }
                 </div>
             </div>
@@ -55,7 +55,7 @@
         {
             gamesCount++;
             <div class="col-md-6 col-lg-4 pb-3">
-                <div class="card card-custom bg-white border-white border-0" style="height: 450px">
+                <div class="card card-custom  border-primary border-0 border-left-0 border-right-0 border-top-0 bg-white text-primary" style="height: 288px">
 
                     <div class="card-body" style="overflow-y: auto">
                         <h4 class="card-title">Game: @gamesCount</h4>

@@ -80,7 +80,11 @@
         });
     }
 
-    
+    $('#collapseExampleScorecard').on('shown.bs.collapse', function () {
+        $('html, body').animate({
+            scrollTop: $("#collapseExampleScorecard").offset().top
+        }, 1000);
+    });
 
     function CreateHoles() {
         $.ajax({

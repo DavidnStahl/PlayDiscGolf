@@ -94,13 +94,22 @@ a:hover {
 
 .card-custom {
     overflow: hidden;
-    min-height: 450px;
+    min-height: 200px;
     box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
 }
 
+#GameOnImage {
+    height: 30vh;
+    width: 100%;
+}
+
+iframe {
+    height: 30vh;
+    width: 100%;
+}
+
 .card-custom-img {
-    height: 400px;
-    min-height: 400px;
+    min-height: 200px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
