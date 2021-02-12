@@ -1,51 +1,51 @@
 ﻿@model PlayDiscGolf.ViewModels.ScoreCard.ScoreCardViewModel
 
-<div id="refreshForm" class="container">
 
-        <input id="ownerIDAjax" hidden asp-for="@Model.UserID">
-        <input id="playerCardsListAjax" hidden asp-for="@Model.PlayerCards">
-        <input id="courseIDAjax" hidden asp-for="@Model.CourseID">
-        <input id="scoreCardIDAjax" hidden asp-for="@Model.ScoreCardID" />
-        <div class="form-group mb-3">
-            <label for="exampleInputEmail1">Scorecard Owner</label>
-            <input id="ownerUserNameAjax" readonly class="form-control" asp-for="@Model.UserName" value="@Model.UserName">
-        </div>
-        <div class="form-group">
-            <div class="form-group row">
-                <label for="addButton" class="col-sm-3 col-form-label">Players</label>
-                <div class="col-sm-2">
-                    <button data-target="#modalAddPlayer" data-toggle="modal" type="button" id="addButton" class="btn btn-success form-control">Add</button>
+<div class="container-fluid p-0 m-0">
+
+    <input id="ownerIDAjax" hidden asp-for="@Model.UserID">
+    <input id="playerCardsListAjax" hidden asp-for="@Model.PlayerCards">
+    <input id="courseIDAjax" hidden asp-for="@Model.CourseID">
+    <input id="scoreCardIDAjax" hidden asp-for="@Model.ScoreCardID" />
+
+    <div class="row pt-5 m-auto row justify-content-md-center">
+        <div class="col-md-6 col-lg-6 pb-3">
+            <div class="card card-custom border-primary border-0 bg-warning text-black" style="min-height:600px;">
+                <div style="width: 100%"><img id="GameOnImage" src="~/picture/gamelobby2.png"></div>
+                <div class="justify-content-center  m-0 text-center d-flex" style="width:100%;background-image:url(http://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max)">
+                    <p class="h5 pl-3 pt-2 pt-4 pb-3">@Model.CourseName</p>
+                </div>
+                <div class="justify-content-between  m-0 text-center d-flex">                    
+                    <a data-target="#modalAddPlayer" data-toggle="modal" id="addButton" class="mt-3 mb-3 ml-3 text-white btn btn-success">Add friend</a>
+                    <a asp-action="StartScoreCard" asp-controller="ScoreCard" class="mr-3 mt-3 mb-3 text-white btn btn-primary">Start Game</a>
+                </div>
+                <div id="playersInScoreCard">
+                    @await Html.PartialAsync("_PlayersInPlayerCard", Model.PlayerCards)
                 </div>
             </div>
-            <div id="playersInScoreCard">
-                @await Html.PartialAsync("_PlayersInPlayerCard", Model.PlayerCards)
-            </div>
         </div>
-        <a asp-action="StartScoreCard" asp-controller="ScoreCard" class="btn btn-primary" >Start Game</a>
+    </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="modalAddPlayer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add player</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-sm-7 pb-4 pl-4">
-                        <input placeholder="Write player name here" class="form-control" id="nameInputPlayAjax" />
-                    </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <select class="p-2 form-control float-left" id="selectFriend" style="max-width:50%">
+                    <option>Choose friend</option>
+                    @for (int i = 0; i < Model.Friends.Count; i++)
+                    {
+                      <option  value="@Model.Friends[i]">@Model.Friends[i]</option>
+                    }
+                </select>
+                <div class="justify-content-end">
+                    <button hidden id="addPlayerAjax" type="button" class="btn btn-success ml-auto">Add player</button>
+                    <button type="button" class="btn btn-primary ml-auto" data-dismiss="modal">Close</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button id="addPlayerAjax" type="button" class="btn btn-success">Add player</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
 

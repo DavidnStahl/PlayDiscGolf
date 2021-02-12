@@ -87,7 +87,7 @@ body {
     
 }
 
-a:hover {
+.nav-link:hover {
     background-color: rgba(186,58,68,0.3);
 }
 

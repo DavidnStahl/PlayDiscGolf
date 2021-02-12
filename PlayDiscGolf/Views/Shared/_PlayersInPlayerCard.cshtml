@@ -1,10 +1,8 @@
 ﻿@model List<PlayDiscGolf.ViewModels.ScoreCard.PlayerCardViewModel>
 
-
-
-<div class="form-group row">
-    <div class="col-sm-3 pb-4">
-        <input readonly class="form-control" asp-for="@Model[0].UserName" value="@Model[0].UserName">
+<div class="card-body" style="overflow-y: auto">
+    <div class="d-flex mb-3">
+        <div id="" class="pt-2 h5">@Model[0].UserName</div>
     </div>
 </div>
 
@@ -12,18 +10,18 @@
 {
     for (int i = 1; i < Model.Count; i++)
     {
-        <div class="form-group row">
-            <div class="col-sm-3 pb-4 form-horizontal">
-                <input readonly class="form-control pb-2 " asp-for="@Model[i]UserName" value="@Model[i].UserName">
-                <button id="@Model[i].UserName" type="button" class="tryThis btn btn-danger form-control">Remove</button>
+        <div class="card-body" style="overflow-y: auto">
+            <div class="d-flex mb-3">
+                <div id="" class="pt-2 h5">@Model[i].UserName</div>
+                <div class="ml-auto d-flex mt-0">
+                    <div class="pb-0">
+                        <a data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#playersInScoreCard" asp-action="RemovePlayer" asp-controller="ScoreCard" asp-route-removePlayer="@Model[i].UserName" id="@Model[i].UserName" class="btn text-success">
+                            <span style="color:tomato"><i class="far fa-minus-square fa-2x"></i></span>
+                        </a>
+                    </div>
+                </div>
             </div>
-            
         </div>
-
     }
 }
-
-
-<script src="~/jquery/jquery.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
 

@@ -1,5 +1,5 @@
 ﻿using PlayDiscGolf.Core.Dtos.Cards;
-
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
 {
@@ -7,6 +7,6 @@ namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
     {
         public ScoreCardDto BuildScoreCardCreateInformation(string courseID);
 
-        public ScoreCardDto BuildUpdatedScoreCardWithUpdatedPlayers(ScoreCardDto sessionModel, string newName);
+        public Task<ScoreCardDto> BuildUpdatedScoreCardWithUpdatedPlayersAsync(ScoreCardDto sessionModel, string newName);
     }
 }

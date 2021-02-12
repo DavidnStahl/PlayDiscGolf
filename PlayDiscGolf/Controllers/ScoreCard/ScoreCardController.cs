@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Core.Services.Score;
+using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.ViewModels.ScoreCard;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Controllers.ScoreCard
 {
@@ -11,18 +14,22 @@ namespace PlayDiscGolf.Controllers.ScoreCard
 
         private readonly IScoreCardService _scoreCardService;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
         public ScoreCardController(
             IScoreCardService scoreCardService,
-            IMapper mapper)
+            IMapper mapper,
+            IUserService userService)
         {
             _scoreCardService = scoreCardService;
             _mapper = mapper;
+            _userService = userService;
         }
 
-        public IActionResult CreateScoreCard(string courseID)
+        public async Task<IActionResult> CreateScoreCard(string courseID)
         {
             var dto = _scoreCardService.GetScoreCardCreateInformation(courseID);
+            var userFriends = await _userService.GetFriendsAsync();
 
             var model = new ScoreCardViewModel
             {
@@ -32,16 +39,18 @@ namespace PlayDiscGolf.Controllers.ScoreCard
                 UserID = dto.UserID,
                 PlayerCards = _mapper.Map<List<PlayerCardViewModel>>(dto.PlayerCards),
                 ScoreCardID = dto.ScoreCardID,
-                UserName = dto.UserName
+                UserName = dto.UserName,
+                Friends = userFriends.Select(x => x.UserName).ToList(),
+                CourseName = _scoreCardService.GetCourseName(dto.CourseID)
             };
 
             return View(model);
         }
 
 
-        public IActionResult AddPlayer(string newName)
+        public async Task<IActionResult> AddPlayer(string newName)
         {
-            var model = _mapper.Map<List<PlayerCardViewModel>>(_scoreCardService.AddPlayerToSessionAndReturnUpdatedPlayers(newName));
+            var model = _mapper.Map<List<PlayerCardViewModel>>(await _scoreCardService.AddPlayerToSessionAndReturnUpdatedPlayersAsync(newName));
 
             return PartialView("_PlayersInPlayerCard", model);
         }
@@ -77,14 +86,12 @@ namespace PlayDiscGolf.Controllers.ScoreCard
         }
 
 
-        public IActionResult OpenScoreCard(string scoreCardID, int HoleNumber = 1)
+        public IActionResult OpenScoreCard(string scoreCardID, int HoleNumber)
         {
             var model = _mapper.Map<ScoreCardGameOnViewModel>(_scoreCardService.OpenScoreCard(scoreCardID));
             model.Hole.HoleNumber = HoleNumber;
 
             return View("ScoreCardLive",model);
-        }
-        
-            
+        }                   
     }
 }

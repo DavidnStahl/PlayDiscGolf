@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Core.Business.DtoBuilder.HoleCard;
 using PlayDiscGolf.Core.Dtos.Cards;
+using PlayDiscGolf.Core.Services.Account;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
 {
@@ -14,18 +16,21 @@ namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfwork _unitOfwork;
+        private readonly IAccountService _accountService;
         private readonly IHoleCardDtoBuilder _holeCardViewModelBuilder;
 
         public ScoreCardDtoBuilder(
             UserManager<IdentityUser> userManager,
             IHoleCardDtoBuilder holeCardViewModelBuilder,
             IHttpContextAccessor httpContextAccessor,
-            IUnitOfwork unitOfwork)
+            IUnitOfwork unitOfwork,
+            IAccountService accountService)
         {
             _userManager = userManager;
             _holeCardViewModelBuilder = holeCardViewModelBuilder;
             _httpContextAccessor = httpContextAccessor;
             _unitOfwork = unitOfwork;
+            _accountService = accountService;
         }
         public ScoreCardDto BuildScoreCardCreateInformation(string courseID)
         {
@@ -65,8 +70,15 @@ namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
             };
         }
 
-        public ScoreCardDto BuildUpdatedScoreCardWithUpdatedPlayers(ScoreCardDto sessionModel, string newName)
+        public async Task<ScoreCardDto> BuildUpdatedScoreCardWithUpdatedPlayersAsync(ScoreCardDto sessionModel, string newName)
         {
+            
+
+            if (sessionModel.PlayerCards.Where(x => x.UserName == newName).SingleOrDefault() != null)
+                return sessionModel;
+
+            var inloggedUserID = await _accountService.GetInloggedUserIDAsync();
+
             var playerCardID = Guid.NewGuid();
 
             sessionModel.PlayerCards = (sessionModel.PlayerCards as IEnumerable<PlayerCardDto>)
@@ -75,7 +87,8 @@ namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
                     UserName = newName,
                     ScoreCardID = sessionModel.ScoreCardID,
                     PlayerCardID = playerCardID,
-                    HoleCards = _holeCardViewModelBuilder.BuildHoleCardsForCourse(sessionModel.CourseID, playerCardID)
+                    HoleCards = _holeCardViewModelBuilder.BuildHoleCardsForCourse(sessionModel.CourseID, playerCardID),
+                    UserID = _unitOfwork.Friends.FindBy(x => x.UserName == newName && x.UserID == Guid.Parse(inloggedUserID)).SingleOrDefault().FriendUserID.ToString()
                 }).ToList();
 
             return sessionModel;

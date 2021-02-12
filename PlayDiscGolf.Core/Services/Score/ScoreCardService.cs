@@ -12,6 +12,7 @@ using PlayDiscGolf.Models.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Core.Services.Score
 {
@@ -40,6 +41,11 @@ namespace PlayDiscGolf.Core.Services.Score
             _unitOfWork = unitOfWork;
             _httpContext = accessor;
             _userManager = userManager;
+        }
+
+        public string GetCourseName(Guid courseID)
+        {
+            return _unitOfWork.Courses.FindById(courseID).Name;
         }
         public ScoreCardDto GetScoreCardCreateInformation(string courseID)
         {
@@ -83,9 +89,9 @@ namespace PlayDiscGolf.Core.Services.Score
             return _sessionStorage.Get(_sessionKey);
         }
 
-        public List<PlayerCardDto> AddPlayerToSessionAndReturnUpdatedPlayers(string newName)
+        public async Task<List<PlayerCardDto>> AddPlayerToSessionAndReturnUpdatedPlayersAsync(string newName)
         {
-            var sessionModel = _scoreCardDtoBuilder.BuildUpdatedScoreCardWithUpdatedPlayers(_sessionStorage.Get(_sessionKey), newName);
+            var sessionModel = await _scoreCardDtoBuilder.BuildUpdatedScoreCardWithUpdatedPlayersAsync(_sessionStorage.Get(_sessionKey), newName);
 
             _sessionStorage.Save(_sessionKey, sessionModel);
 

@@ -53,6 +53,13 @@
     <div class="row pt-5 m-auto collapse" id="collapseExampleScorecard">
         @foreach (var scoreCard in Model.ScoreCards)
         {
+            var currentHole = @scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count();
+
+            if(currentHole == 0)
+            {
+                currentHole++;
+            }
+
             gamesCount++;
             <div class="col-md-6 col-lg-4 pb-3">
                 <div class="card card-custom  border-primary border-0 border-left-0 border-right-0 border-top-0 bg-white text-primary" style="height: 288px">
@@ -77,7 +84,7 @@
                     </div>
                     <div class="card-footer" style="background: inherit; border-color: inherit;">
                         <a type="button" class="btn btn-primary" asp-action="OpenScoreCard" asp-controller="ScoreCard"
-                           asp-route-scoreCardID="@scoreCard.ScoreCardID" asp-route-holeNumber="@scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count()">Open game</a>
+                           asp-route-scoreCardID="@scoreCard.ScoreCardID" asp-route-holeNumber="@currentHole">Open game</a>
                     </div>
                 </div>
 
