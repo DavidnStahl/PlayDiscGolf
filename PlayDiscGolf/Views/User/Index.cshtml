@@ -47,31 +47,16 @@
                         </div>
                     }
                 <div class="card-body">
-                    <!--<p>
-                        <a type="button" class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeUsername" role="button" aria-expanded="false" aria-controls="collapseExampleChangeUsername">
-                            Change Username
-                        </a>
-                    </p>-->
                     <div id="ChangeUsername">
                         @await Html.PartialAsync("_ChangeUsername", Model.UserChangeUsernameViewModel)
                     </div>
                 </div>
                 <div class="card-body">
-                    <!--<p>
-        <a type="button" class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeEmail" role="button" aria-expanded="false" aria-controls="collapseExampleChangeEmail">
-            Change Email
-        </a>
-    </p>-->
                     <div id="ChangeEmail">
                         @await Html.PartialAsync("_ChangeEmail", Model.UserChangeEmailViewModel)
                     </div>
                 </div>
                     <div class="card-body">
-                        <!--<p>
-        <a type="button" class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangePassword" role="button" aria-expanded="false" aria-controls="collapseExampleChangePassword">
-            Change Password
-        </a>
-    </p>-->
                         <div id="ChangePassword">
                             @await Html.PartialAsync("_ChangePassword", Model.UserChangePasswordViewModel)
                         </div>

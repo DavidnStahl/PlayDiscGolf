@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayDiscGolf.Models", "Play
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayDiscGolf.SaveLocationData", "PlayDiscGolf.SaveLocationData\PlayDiscGolf.SaveLocationData.csproj", "{51DC073C-45EA-4439-B9D6-746F81CCA3DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayDiscGolf.Infrastructure", "PlayDiscGolf.Infrastructure\PlayDiscGolf.Infrastructure.csproj", "{60E2579B-1D03-40F6-9D03-65F023258338}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayDiscGolf.Infrastructure", "PlayDiscGolf.Infrastructure\PlayDiscGolf.Infrastructure.csproj", "{60E2579B-1D03-40F6-9D03-65F023258338}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayDiscGolf.Core", "PlayDiscGolf.Core\PlayDiscGolf.Core.csproj", "{B0C33FA8-06C1-4B5E-9800-F8B6A5F9C6A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayDiscGolf.Core", "PlayDiscGolf.Core\PlayDiscGolf.Core.csproj", "{B0C33FA8-06C1-4B5E-9800-F8B6A5F9C6A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

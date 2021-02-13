@@ -9,7 +9,7 @@
     var numberofHoleslooped = 0;
     var leftArrowHoleNumber = Model.Hole.HoleNumber - 1;
     var rightArrowHoleNumber = 0;
-    
+
 
     if (Model.Hole.HoleNumber != 1)
     {
@@ -90,7 +90,7 @@
                         </li>
                         numberofHoleslooped++;
                     }
-                    @for (int i = currentPage; i < Model.ScoreCard.PlayerCards[0].HoleCards.Count+1; i++)
+                    @for (int i = currentPage; i < Model.ScoreCard.PlayerCards[0].HoleCards.Count + 1; i++)
                     {
                         numberofHoleslooped++;
 
@@ -132,5 +132,111 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<div class="justify-content-between border-bottom border-dark m-0 text-center d-flex" style="background-image:url(http://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max)">
+    <p class="h5 pl-3 pt-2 pt-b-3">Hole: @Model.Hole.HoleNumber </p>
+    <p class="h5 pl-0 pt-2 pt-b-3">Par: @Model.Hole.ParValue</p>
+    <p class="h5 pr-3 pt-2 pt-b-3">Distance: @Model.Hole.Distance @meter</p>
+</div>
+<div class="card-body" style="overflow-y: auto">
+
+    @foreach (var player in Model.ScoreCard.PlayerCards)
+    {
+        var holeCard = (player.HoleCards as IEnumerable<HoleCardViewModel>
+        ).FirstOrDefault(h => h.HoleNumber == Model.Hole.HoleNumber);
+
+        <div class="d-flex mb-3">
+            @if (@player.TotalScore <= 0)
+            {
+                <div class="pt-2 h5">@player.UserName (@player.TotalScore)</div>
+            }
+            else
+            {
+                <div class="pt-2 h5">@player.UserName (+@player.TotalScore)</div>
+            }
+            <div class="ml-auto d-flex mt-0">
+                <div class="pb-0">
+                    <a type="button" id="@player.UserName" class="btn text-success" asp-action="UpdateScoreCard" asp-controller="ScoreCard"
+                       asp-route-scoreCardID="@Model.ScoreCard.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="Minus"
+                       asp-route-userName="@player.UserName" asp-route-courseID="@Model.ScoreCard.CourseID.ToString()" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">
+                        <span style="color:tomato"><i class="far fa-minus-square fa-2x"></i></span>
+                    </a>
+                </div>
+                @if (holeCard == null || holeCard.Score == 0)
+                {
+                    <div class="pt-2 h4">0</div>
+                }
+                else
+                {
+                    <div class="pt-2 h4">@holeCard.Score</div>
+                }
+                <div class="pb-0">
+                    <a type="button" id="@player.PlayerCardID" class="btn text-success" asp-action="UpdateScoreCard" asp-controller="ScoreCard"
+                       asp-route-scoreCardID="@Model.ScoreCard.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-addOrRemove="Plus"
+                       asp-route-userName="@player.UserName" asp-route-courseID="@Model.ScoreCard.CourseID.ToString()" data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">
+                        <i class="far fa-plus-square fa-2x"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<nav aria-label="...">
+
+    <ul class="pagination pagination-lg">
+        @if (currentPage != 1)
+        {
+            <li class="page-item">
+                <a class="page-link" aria-label="Previous" asp-action="ChangeHole" asp-controller="ScoreCard"
+                   asp-route-scoreCardID="@Model.ScoreCard.ScoreCardID.ToString()" asp-route-holeNumber="@leftArrowHoleNumber.ToString()" asp-route-courseID="@Model.ScoreCard.CourseID.ToString()"
+                   data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            numberofHoleslooped++;
+        }
+        @for (int i = currentPage; i < Model.ScoreCard.PlayerCards[0].HoleCards.Count + 1; i++)
+        {
+            numberofHoleslooped++;
+
+            @if (Model.Hole.HoleNumber == i)
+            {
+                <li class="page-item active">
+                    <a class="page-link" asp-action="ChangeHole" asp-controller="ScoreCard"
+                       asp-route-scoreCardID="@Model.ScoreCard.ScoreCardID.ToString()" asp-route-holeNumber="@Model.Hole.HoleNumber.ToString()" asp-route-courseID="@Model.ScoreCard.CourseID.ToString()"
+                       data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">@i <span class="sr-only">(current)</span></a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="ChangeHole" asp-controller="ScoreCard"
+                       asp-route-scoreCardID="@Model.ScoreCard.ScoreCardID.ToString()" asp-route-holeNumber="@i.ToString()" asp-route-courseID="@Model.ScoreCard.CourseID.ToString()"
+                       data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">@i</a>
+                </li>
+            }
+            if (numberofHoleslooped == 5)
+            {
+                break;
+            }
+        }
+        @if (((Model.Hole.HoleNumber + 3) < Model.ScoreCard.PlayerCards[0].HoleCards.Count))
+        {
+            <li class="page-item">
+                <a class="page-link" aria-label="Next" asp-action="ChangeHole" asp-controller="ScoreCard"
+                   asp-route-scoreCardID="@Model.ScoreCard.ScoreCardID.ToString()" asp-route-holeNumber="@rightArrowHoleNumber.ToString()" asp-route-courseID="@Model.ScoreCard.CourseID.ToString()"
+                   data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#scoreCardLive">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
 
 
