@@ -19,7 +19,7 @@
                     <a data-target="#modalAddPlayer" data-toggle="modal" id="addButton" class="mt-3 mb-3 ml-3 text-white btn btn-success">Add friend</a>
                     <a asp-action="StartScoreCard" asp-controller="ScoreCard" class="mr-3 mt-3 mb-3 text-white btn btn-primary">Start Game</a>
                 </div>
-                <div id="playersInScoreCard">
+                <div class="bg-transparent" id="playersInScoreCard">
                     @await Html.PartialAsync("_PlayersInPlayerCard", Model.PlayerCards)
                 </div>
             </div>
