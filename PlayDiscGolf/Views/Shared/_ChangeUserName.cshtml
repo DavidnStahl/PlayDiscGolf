@@ -1,17 +1,12 @@
 ﻿@model PlayDiscGolf.ViewModels.User.UserChangeUsernameViewModel
 
-<p>
-    <a class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeUsername" role="button" aria-expanded="false" aria-controls="collapseExampleChangeUsername">
-        Change Username
-    </a>
-</p>
-<div class="collapse" id="collapseExampleChangeUsername">
 
+<div>
         <form id="ChangeUsername" asp-action="ChangeUsername" onsubmit="return jQueryAjaxPost(this);">
             <div class="form-group">
-                <label for="exampleInputEmail1">New username</label>
-                <span class="text-danger" asp-validation-for="@Model.Username"></span>
+                <label for="exampleInputEmail1">Change username</label>
                 <input asp-for="@Model.Username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username..">
+                <span class="text-danger" asp-validation-for="@Model.Username"></span>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

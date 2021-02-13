@@ -1,60 +1,84 @@
 ﻿@model PlayDiscGolf.ViewModels.User.UserInformationViewModel
 
-<div class="card" style="width: auto;">
-    <div id="userInformation" class="card-body">
-        <h4 class="card-title">Username: @Model.Username</h4>
-        <h4 id="emailLabel" class="card-title">Email: @Model.Email</h4>
-    </div>
-    <form id="SearchUser" asp-action="SearchUser" onsubmit="return jQueryAjaxPost(this);">
-        <div class="form-group row">
-            <div class="col-sm-4 ml-xl-2 pb-4">
-                <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
-                <input placeholder="Search user here.." class="form-control" id="searchUser" asp-for="@Model.SearchUsername">
-            </div>
-            <div class="col-sm-2 ml-xl-2 pb-4">
-                <input type="submit" class="btn btn-primary mb-2 form-control" value="Search" />
-            </div>
-        </div>
-    </form>
-    <div id="searchUserName">
-        @await Html.PartialAsync("_SearchUserNameResult", Model.UserSearchResultViewModel)
-    </div>
-    <ul class="list-group list-group-flush">
 
-        @if (Model.Friends.Count > 0)
-        {
-            <li class="list-group-item">Friends</li>
-        }
+<div class="container-fluid p-0 m-0">
+    <div class="row pt-5 m-auto row justify-content-md-center">
+        <div class="col-md-6 col-lg-6 pb-3 ml-3">
+            <div class="card card-custom border-primary border-0 bg-white text-black" style="min-height:500px;">
+                <div class="card" style="width: auto;">
+                    <div id="userInformation" class="card-body ml-2">
+                        <h4 class="card-title">@Model.Username</h4>
+                        <h4 id="emailLabel" class="card-title">@Model.Email</h4>
+                    </div>
+                    <form class="ml-4 mr-4" id="SearchUser" asp-action="SearchUser" onsubmit="return jQueryAjaxPost(this);">
+                        <div class="form-group row">
+                            <div class="col-sm-6 col-md-6 pb-4">
+                                <span class="text-danger" asp-validation-for="@Model.SearchUsername"></span>
+                                <input placeholder="Search user here.." class="form-control" style="min-width:70%" id="searchUser" asp-for="@Model.SearchUsername">
+                            </div>
+                            <div class="col-sm-3 col-md-3 pb-4">
+                                <input type="submit" class="btn btn-primary mb-2" value="Search" />
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchUserName">
+                        @await Html.PartialAsync("_SearchUserNameResult", Model.UserSearchResultViewModel)
+                    </div>
+                    @if (Model.Friends.Count > 0)
+                    {
+                        <div class="card" style="width:auto;">
+                            <h5 class="card-body">Friends:</h5>
+                            <div class="card-body">
+                                @for (int i = 0; i < Model.Friends.Count; i++)
+                                {
+                                    <p>@Model.Friends[i].UserName</p>
 
-        @for (int i = 0; i < Model.Friends.Count; i++)
-        {
-    <li class="list-group-item">
-        @Model.Friends[i].UserName
-        @if (Model.Friends[i].FriendRequestAccepted == false)
-        {
-            <p class="text-danger">Waiting for friendrequest to be accepted</p>
-        }
-        else
-        {
-            <p class="text-success">Friend request accepted</p>
-        }
-        <a class="btn btn-danger" asp-route-friendID="@Model.Friends[i].FriendID" asp-action="RemoveFriend" asp-controller="User">Remove</a>
-    </li>
-        }
-    </ul>
-    <div class="card-body">
-        <div id="ChangeUsername">
-            @await Html.PartialAsync("_ChangeUsername", Model.UserChangeUsernameViewModel)
-        </div>
-    </div>
-    <div class="card-body">
-        <div id="ChangeEmail">            
-            @await Html.PartialAsync("_ChangeEmail", Model.UserChangeEmailViewModel)
-        </div>
-    </div>
-        <div class="card-body">
-            <div id="ChangePassword">
-                @await Html.PartialAsync("_ChangePassword", Model.UserChangePasswordViewModel)
+                                    @if (Model.Friends[i].FriendRequestAccepted == false)
+                                    {
+                                        <p class="text-danger">Waiting for friend request to be accepted</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-success">Friend request accepted</p>
+                                    }
+                                    <a class="btn btn-danger mb-4" asp-route-friendID="@Model.Friends[i].FriendID" asp-action="RemoveFriend" asp-controller="User">Remove</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                <div class="card-body">
+                    <!--<p>
+                        <a type="button" class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeUsername" role="button" aria-expanded="false" aria-controls="collapseExampleChangeUsername">
+                            Change Username
+                        </a>
+                    </p>-->
+                    <div id="ChangeUsername">
+                        @await Html.PartialAsync("_ChangeUsername", Model.UserChangeUsernameViewModel)
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!--<p>
+        <a type="button" class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangeEmail" role="button" aria-expanded="false" aria-controls="collapseExampleChangeEmail">
+            Change Email
+        </a>
+    </p>-->
+                    <div id="ChangeEmail">
+                        @await Html.PartialAsync("_ChangeEmail", Model.UserChangeEmailViewModel)
+                    </div>
+                </div>
+                    <div class="card-body">
+                        <!--<p>
+        <a type="button" class="btn btn-primary card-link" data-toggle="collapse" href="#collapseExampleChangePassword" role="button" aria-expanded="false" aria-controls="collapseExampleChangePassword">
+            Change Password
+        </a>
+    </p>-->
+                        <div id="ChangePassword">
+                            @await Html.PartialAsync("_ChangePassword", Model.UserChangePasswordViewModel)
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
+

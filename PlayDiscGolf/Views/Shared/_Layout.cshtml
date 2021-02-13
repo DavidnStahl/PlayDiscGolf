@@ -57,13 +57,12 @@
                             if (model.Count() > 0)
                             {
                                 notificationCount = model.Count().ToString();
+
+                                <li class="nav-item">
+                                    <a class="nav-link hover-shadow text-white h5" asp-area="" asp-controller="Notification" asp-action="Index">Notification (@notificationCount)</a>
+                                </li>
                             }
 
-
-
-                            <li class="nav-item">
-                                <a class="nav-link hover-shadow text-white h5" asp-area="" asp-controller="Notification" asp-action="Index">Notification (@notificationCount)</a>
-                            </li>
                             <li class="nav-item ml-lg-2">
                                 <a class="nav-link hover-shadow text-white h5" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>

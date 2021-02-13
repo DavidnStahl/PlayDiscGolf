@@ -198,7 +198,7 @@ namespace PlayDiscGolf.Core.Services.Score
             if (holeCard.SingleOrDefault().Score == 0)
             {
                 var item = holeCard.SingleOrDefault();
-                item.Score = hole.ParValue + 1;
+                item.Score++;
                 _unitOfWork.HoleCards.Edit(item);
             }
             else
@@ -214,21 +214,15 @@ namespace PlayDiscGolf.Core.Services.Score
 
         private void DecreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard, Hole hole)
         {
-            if (holeCard.SingleOrDefault().Score == 0)
-            {
-                var item = holeCard.SingleOrDefault();
-                item.Score = hole.ParValue - 1;
-                _unitOfWork.HoleCards.Edit(item);
-            }
-            else
+            if (holeCard.SingleOrDefault().Score != 0)
             {
                 var item = holeCard.SingleOrDefault();
                 item.Score--;
                 _unitOfWork.HoleCards.Edit(item);
-            }
 
-            _unitOfWork.Complete();
-            UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
+                _unitOfWork.Complete();
+                UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
+            }   
         }
 
         public ScoreCardGameOnDto OpenScoreCard(string scoreCardID)

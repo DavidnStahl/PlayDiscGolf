@@ -10,8 +10,12 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
+
 }
 
+a:hover{
+    text-decoration: none;
+}
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
@@ -100,6 +104,11 @@ body {
 
 #GameOnImage {
     height: 30vh;
+    width: 100%;
+}
+
+#LoginRegister {
+    height: 24vh;
     width: 100%;
 }
 

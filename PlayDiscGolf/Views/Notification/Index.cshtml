@@ -1,17 +1,30 @@
 ﻿@model List<PlayDiscGolf.ViewModels.User.FriendViewModel>
 
-<div class="card" style="width: auto;">
-    <div id="userInformation" class="card-body">
-        <h3>Friend Requests</h3>
-        <ul class="list-group list-group-flush">
-            @foreach (var friend in Model)
-            {
-            <li class="list-group-item">
-                @friend.UserName
-                <a class="btn btn-success" asp-route-friendID="@friend.FriendID" asp-action="AcceptFriendRequest" asp-controller="Notification">Accept</a>
-                <a class="btn btn-danger" asp-route-friendID="@friend.FriendID" asp-action="DeclineFriendRequest" asp-controller="Notification">Decline</a>
-            </li>
-            }
-        </ul>
+@if (Model.Count > 0)
+{
+    <div class="row pt-5 m-auto row justify-content-md-center bg-transparent">
+        <div class="col-md-6 col-lg-6 pb-3">
+                <table class="container table table-warning">
+                    <thead>
+                        <tr>
+                            <th scope="col">Friend Request</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>@request.UserName</td>
+                                <td><a class="text-success" asp-route-friendID="@request.FriendID" asp-action="AcceptFriendRequest" asp-controller="Notification">Accept</a></td>
+                                <td><a class="text-danger" asp-route-friendID="@request.FriendID" asp-action="DeclineFriendRequest" asp-controller="Notification">Decline</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            
         </div>
-</div>
+    </div>
+}
+

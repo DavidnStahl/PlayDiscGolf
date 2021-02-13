@@ -20,6 +20,9 @@ namespace PlayDiscGolf.Core.Services.Account
 
         string GetUserName();
 
+        Task<bool> CheckIfCredentialsIsValidAsync(string username, string password);
+
+
         Task ChangePasswordAsync(string newPassword);
 
         Task ChangeEmailAsync(string newEmail);

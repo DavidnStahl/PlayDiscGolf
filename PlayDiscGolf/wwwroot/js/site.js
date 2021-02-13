@@ -27,7 +27,7 @@
                         }
                         
                          $("#ChangeEmail").empty().append(res);
-                         $("#collapseExampleChangeEmail").toggle();  
+                         //$("#collapseExampleChangeEmail").toggle();  
                     } 
                     if (form.id === "ChangeUsername") {
 
@@ -36,7 +36,7 @@
                         }
 
                         $("#ChangeUsername").empty().append(res);
-                        $("#collapseExampleChangeUsername").toggle();
+                        //$("#collapseExampleChangeUsername").toggle();
                     }
                     if (form.id === "ChangePassword") {
 
@@ -45,7 +45,7 @@
                         }
 
                         $("#ChangePassword").empty().append(res);
-                        $("#collapseExampleChangePassword").toggle();
+                        //$("#collapseExampleChangePassword").toggle();
                     }
                 },
                 error: function (err) {

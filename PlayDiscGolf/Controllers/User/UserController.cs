@@ -5,6 +5,7 @@ using PlayDiscGolf.Core.Services.Account;
 using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.ViewModels.User;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Controllers.User
@@ -28,7 +29,7 @@ namespace PlayDiscGolf.Controllers.User
                 UserID = await _accountService.GetInloggedUserIDAsync(),
                 Email = await _accountService.GetEmailAsync(),
                 Username = _accountService.GetUserName(),
-                Friends = _mapper.Map<List<FriendViewModel>>(await _userService.GetFriendsAsync())                
+                Friends = _mapper.Map<List<FriendViewModel>>(await _userService.GetFriendsAsync()).Where(x => x.FriendRequestAccepted == true).ToList()
             };
 
             return View(model);

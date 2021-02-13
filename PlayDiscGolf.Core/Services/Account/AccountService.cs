@@ -24,6 +24,13 @@ namespace PlayDiscGolf.Core.Services.Account
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<bool> CheckIfCredentialsIsValidAsync(string username, string password)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+  
+            return await _signInManager.UserManager.CheckPasswordAsync(user, password);
+        }
+
         public async Task<RegisterUserDto> UserRegisterAsync(RegisterDto model)
         {
             var ErrorMessegeEmaiResult = await IsEmailTakenAsync(model.Email);
