@@ -9,7 +9,7 @@ namespace PlayDiscGolf.Models.Models.DataModels
     {
         private readonly IConfiguration _configuration;
 
-        public DataBaseContext()
+        public DataBaseContext(DbContextOptions<DataBaseContext> options)
         {
         }
 
