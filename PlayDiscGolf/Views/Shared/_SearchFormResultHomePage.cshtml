@@ -12,7 +12,7 @@
             @foreach (var item in Model)
             {
                 <li class="mb-3">
-                    <a type="button" asp-action="Index" asp-controller="Course" asp-route-courseID="@item.CourseID.ToString()" class="btn btn-secondary" id="@item.CourseID.ToString()">@item.FullName</a>
+                    <a type="button" asp-action="Index" asp-controller="Course" asp-route-courseID="@item.CourseID.ToString()" class="btn btn-primary" id="@item.CourseID.ToString()">@item.FullName</a>
                 </li>
             }
         </ul>

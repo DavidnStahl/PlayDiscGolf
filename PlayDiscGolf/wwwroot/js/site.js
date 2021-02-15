@@ -15,10 +15,13 @@
 
                         $("#searchFormHome").empty().append(res);
                     }
+
+                    if (form.id === "SearchFormAdmin") {
+                        $("#partial").empty().append(res);
+                    }
                     if (form.id === "SearchUser") {
 
                         $("#searchUserName").empty().append(res);
-
                     }
                     if (form.id === "ChangeEmail") {
 
@@ -26,8 +29,7 @@
                             location.reload();
                         }
                         
-                         $("#ChangeEmail").empty().append(res);
-                         //$("#collapseExampleChangeEmail").toggle();  
+                         $("#ChangeEmail").empty().append(res); 
                     } 
                     if (form.id === "ChangeUsername") {
 
@@ -36,7 +38,6 @@
                         }
 
                         $("#ChangeUsername").empty().append(res);
-                        //$("#collapseExampleChangeUsername").toggle();
                     }
                     if (form.id === "ChangePassword") {
 
@@ -45,7 +46,6 @@
                         }
 
                         $("#ChangePassword").empty().append(res);
-                        //$("#collapseExampleChangePassword").toggle();
                     }
                 },
                 error: function (err) {
@@ -107,8 +107,7 @@
                 $("#playersInScoreCard").empty().append(result);
 
             }
-        });
-        
+        });       
     }
 
     function GetCourses(value) {

@@ -3,6 +3,7 @@ using PlayDiscGolf.Core.Business.Calculations.Hole;
 using PlayDiscGolf.Core.Dtos.AdminCourse;
 using PlayDiscGolf.Core.Dtos.Course;
 using PlayDiscGolf.Core.Dtos.Entities;
+using PlayDiscGolf.Core.Dtos.Home;
 using PlayDiscGolf.Core.Dtos.PostModels;
 using PlayDiscGolf.Core.Enums;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
@@ -27,6 +28,28 @@ namespace PlayDiscGolf.Core.Services.Admin
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _createHolesCalcultion = createHolesCalcultion;
+        }
+
+        public List<SearchResultAjaxFormDto> TypeIsArea(SearchFormHomeDto model)
+        {
+            var courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query)).ToList();
+
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
+        }
+
+        public List<SearchResultAjaxFormDto> TypeIsCourse(SearchFormHomeDto model)
+        {
+            var courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query)).ToList();
+
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
+        }
+
+        public List<SearchResultAjaxFormDto> GetAllCourseBySearchQuery(SearchFormHomeDto model)
+        {
+            if (model.Type == EnumHelper.SearchType.Area.ToString())
+                return TypeIsArea(model);
+
+            return TypeIsCourse(model);
         }
 
         public CourseFormDto GetCourseByID(Guid id)

@@ -1,4 +1,4 @@
-﻿@model List<PlayDiscGolf.Models.ViewModels.SearchCourseItemViewModel>
+﻿@model List<PlayDiscGolf.ViewModels.Home.SearchResultAjaxFormViewModel>
 
 
 @{
@@ -10,18 +10,19 @@
 
 @if (Model.Count > 0)
 {
-<ul>
-    @foreach (var item in Model)
-    {
-        <li>
-            <button class="locationButton" id="@item.CourseID.ToString()">@item.FullName</button>
-        </li>
+    <ul class="list-unstyled">
+        @foreach (var item in Model)
+        {
+            <li class="mb-3">
+                <button class="locationButton btn btn-primary" id="@item.CourseID.ToString()">@item.FullName</button>
+            </li>
 
 
 
-    }
-</ul>
+        }
+    </ul>
 }
+
 
 
 <script src="~/js/site.js" asp-append-version="true"></script>
