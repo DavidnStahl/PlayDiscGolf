@@ -55,7 +55,7 @@ namespace PlayDiscGolf.Core.Services.Score
 
             var holeCardDtos = new List<HoleCardDto>();
 
-            var holes = _unitOfWork.Holes.FindBy(x => x.CourseID == Guid.Parse(courseID));
+            var holes = _unitOfWork.Holes.FindAllBy(x => x.CourseID == Guid.Parse(courseID));
 
             for (int i = 0; i < holes.Count; i++)
                 holeCardDtos.Add(new HoleCardDto
@@ -124,7 +124,7 @@ namespace PlayDiscGolf.Core.Services.Score
         {
             var players = scorecard.PlayerCards.Select(x => x.UserName).ToList();
 
-            var friends = _unitOfWork.Friends.FindBy(x => players.Contains(x.UserName)).ToList();
+            var friends = _unitOfWork.Friends.FindAllBy(x => players.Contains(x.UserName));
 
             foreach (var friend in friends)
             {
@@ -178,7 +178,7 @@ namespace PlayDiscGolf.Core.Services.Score
                 .Select(x => x.Score)
                 .Sum();
 
-            var totalParValueFromStartedHoles = _unitOfWork.Holes.FindBy(x => x.CourseID == scoreCard.CourseID)
+            var totalParValueFromStartedHoles = _unitOfWork.Holes.FindAllBy(x => x.CourseID == scoreCard.CourseID)
                 .Where(x => holeCard
                             .Where(y => y.Score > 0)
                             .Select(y => y.HoleNumber)

@@ -25,14 +25,14 @@ namespace PlayDiscGolf.Core.Services.Home
 
         public List<SearchResultAjaxFormDto> TypeIsArea(SearchFormHomeDto model)
         {
-            var courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
+            var courses = _unitOfWork.Courses.FindAllBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query) && course.HolesTotal > 0);
 
             return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
         }
 
         public List<SearchResultAjaxFormDto> TypeIsCourse(SearchFormHomeDto model)
         {
-            var courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
+            var courses = _unitOfWork.Courses.FindAllBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query) && course.HolesTotal > 0);
 
             return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
         }

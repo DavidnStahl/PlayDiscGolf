@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayDiscGolf.Infrastructure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayDiscGolf.Core", "PlayDiscGolf.Core\PlayDiscGolf.Core.csproj", "{B0C33FA8-06C1-4B5E-9800-F8B6A5F9C6A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayDiscGolf.Core.Tests", "PlayDiscGolf.Core.Tests\PlayDiscGolf.Core.Tests.csproj", "{01A62C8F-DF39-43D0-A80A-9357959AB0D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B0C33FA8-06C1-4B5E-9800-F8B6A5F9C6A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0C33FA8-06C1-4B5E-9800-F8B6A5F9C6A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0C33FA8-06C1-4B5E-9800-F8B6A5F9C6A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01A62C8F-DF39-43D0-A80A-9357959AB0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01A62C8F-DF39-43D0-A80A-9357959AB0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01A62C8F-DF39-43D0-A80A-9357959AB0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01A62C8F-DF39-43D0-A80A-9357959AB0D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

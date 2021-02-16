@@ -40,7 +40,7 @@ namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
 
             var holeCardDtos = new List<HoleCardDto>();
 
-            var holes = _unitOfwork.Holes.FindBy(x => x.CourseID == Guid.Parse(courseID));
+            var holes = _unitOfwork.Holes.FindAllBy(x => x.CourseID == Guid.Parse(courseID));
 
             for (int i = 0; i < holes.Count; i++)
                 holeCardDtos.Add(new HoleCardDto
@@ -88,7 +88,7 @@ namespace PlayDiscGolf.Core.Business.DtoBuilder.ScoreCard
                     ScoreCardID = sessionModel.ScoreCardID,
                     PlayerCardID = playerCardID,
                     HoleCards = _holeCardViewModelBuilder.BuildHoleCardsForCourse(sessionModel.CourseID, playerCardID),
-                    UserID = _unitOfwork.Friends.FindBy(x => x.UserName == newName && x.UserID == Guid.Parse(inloggedUserID)).SingleOrDefault().FriendUserID.ToString()
+                    UserID = _unitOfwork.Friends.FindSingleBy(x => x.UserName == newName && x.UserID == Guid.Parse(inloggedUserID)).FriendUserID.ToString()
                 }).ToList();
 
             return sessionModel;

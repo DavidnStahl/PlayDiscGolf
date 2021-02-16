@@ -14,6 +14,13 @@ namespace PlayDiscGolf.AutoMapper.Profiles.Search
         public SearchResultAjaxFormProfiles()
         {
             CreateMap<SearchResultAjaxFormDto, SearchResultAjaxFormViewModel>();
+            CreateMap<CourseDto, SearchResultAjaxFormViewModel>()
+                .ForMember(x => x.Holes, source => source.MapFrom(x => x.TotalHoles))
+                .ForMember(x => x.Area, source => source.MapFrom(x => x.Area))
+                .ForMember(x => x.FullName, source => source.MapFrom(x => x.FullName))
+                .ForMember(x => x.CourseID, source => source.MapFrom(x => x.CourseID))
+                .ForAllOtherMembers(x => x.Ignore());
+
         }
     }
 }

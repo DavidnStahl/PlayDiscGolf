@@ -9,7 +9,9 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
     public interface IEntityRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
-        List<T> FindBy(Expression<Func<T, bool>> predicate);
+        List<T> FindAllBy(Expression<Func<T, bool>> predicate);
+
+        T FindSingleBy(Expression<Func<T, bool>> predicate);
         bool Add(T entity);
 
         bool AddRange(List<T> entities);

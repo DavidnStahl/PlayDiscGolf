@@ -36,7 +36,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
 
         private List<ScoreCard> GetScoreCards(string userID, string username, Guid courseID)
         {
-            var myfriends = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(userID)).ToList();
+            var myfriends = _unitOfWork.Friends.FindAllBy(x => x.UserID == Guid.Parse(userID));
 
             return _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x =>
                      (x.CourseID == courseID && x.UserName == username) 
@@ -54,7 +54,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             var course = _unitOfWork.Courses.FindById(courseID);
             var userID = await _accountService.GetInloggedUserIDAsync();
             var scoreCards = _mapper.Map <List<ScoreCardDto>>(GetScoreCards(userID, _accountService.GetUserName(), courseID));            
-            var holesEntity = _unitOfWork.Holes.FindBy(x => x.CourseID == courseID);
+            var holesEntity = _unitOfWork.Holes.FindAllBy(x => x.CourseID == courseID);
             var holes = _mapper.Map<List<HoleDto>>(holesEntity);
 
             return new CourseInfoDto

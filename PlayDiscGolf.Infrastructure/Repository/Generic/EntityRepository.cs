@@ -21,10 +21,16 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
             return _context.Set<T>();
         }
 
-        public List<T> FindBy(Expression<Func<T, bool>> predicate)
+        public List<T> FindAllBy(Expression<Func<T, bool>> predicate)
         {
-            IQueryable<T> query = _context.Set<T>().Where(predicate);
-            return query.ToList();
+            return _context.Set<T>().Where(predicate).ToList();
+
+        }
+
+        public T FindSingleBy(Expression<Func<T, bool>> predicate)
+        {
+            return  _context.Set<T>().SingleOrDefault(predicate);
+
         }
 
         public virtual bool Add(T entity)
