@@ -26,7 +26,6 @@ namespace PlayDiscGolf.Core.Services.User
         public async Task<List<FriendDto>> GetFriendsAsync()
         {
             var inloggedUserID = await _accountService.GetInloggedUserIDAsync();
-            //var username = _accountService.GetUserName();
             var friends = _unitOfWork.Friends.FindAllBy(x => x.UserID == Guid.Parse(inloggedUserID));
 
             return _mapper.Map<List<FriendDto>>(friends);
@@ -35,7 +34,6 @@ namespace PlayDiscGolf.Core.Services.User
         public async Task RemoveFriendAsync(string friendID)
         {
             var inloggedUsername = _accountService.GetUserName();
-            //var inloggedUser = await _accountService.GetUserByQueryAsync(inloggedUsername);
             var friend = _unitOfWork.Friends.FindSingleBy(x => x.FriendID == Guid.Parse(friendID));
 
             if(friend.FriendRequestAccepted == true)
@@ -51,7 +49,6 @@ namespace PlayDiscGolf.Core.Services.User
         {
             var username = _accountService.GetUserName();
             var user = await _accountService.GetUserByQueryAsync(username);
-
             var friendRequests = _unitOfWork.Friends.FindAllBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false);
 
             var friendDto = new List<FriendDto>();

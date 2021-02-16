@@ -86,5 +86,110 @@ namespace PlayDiscGolf.Core.Tests.Services
             //Assert
             _unitOfWorkMock.Verify(x => x.Complete(), Times.Once);
         }
+
+        [Fact]
+
+        public async Task GetFriendRequestsAsync_Should_Call_GetUserByIDAsync_Once()
+        {
+            //Arange
+            var inloggedUsername = "david";
+            var userID = Guid.NewGuid();
+            var friends = new List<Friend>
+            {
+                new Friend { UserID = Guid.NewGuid(), FriendID = userID, FriendRequestAccepted = false, FriendUserID = Guid.NewGuid(), UserName = "david" }
+            };
+            
+            var user = new IdentityUser { Id = userID.ToString() };
+
+            _accountServiceMock.Setup(x => x.GetUserName()).Returns(inloggedUsername);
+            _accountServiceMock.Setup(x => x.GetUserByQueryAsync(inloggedUsername)).ReturnsAsync(user);
+            _unitOfWorkMock.Setup(x => x.Friends.FindAllBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false)).Returns(friends);
+            _accountServiceMock.Setup(x => x.GetUserByIDAsync(friends[0].UserID.ToString())).ReturnsAsync(new IdentityUser());
+            
+            //Act
+            var result = await _sut.GetFriendRequestsAsync();
+
+            //Assert
+            _accountServiceMock.Verify(x => x.GetUserByIDAsync(friends[0].UserID.ToString()), Times.Once());
+        }
+
+        [Fact]
+
+        public async Task RemoveExtraFriendAsync_Should_Call_unitOfWorkFriendsDelete_Once()
+        {
+            //Arange
+            var inloggedUsername = "david";            
+            var addedfriendID = Guid.NewGuid();
+            var userRemovedFriendUserID = addedfriendID;
+            var friendID = addedfriendID.ToString();
+            var friend = new Friend { UserID = addedfriendID, FriendID = Guid.NewGuid(), FriendRequestAccepted = false, FriendUserID = Guid.NewGuid(), UserName = "david" };
+
+            var user = new IdentityUser { Id = addedfriendID.ToString() };
+
+            _accountServiceMock.Setup(x => x.GetUserName()).Returns(inloggedUsername);
+            _accountServiceMock.Setup(x => x.GetUserByQueryAsync(inloggedUsername)).ReturnsAsync(user);
+            _unitOfWorkMock.Setup(x => x.Friends.FindSingleBy(x => x.UserID == userRemovedFriendUserID && x.FriendUserID == Guid.Parse(user.Id))).Returns(friend);
+            _unitOfWorkMock.Setup(x => x.Friends.Delete(friend));
+
+            //Act
+           await _sut.RemoveExtraFriendAsync(userRemovedFriendUserID);
+
+            //Assert
+            _unitOfWorkMock.Verify(x => x.Friends.Delete(friend), Times.Once);
+        }
+
+        [Fact]
+
+        public void DeclineFriendRequest_Should_Call_UnitOfWorkFriendsFindById_Once()
+        {
+            //Arange
+            var friendID = Guid.NewGuid().ToString();
+            var friend = new Friend { UserID = Guid.NewGuid(), FriendID = Guid.NewGuid(), FriendRequestAccepted = false, FriendUserID = Guid.Parse(friendID), UserName = "david" };
+            _unitOfWorkMock.Setup(x => x.Friends.FindById(Guid.Parse(friendID))).Returns(friend);
+            _unitOfWorkMock.Setup(x => x.Friends.Delete(friend));
+            _unitOfWorkMock.Setup(x => x.Complete()).Returns(It.IsAny<int>);
+
+            //Act
+            _sut.DeclineFriendRequest(friendID);
+
+            //Assert
+            _unitOfWorkMock.Verify(x => x.Friends.FindById(Guid.Parse(friendID)), Times.Once());
+        }
+
+        [Fact]
+
+        public void DeclineFriendRequest_Should_Call_unitOfWorkFriendsDelete_Once()
+        {
+            //Arange
+            var friendID = Guid.NewGuid().ToString();
+            var friend = new Friend { UserID = Guid.NewGuid(), FriendID = Guid.NewGuid(), FriendRequestAccepted = false, FriendUserID = Guid.Parse(friendID), UserName = "david" };
+            _unitOfWorkMock.Setup(x => x.Friends.FindById(Guid.Parse(friendID))).Returns(friend);
+            _unitOfWorkMock.Setup(x => x.Friends.Delete(friend));
+            _unitOfWorkMock.Setup(x => x.Complete()).Returns(It.IsAny<int>);
+
+            //Act
+            _sut.DeclineFriendRequest(friendID);
+
+            //Assert
+            _unitOfWorkMock.Verify(x => x.Friends.Delete(friend), Times.Once());
+        }
+
+        [Fact]
+
+        public void DeclineFriendRequest_Should_Call_unitOfWorkComplete_Once()
+        {
+            //Arange
+            var friendID = Guid.NewGuid().ToString();
+            var friend = new Friend { UserID = Guid.NewGuid(), FriendID = Guid.NewGuid(), FriendRequestAccepted = false, FriendUserID = Guid.Parse(friendID), UserName = "david" };
+            _unitOfWorkMock.Setup(x => x.Friends.FindById(Guid.Parse(friendID))).Returns(friend);
+            _unitOfWorkMock.Setup(x => x.Friends.Delete(friend));
+            _unitOfWorkMock.Setup(x => x.Complete()).Returns(It.IsAny<int>);
+
+            //Act
+            _sut.DeclineFriendRequest(friendID);
+
+            //Assert
+            _unitOfWorkMock.Verify(x => x.Complete(), Times.Once());
+        }
     }
 }
