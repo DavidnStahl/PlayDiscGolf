@@ -32,7 +32,7 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific
         {
             return _context
                 .Set<ScoreCard>()
-                .Include(x => x.PlayerCards)
+                .Include(x => x.PlayerCards)                
                 .ThenInclude(x => x.HoleCards)
                 .SingleOrDefault(predicate);
 

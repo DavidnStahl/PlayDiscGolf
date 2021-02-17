@@ -9,6 +9,7 @@
     var numberofHoleslooped = 0;
     var leftArrowHoleNumber = Model.Hole.HoleNumber - 1;
     var rightArrowHoleNumber = 0;
+    var players = Model.ScoreCard.PlayerCards.OrderBy(x => x.TotalScore).ThenBy(x => x.UserID).ToList();
 
 
     if (Model.Hole.HoleNumber != 1)
@@ -24,7 +25,7 @@
 <div class="bg-transparent">
     <div class="card-body bg-warning" style="overflow-y: auto">
 
-        @foreach (var player in Model.ScoreCard.PlayerCards)
+        @foreach (var player in players)
         {
             var holeCard = (player.HoleCards as IEnumerable<HoleCardViewModel>
             ).FirstOrDefault(h => h.HoleNumber == Model.Hole.HoleNumber);
