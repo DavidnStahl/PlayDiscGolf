@@ -38,7 +38,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
         {
             var myfriends = _unitOfWork.Friends.FindAllBy(x => x.UserID == Guid.Parse(userID));
 
-            return _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x =>
+            return _unitOfWork.ScoreCards.GetAllScoreCardAndIncludePlayerCardAndHoleCardBy(x =>
                      (x.CourseID == courseID && x.UserName == username) 
                      || 
                      (x.CourseID == courseID && myfriends.Select(x => x.UserName).Contains(x.UserName)))

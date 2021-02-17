@@ -14,12 +14,9 @@
         @foreach (var item in Model)
         {
             <li class="mb-3">
-                <button class="locationButton btn btn-primary" id="@item.CourseID.ToString()">@item.FullName</button>
+                <a href="#" class="locationButton btn btn-primary" id="@item.CourseID.ToString()">@item.FullName</a>
             </li>
         }
     </ul>
 }
 
-
-
-<script src="~/js/site.js" asp-append-version="true"></script>

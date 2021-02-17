@@ -17,7 +17,7 @@
                     }
 
                     if (form.id === "SearchFormAdmin") {
-                        $("#partial").empty().append(res);
+                        $("#adminSearchResult").empty().append(res);
                     }
                     if (form.id === "SearchUser") {
 

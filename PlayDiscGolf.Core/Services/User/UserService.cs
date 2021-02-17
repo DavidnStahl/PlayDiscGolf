@@ -111,7 +111,7 @@ namespace PlayDiscGolf.Core.Services.User
             _unitOfWork.Complete();
         }
 
-    public async Task<string> SearchUsersAsync(string query)
+        public async Task<string> SearchUsersAsync(string query)
         {
             var user = await _accountService.GetUserByQueryAsync(query);
             var inloggedUserID = await _accountService.GetInloggedUserIDAsync();

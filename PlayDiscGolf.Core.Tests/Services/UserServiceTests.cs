@@ -5,6 +5,7 @@ using PlayDiscGolf.AutoMapper.Profiles.User;
 using PlayDiscGolf.Core.AutoMapper.Profiles.Entities;
 using PlayDiscGolf.Core.Services.Account;
 using PlayDiscGolf.Core.Services.User;
+using PlayDiscGolf.Core.Tests.MockHelpers;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
 using System;
@@ -22,11 +23,9 @@ namespace PlayDiscGolf.Core.Tests.Services
         private readonly Mock<IUnitOfwork> _unitOfWorkMock = new Mock<IUnitOfwork>();
         private static IMapper _mapper;
         private readonly Mock<IAccountService> _accountServiceMock;
-        private readonly Mock<IUserService> _userServiceMock;
         public UserServiceTests()
         {
             _accountServiceMock = new Mock<IAccountService>();
-            _userServiceMock = new Mock<IUserService>();
 
             if (_mapper == null)
             {
@@ -37,6 +36,7 @@ namespace PlayDiscGolf.Core.Tests.Services
                 IMapper mapper = mappingConfig.CreateMapper();
                 _mapper = mapper;
             }
+
             _sut = new UserService(_accountServiceMock.Object, _unitOfWorkMock.Object, _mapper);            
         }
 
@@ -191,5 +191,40 @@ namespace PlayDiscGolf.Core.Tests.Services
             //Assert
             _unitOfWorkMock.Verify(x => x.Complete(), Times.Once());
         }
+
+        [Fact]
+        public async Task SendFriendRequestAsync_Should_Call_UnitOfWork_Complete_Once()
+        {
+            //Arange
+            var username = "david";
+            var inloggedUserID = Guid.NewGuid().ToString();
+            var user = new IdentityUser
+            {
+                UserName = "david",
+                Id = Guid.NewGuid().ToString(),
+            };
+            _accountServiceMock.Setup(x => x.GetUserByQueryAsync(username)).ReturnsAsync(user);
+            _accountServiceMock.Setup(x => x.GetInloggedUserIDAsync()).ReturnsAsync(inloggedUserID);
+            
+            var friend = new Friend
+            {
+                UserName = username,
+                UserID = Guid.Parse(inloggedUserID),
+                FriendID = Guid.NewGuid(),
+                FriendUserID = Guid.Parse(user.Id),
+                FriendRequestAccepted = false
+            };
+
+            _unitOfWorkMock.Setup(x => x.Friends.Add(friend)).Returns(true);
+            _unitOfWorkMock.Setup(x => x.Complete()).Returns(It.IsAny<int>);
+
+
+            //Act
+            await _sut.SendFriendRequestAsync(username);
+
+            //Assert
+            _unitOfWorkMock.Verify(x => x.Complete(), Times.Once());
+        }
+
     }
 }
