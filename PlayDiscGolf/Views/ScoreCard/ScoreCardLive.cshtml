@@ -1,9 +1,24 @@
 ﻿@model PlayDiscGolf.ViewModels.ScoreCard.ScoreCardGameOnViewModel
 
 
-
-<div id="scoreCardLive">
-    @await Html.PartialAsync("_ScoreCardLive", Model)
+<div class="container-fluid p-0 m-0">
+    <div class="row pt-5 m-auto row justify-content-md-center">
+        <div class="col-md-6 col-lg-6 pb-3">
+            <div class="card card-custom-GameOn bg-transparent text-black" style="min-height:600px;border:none">
+                <div style="width: 100%"><img id="GameOnImage" src="~/picture/gameon.png"></div>
+                <div class="justify-content-between border-bottom border-dark m-0 text-center d-flex" style="background-image:url(http://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max)">
+                    <p class="h5 pl-3 pt-2 pt-b-3">Hole: @Model.Hole.HoleNumber </p>
+                    <p class="h5 pl-0 pt-2 pt-b-3">Par: @Model.Hole.ParValue</p>
+                    <p class="h5 pr-3 pt-2 pt-b-3">Distance: @Model.Hole.Distance m</p>
+                </div>
+                <div class="bg-transparent" id="scoreCardLive">
+                    @await Html.PartialAsync("_ScoreCardLive", Model)
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 

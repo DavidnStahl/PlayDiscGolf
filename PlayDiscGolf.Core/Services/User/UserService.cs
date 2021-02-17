@@ -26,8 +26,7 @@ namespace PlayDiscGolf.Core.Services.User
         public async Task<List<FriendDto>> GetFriendsAsync()
         {
             var inloggedUserID = await _accountService.GetInloggedUserIDAsync();
-            var username = _accountService.GetUserName();
-            var friends = _unitOfWork.Friends.FindBy(x => x.UserID == Guid.Parse(inloggedUserID)).ToList();
+            var friends = _unitOfWork.Friends.FindAllBy(x => x.UserID == Guid.Parse(inloggedUserID));
 
             return _mapper.Map<List<FriendDto>>(friends);
         }
@@ -35,8 +34,7 @@ namespace PlayDiscGolf.Core.Services.User
         public async Task RemoveFriendAsync(string friendID)
         {
             var inloggedUsername = _accountService.GetUserName();
-            var inloggedUser = await _accountService.GetUserByQueryAsync(inloggedUsername);
-            var friend = _unitOfWork.Friends.FindBy(x => x.FriendID == Guid.Parse(friendID)).SingleOrDefault();
+            var friend = _unitOfWork.Friends.FindSingleBy(x => x.FriendID == Guid.Parse(friendID));
 
             if(friend.FriendRequestAccepted == true)
             {
@@ -51,8 +49,7 @@ namespace PlayDiscGolf.Core.Services.User
         {
             var username = _accountService.GetUserName();
             var user = await _accountService.GetUserByQueryAsync(username);
-
-            var friendRequests = _unitOfWork.Friends.FindBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false).ToList();
+            var friendRequests = _unitOfWork.Friends.FindAllBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false);
 
             var friendDto = new List<FriendDto>();
 
@@ -67,12 +64,12 @@ namespace PlayDiscGolf.Core.Services.User
             return friendDto;
         }
 
-        private async Task RemoveExtraFriendAsync(Guid userRemovedFriendUserID)
+        public async Task RemoveExtraFriendAsync(Guid userRemovedFriendUserID)
         {
             var inloggedUsername = _accountService.GetUserName();
             var inloggedUser = await _accountService.GetUserByQueryAsync(inloggedUsername);
 
-            var friend = _unitOfWork.Friends.FindBy(x => x.UserID == userRemovedFriendUserID && x.FriendUserID == Guid.Parse(inloggedUser.Id)).SingleOrDefault();
+            var friend = _unitOfWork.Friends.FindSingleBy(x => x.UserID == userRemovedFriendUserID && x.FriendUserID == Guid.Parse(inloggedUser.Id));
 
             _unitOfWork.Friends.Delete(friend);
         }
@@ -114,7 +111,7 @@ namespace PlayDiscGolf.Core.Services.User
             _unitOfWork.Complete();
         }
 
-    public async Task<string> SearchUsersAsync(string query)
+        public async Task<string> SearchUsersAsync(string query)
         {
             var user = await _accountService.GetUserByQueryAsync(query);
             var inloggedUserID = await _accountService.GetInloggedUserIDAsync();
@@ -123,7 +120,7 @@ namespace PlayDiscGolf.Core.Services.User
                 return null;
 
             return _unitOfWork.Friends
-                .FindBy(x => x.UserID == Guid.Parse(inloggedUserID) && x.UserName.ToLower() == user.NormalizedUserName.ToLower()).SingleOrDefault() != null 
+                .FindSingleBy(x => x.UserID == Guid.Parse(inloggedUserID) && x.UserName.ToLower() == user.NormalizedUserName.ToLower()) != null 
                 ? null 
                 : user.UserName;
         }

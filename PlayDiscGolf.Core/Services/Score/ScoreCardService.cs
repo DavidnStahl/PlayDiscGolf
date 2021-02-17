@@ -12,6 +12,7 @@ using PlayDiscGolf.Models.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Core.Services.Score
 {
@@ -41,6 +42,11 @@ namespace PlayDiscGolf.Core.Services.Score
             _httpContext = accessor;
             _userManager = userManager;
         }
+
+        public string GetCourseName(Guid courseID)
+        {
+            return _unitOfWork.Courses.FindById(courseID).Name;
+        }
         public ScoreCardDto GetScoreCardCreateInformation(string courseID)
         {
             var scoreCardID = Guid.NewGuid();
@@ -49,7 +55,7 @@ namespace PlayDiscGolf.Core.Services.Score
 
             var holeCardDtos = new List<HoleCardDto>();
 
-            var holes = _unitOfWork.Holes.FindBy(x => x.CourseID == Guid.Parse(courseID));
+            var holes = _unitOfWork.Holes.FindAllBy(x => x.CourseID == Guid.Parse(courseID));
 
             for (int i = 0; i < holes.Count; i++)
                 holeCardDtos.Add(new HoleCardDto
@@ -83,9 +89,9 @@ namespace PlayDiscGolf.Core.Services.Score
             return _sessionStorage.Get(_sessionKey);
         }
 
-        public List<PlayerCardDto> AddPlayerToSessionAndReturnUpdatedPlayers(string newName)
+        public async Task<List<PlayerCardDto>> AddPlayerToSessionAndReturnUpdatedPlayersAsync(string newName)
         {
-            var sessionModel = _scoreCardDtoBuilder.BuildUpdatedScoreCardWithUpdatedPlayers(_sessionStorage.Get(_sessionKey), newName);
+            var sessionModel = await _scoreCardDtoBuilder.BuildUpdatedScoreCardWithUpdatedPlayersAsync(_sessionStorage.Get(_sessionKey), newName);
 
             _sessionStorage.Save(_sessionKey, sessionModel);
 
@@ -118,7 +124,7 @@ namespace PlayDiscGolf.Core.Services.Score
         {
             var players = scorecard.PlayerCards.Select(x => x.UserName).ToList();
 
-            var friends = _unitOfWork.Friends.FindBy(x => players.Contains(x.UserName)).ToList();
+            var friends = _unitOfWork.Friends.FindAllBy(x => players.Contains(x.UserName));
 
             foreach (var friend in friends)
             {
@@ -141,7 +147,7 @@ namespace PlayDiscGolf.Core.Services.Score
 
         public ScoreCardGameOnDto UpdateScore(string scoreCardID, string holeNumber, string addOrRemove, string userName)
         {
-            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID)).FirstOrDefault();
+            var scoreCard = _unitOfWork.ScoreCards.GetSingleScoreCardAndIncludePlayerCardAndHoleCardBy(x => x.ScoreCardID == Guid.Parse(scoreCardID));
 
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, Convert.ToInt32(holeNumber));
 
@@ -172,7 +178,7 @@ namespace PlayDiscGolf.Core.Services.Score
                 .Select(x => x.Score)
                 .Sum();
 
-            var totalParValueFromStartedHoles = _unitOfWork.Holes.FindBy(x => x.CourseID == scoreCard.CourseID)
+            var totalParValueFromStartedHoles = _unitOfWork.Holes.FindAllBy(x => x.CourseID == scoreCard.CourseID)
                 .Where(x => holeCard
                             .Where(y => y.Score > 0)
                             .Select(y => y.HoleNumber)
@@ -192,7 +198,7 @@ namespace PlayDiscGolf.Core.Services.Score
             if (holeCard.SingleOrDefault().Score == 0)
             {
                 var item = holeCard.SingleOrDefault();
-                item.Score = hole.ParValue + 1;
+                item.Score++;
                 _unitOfWork.HoleCards.Edit(item);
             }
             else
@@ -208,30 +214,24 @@ namespace PlayDiscGolf.Core.Services.Score
 
         private void DecreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard, Hole hole)
         {
-            if (holeCard.SingleOrDefault().Score == 0)
-            {
-                var item = holeCard.SingleOrDefault();
-                item.Score = hole.ParValue - 1;
-                _unitOfWork.HoleCards.Edit(item);
-            }
-            else
+            if (holeCard.SingleOrDefault().Score != 0)
             {
                 var item = holeCard.SingleOrDefault();
                 item.Score--;
                 _unitOfWork.HoleCards.Edit(item);
-            }
 
-            _unitOfWork.Complete();
-            UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
+                _unitOfWork.Complete();
+                UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
+            }   
         }
 
         public ScoreCardGameOnDto OpenScoreCard(string scoreCardID)
         {
-            var scoreCard = _unitOfWork.ScoreCards.GetScoreCardAndIncludePlayerCardAndHoleCard(x => x.ScoreCardID == Guid.Parse(scoreCardID)).FirstOrDefault();
+            var scoreCard = _unitOfWork.ScoreCards.GetSingleScoreCardAndIncludePlayerCardAndHoleCardBy(x => x.ScoreCardID == Guid.Parse(scoreCardID));
 
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1);
 
-            var model =  new ScoreCardGameOnDto
+            var model = new ScoreCardGameOnDto
             {
                 Hole = _mapper.Map<HoleDto>(hole),
                 ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)

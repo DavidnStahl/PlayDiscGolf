@@ -33,6 +33,16 @@ namespace PlayDiscGolf.Controllers.Account
             if (!ModelState.IsValid)
                 return View(model);
 
+            var validCredentials = await _accountService.CheckIfCredentialsIsValidAsync(model.UserName, model.Password);
+
+            if(!validCredentials)
+            {
+                ModelState.AddModelError("Username","Username or password is wrong");
+                ModelState.AddModelError("Password", "Password or username wrong");
+
+                return View(model);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
             if (result.Succeeded) 

@@ -24,6 +24,13 @@ namespace PlayDiscGolf.Core.Services.Account
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<bool> CheckIfCredentialsIsValidAsync(string username, string password)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+  
+            return await _signInManager.UserManager.CheckPasswordAsync(user, password);
+        }
+
         public async Task<RegisterUserDto> UserRegisterAsync(RegisterDto model)
         {
             var ErrorMessegeEmaiResult = await IsEmailTakenAsync(model.Email);
@@ -33,24 +40,34 @@ namespace PlayDiscGolf.Core.Services.Account
             {
                 ErrorMessegeEmail = ErrorMessegeEmaiResult,
                 ErrorMessegeUsername = ErrorMessegeUsernameResult,
-                CreateUserSucceded = ErrorMessegeEmaiResult == false & ErrorMessegeUsernameResult == false
-
+                CreateUserSucceded = !ErrorMessegeEmaiResult & !ErrorMessegeUsernameResult
             };
 
             if(registerUserDto.CreateUserSucceded == true)
             {
-                var user = new IdentityUser
-                {
-                    UserName = model.Username,
-                    Email = model.Email
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                return (result.Succeeded) ? await SignInUserAfterRegisterAsync(user, registerUserDto) : registerUserDto;
+                return await CreateUserAsync(registerUserDto, model);
             }
 
             return registerUserDto;
+        }
+
+        private async Task<RegisterUserDto> CreateUserAsync(RegisterUserDto registerUserDto, RegisterDto model)
+        {
+            var user = new IdentityUser
+            {
+                UserName = model.Username,
+                Email = model.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                return await SignInUserAfterRegisterAsync(user, registerUserDto);
+            }
+
+            return registerUserDto;
+
         }
         public async Task<string> GetInloggedUserIDAsync()
         {

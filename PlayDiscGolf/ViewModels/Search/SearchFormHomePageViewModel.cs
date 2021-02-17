@@ -11,7 +11,6 @@ namespace PlayDiscGolf.ViewModels.Home
     {
         public string Type { get; set; }
         public string Country { get; set; }
-        [Required(ErrorMessage = "Required")]
         public string Query { get; set; }
         public List<SelectListItem> Types = new List<SelectListItem>();
         [Display(Name = "Choose country")]

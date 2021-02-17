@@ -23,22 +23,26 @@ namespace PlayDiscGolf.Core.Services.Home
             _mapper = mapper;
         }
 
+        public List<SearchResultAjaxFormDto> TypeIsArea(SearchFormHomeDto model)
+        {
+            var courses = _unitOfWork.Courses.FindAllBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query) && course.HolesTotal > 0);
+
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
+        }
+
+        public List<SearchResultAjaxFormDto> TypeIsCourse(SearchFormHomeDto model)
+        {
+            var courses = _unitOfWork.Courses.FindAllBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query) && course.HolesTotal > 0);
+
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
+        }
+
         public List<SearchResultAjaxFormDto> GetCourseBySearchQuery(SearchFormHomeDto model)
         {
-            var courses = new List<Course>();
-            var dto = new List<CourseDto>();
-
             if (model.Type == EnumHelper.SearchType.Area.ToString())
-            {
-                courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
-                dto = _mapper.Map<List<CourseDto>>(courses);
+                return TypeIsArea(model);
 
-                return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
-            }
-
-            courses = _unitOfWork.Courses.FindBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query) && course.HolesTotal > 0).ToList();
-            dto = _mapper.Map<List<CourseDto>>(courses);
-            return _mapper.Map<List<SearchResultAjaxFormDto>>(dto);
+            return TypeIsCourse(model);
         }
 
         public SearchFormHomeDto ConfigureCountriesAndTypes(SearchFormHomeDto model)

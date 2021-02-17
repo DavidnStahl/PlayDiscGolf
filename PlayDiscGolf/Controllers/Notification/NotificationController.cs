@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using PlayDiscGolf.Core.Dtos.User;
-using PlayDiscGolf.Core.Services.Account;
 using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.ViewModels.User;
 using System.Collections.Generic;
@@ -24,6 +22,11 @@ namespace PlayDiscGolf.Controllers.User
         {
             var model = _mapper.Map<List<FriendViewModel>>(await _userService.GetFriendRequestsAsync());
 
+            if(model.Count == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View(model);
         }
 
@@ -40,7 +43,6 @@ namespace PlayDiscGolf.Controllers.User
 
             return RedirectToAction("Index");
         }
-        
     }
 }
 

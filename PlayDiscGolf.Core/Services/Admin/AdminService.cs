@@ -3,6 +3,7 @@ using PlayDiscGolf.Core.Business.Calculations.Hole;
 using PlayDiscGolf.Core.Dtos.AdminCourse;
 using PlayDiscGolf.Core.Dtos.Course;
 using PlayDiscGolf.Core.Dtos.Entities;
+using PlayDiscGolf.Core.Dtos.Home;
 using PlayDiscGolf.Core.Dtos.PostModels;
 using PlayDiscGolf.Core.Enums;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
@@ -29,6 +30,28 @@ namespace PlayDiscGolf.Core.Services.Admin
             _createHolesCalcultion = createHolesCalcultion;
         }
 
+        public List<SearchResultAjaxFormDto> TypeIsArea(SearchFormHomeDto model)
+        {
+            var courses = _unitOfWork.Courses.FindAllBy(course => course.Country == model.Country && course.Area.StartsWith(model.Query));
+
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
+        }
+
+        public List<SearchResultAjaxFormDto> TypeIsCourse(SearchFormHomeDto model)
+        {
+            var courses = _unitOfWork.Courses.FindAllBy(course => course.Country == model.Country && course.FullName.StartsWith(model.Query));
+
+            return _mapper.Map<List<SearchResultAjaxFormDto>>(courses);
+        }
+
+        public List<SearchResultAjaxFormDto> GetAllCourseBySearchQuery(SearchFormHomeDto model)
+        {
+            if (model.Type == EnumHelper.SearchType.Area.ToString())
+                return TypeIsArea(model);
+
+            return TypeIsCourse(model);
+        }
+
         public CourseFormDto GetCourseByID(Guid id)
         {
             var course = _unitOfWork.Courses.GetCourseByIDAndIncludeHoles(id);
@@ -42,17 +65,19 @@ namespace PlayDiscGolf.Core.Services.Admin
             
             if (!string.IsNullOrWhiteSpace(model.Query) && model.Type == EnumHelper.SearchType.Area.ToString())
             {
-                course = _unitOfWork.Courses.FindBy(x => x.Area.StartsWith(model.Query)).OrderBy(x => x.Area).ToList();
-                return _mapper.Map<List<CourseDto>>(course);
+                course = _unitOfWork.Courses.FindAllBy(x => x.Area.StartsWith(model.Query));
+                course.OrderBy(x => x.Area);
+                return _mapper.Map<List<CourseDto>>(course.ToList());
             }           
 
-            course = _unitOfWork.Courses.FindBy(x => x.FullName.StartsWith(model.Query)).OrderBy(x => x.FullName).ToList();
-            return _mapper.Map<List<CourseDto>>(course);
+            course = _unitOfWork.Courses.FindAllBy(x => x.FullName.StartsWith(model.Query));
+            
+            return _mapper.Map<List<CourseDto>>(course.OrderBy(x => x.FullName).ToList());
         }
 
         public List<HoleDto> GetCoursesHoles(Guid id)
         {
-            var holes = _unitOfWork.Holes.FindBy(x => x.CourseID == id);
+            var holes = _unitOfWork.Holes.FindAllBy(x => x.CourseID == id);
             return _mapper.Map<List<HoleDto>>(holes);
         }
 
@@ -64,7 +89,7 @@ namespace PlayDiscGolf.Core.Services.Admin
         public void SaveUpdatedCourse(CourseFormDto model)
         {
             var course = _mapper.Map(model, _unitOfWork.Courses.FindById(model.CourseID));
-            course.Holes = _mapper.Map(model.Holes, _unitOfWork.Holes.FindBy(x => x.CourseID == model.CourseID));
+            course.Holes = _mapper.Map(model.Holes, _unitOfWork.Holes.FindAllBy(x => x.CourseID == model.CourseID));
             _unitOfWork.Courses.Edit(course);
             _unitOfWork.Complete();
         }

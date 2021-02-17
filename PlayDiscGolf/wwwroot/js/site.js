@@ -15,10 +15,13 @@
 
                         $("#searchFormHome").empty().append(res);
                     }
+
+                    if (form.id === "SearchFormAdmin") {
+                        $("#adminSearchResult").empty().append(res);
+                    }
                     if (form.id === "SearchUser") {
 
                         $("#searchUserName").empty().append(res);
-
                     }
                     if (form.id === "ChangeEmail") {
 
@@ -26,8 +29,7 @@
                             location.reload();
                         }
                         
-                         $("#ChangeEmail").empty().append(res);
-                         $("#collapseExampleChangeEmail").toggle();  
+                         $("#ChangeEmail").empty().append(res); 
                     } 
                     if (form.id === "ChangeUsername") {
 
@@ -36,7 +38,6 @@
                         }
 
                         $("#ChangeUsername").empty().append(res);
-                        $("#collapseExampleChangeUsername").toggle();
                     }
                     if (form.id === "ChangePassword") {
 
@@ -45,7 +46,6 @@
                         }
 
                         $("#ChangePassword").empty().append(res);
-                        $("#collapseExampleChangePassword").toggle();
                     }
                 },
                 error: function (err) {
@@ -58,9 +58,6 @@
             console.log(ex)
         }
     }
-
-
-
     
     function GetSearchOptions() {
         $.ajax({
@@ -80,7 +77,11 @@
         });
     }
 
-    
+    $('#collapseExampleScorecard').on('shown.bs.collapse', function () {
+        $('html, body').animate({
+            scrollTop: $("#collapseExampleScorecard").offset().top
+        }, 1000);
+    });
 
     function CreateHoles() {
         $.ajax({
@@ -94,39 +95,20 @@
             }
         });
     }
-
-
     
     function AddPlayerToPlayerCard() {
         $.ajax({
             url: "/ScoreCard/AddPlayer",
             data: {
-                newName: $("#nameInputPlayAjax").val()
+                newName: $("#selectFriend").children("option:selected").val()
             },
             success: function (result) {
                 console.log(result)
                 $("#playersInScoreCard").empty().append(result);
 
             }
-        });
-        
+        });       
     }
-
-    function RemovePlayerToPlayerCard(val) {
-        $.ajax({
-            url: "/ScoreCard/RemovePlayer",
-            data: {
-                removePlayer: val
-            },
-            success: function (result) {
-                console.log(result)
-                $("#playersInScoreCard").empty().append(result);
-
-            }
-        });
-
-    }
-
 
     function GetCourses(value) {
         $.ajax({
@@ -140,7 +122,17 @@
             }
         });
     }
-    
+
+    $("#selectFriend").on("change", function () {
+        var value = $(this).children("option:selected").val();
+
+        if (value !== "Choose friend") {
+            document.getElementById("addPlayerAjax").hidden = false;
+        }
+        else {
+            document.getElementById("addPlayerAjax").hidden = true;
+        }
+    });
 
     $("#editHoles").on('keyup change',function () {
         CreateHoles();
@@ -151,23 +143,14 @@
     });
 
     $("#addPlayerAjax").click(function () {
-        AddPlayerToPlayerCard();
-    });
 
-    $(".tryThis").on('click', function () {
-        var value = $(this).prev().val();
-        RemovePlayerToPlayerCard(value);
-        
+        AddPlayerToPlayerCard();
     });
 
     $(".locationButton").click(function (event) {
         var location = event.target.id
         GetCourses(location)
     });
-
-
-    
-
 });
 
 

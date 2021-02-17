@@ -19,7 +19,7 @@ namespace PlayDiscGolf.Core.Business.DtoBuilder.HoleCard
         {
             var holeCardDtos = new List<HoleCardDto>();
 
-            var holes = _unitOfwork.Holes.FindBy(x => x.CourseID == courseID);
+            var holes = _unitOfwork.Holes.FindAllBy(x => x.CourseID == courseID);
 
             for (int i = 0; i < holes.Count; i++)
                 holeCardDtos.Add(new HoleCardDto

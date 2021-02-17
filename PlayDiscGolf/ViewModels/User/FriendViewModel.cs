@@ -12,5 +12,7 @@ namespace PlayDiscGolf.ViewModels.User
         public string UserName { get; set; }
         public string FriendUserID { get; set; }
         public bool FriendRequestAccepted { get; set; }
+
+        public UserInformationViewModel UserInformationViewModel = new UserInformationViewModel();
     }
 }

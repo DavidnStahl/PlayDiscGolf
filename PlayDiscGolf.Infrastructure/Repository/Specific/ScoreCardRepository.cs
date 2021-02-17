@@ -18,7 +18,7 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific
             _context = context;
         }
 
-        public IEnumerable<ScoreCard> GetScoreCardAndIncludePlayerCardAndHoleCard(Expression<Func<ScoreCard, bool>> predicate)
+        public IEnumerable<ScoreCard> GetAllScoreCardAndIncludePlayerCardAndHoleCardBy(Expression<Func<ScoreCard, bool>> predicate)
         {
             return _context
                 .Set<ScoreCard>()
@@ -26,6 +26,16 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific
                 .ThenInclude(x => x.HoleCards)
                 .Where(predicate).ToList();
                 
+        }
+
+        public ScoreCard GetSingleScoreCardAndIncludePlayerCardAndHoleCardBy(Expression<Func<ScoreCard, bool>> predicate)
+        {
+            return _context
+                .Set<ScoreCard>()
+                .Include(x => x.PlayerCards)                
+                .ThenInclude(x => x.HoleCards)
+                .SingleOrDefault(predicate);
+
         }
 
         public IEnumerable<ScoreCard> GetScoreCardAndIncludeWhenNotTheOwner(string userID, Guid courseID)
