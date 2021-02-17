@@ -102,6 +102,11 @@ body {
     box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
 }
 
+.card-custom-GameOn {
+    overflow: hidden;
+    min-height: 200px;
+}
+
 #GameOnImage {
     height: 30vh;
     width: 100%;

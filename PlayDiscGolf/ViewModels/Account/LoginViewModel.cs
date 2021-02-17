@@ -9,7 +9,6 @@ namespace PlayDiscGolf.Models.ViewModels.Account
 {
     public class LoginViewModel
     {
-        private readonly IAccountService _accountService;
         public LoginViewModel()
         {
 

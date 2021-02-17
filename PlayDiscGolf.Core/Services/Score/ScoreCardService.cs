@@ -153,6 +153,8 @@ namespace PlayDiscGolf.Core.Services.Score
 
             if (addOrRemove != null)
                 UpdateScoreCard(userName, holeNumber, hole, addOrRemove, scoreCard);
+
+            scoreCard.PlayerCards = scoreCard.PlayerCards.OrderBy(x => x.TotalScore).ThenBy(x => x.UserID).ToList();
        
             return new ScoreCardGameOnDto 
             {
@@ -231,7 +233,9 @@ namespace PlayDiscGolf.Core.Services.Score
 
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1);
 
-            var model =  new ScoreCardGameOnDto
+            scoreCard.PlayerCards = scoreCard.PlayerCards.OrderBy(x => x.TotalScore).ToList();
+
+            var model = new ScoreCardGameOnDto
             {
                 Hole = _mapper.Map<HoleDto>(hole),
                 ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
