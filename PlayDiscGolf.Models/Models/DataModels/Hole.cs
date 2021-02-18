@@ -11,17 +11,18 @@ namespace PlayDiscGolf.Models.Models.DataModels
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid HoleID { get; set; }
+
         [Required]
         public int HoleNumber { get; set; }
+
         [Required]
         public int ParValue { get; set; }
+
         [Required]
         public int Distance { get; set; }
 
         [ForeignKey("CourseID")]
-        public Guid CourseID { get; set; }
-
-        
+        public Guid CourseID { get; set; }        
         public virtual Course Course { get; set; }
     }
 }

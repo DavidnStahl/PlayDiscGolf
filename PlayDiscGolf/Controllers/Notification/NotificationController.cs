@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.ViewModels.User;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Controllers.User
 {
+    [Authorize]
     public class NotificationController : Controller
     {
         private readonly IUserService _userService;

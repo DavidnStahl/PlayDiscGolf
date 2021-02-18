@@ -50,11 +50,8 @@ namespace PlayDiscGolf.Core.Services.Score
         public ScoreCardDto GetScoreCardCreateInformation(string courseID)
         {
             var scoreCardID = Guid.NewGuid();
-
             var playerCardID = Guid.NewGuid();
-
             var holeCardDtos = new List<HoleCardDto>();
-
             var holes = _unitOfWork.Holes.FindAllBy(x => x.CourseID == Guid.Parse(courseID));
 
             for (int i = 0; i < holes.Count; i++)
@@ -101,9 +98,7 @@ namespace PlayDiscGolf.Core.Services.Score
         public List<PlayerCardDto> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer)
         {
             var sessionModel = _sessionStorage.Get(_sessionKey);
-
             sessionModel.PlayerCards = sessionModel.PlayerCards.Where(player => player.UserName != removePlayer).ToList();
-
             _sessionStorage.Save(_sessionKey, sessionModel);
 
             return sessionModel.PlayerCards;
@@ -119,27 +114,11 @@ namespace PlayDiscGolf.Core.Services.Score
                 ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
             };
         }
-
-        private ScoreCard CheckIfAnyPlayerIsFriend(ScoreCard scorecard)
-        {
-            var players = scorecard.PlayerCards.Select(x => x.UserName).ToList();
-
-            var friends = _unitOfWork.Friends.FindAllBy(x => players.Contains(x.UserName));
-
-            foreach (var friend in friends)
-            {
-                scorecard.PlayerCards.SingleOrDefault(x => x.UserName == friend.UserName).UserID = friend.FriendUserID.ToString();
-            }
-
-            return scorecard;
-        }
-
         private ScoreCard CreateScoreCard()
         {
             var cachedScoreCard = _sessionStorage.Get(_sessionKey);
             var scoreCard = _mapper.Map<ScoreCard>(cachedScoreCard);
-
-            _unitOfWork.ScoreCards.Add(CheckIfAnyPlayerIsFriend(scoreCard));
+            _unitOfWork.ScoreCards.Add(scoreCard);
             _unitOfWork.Complete();
 
             return scoreCard;
@@ -148,7 +127,6 @@ namespace PlayDiscGolf.Core.Services.Score
         public ScoreCardGameOnDto UpdateScore(string scoreCardID, string holeNumber, string addOrRemove, string userName)
         {
             var scoreCard = _unitOfWork.ScoreCards.GetSingleScoreCardAndIncludePlayerCardAndHoleCardBy(x => x.ScoreCardID == Guid.Parse(scoreCardID));
-
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, Convert.ToInt32(holeNumber));
 
             if (addOrRemove != null)
@@ -186,9 +164,7 @@ namespace PlayDiscGolf.Core.Services.Score
                 .Select(x => x.ParValue).Sum();
 
             var playerItem = playerCard.SingleOrDefault();
-
             playerItem.TotalScore = playerTotalThrowsFromStartedHoles - totalParValueFromStartedHoles;
-
             _unitOfWork.PlayerCards.Edit(playerItem);
             _unitOfWork.Complete();
         }
@@ -219,7 +195,6 @@ namespace PlayDiscGolf.Core.Services.Score
                 var item = holeCard.SingleOrDefault();
                 item.Score--;
                 _unitOfWork.HoleCards.Edit(item);
-
                 _unitOfWork.Complete();
                 UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
             }   
@@ -228,7 +203,6 @@ namespace PlayDiscGolf.Core.Services.Score
         public ScoreCardGameOnDto OpenScoreCard(string scoreCardID)
         {
             var scoreCard = _unitOfWork.ScoreCards.GetSingleScoreCardAndIncludePlayerCardAndHoleCardBy(x => x.ScoreCardID == Guid.Parse(scoreCardID));
-
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1);
 
             var model = new ScoreCardGameOnDto

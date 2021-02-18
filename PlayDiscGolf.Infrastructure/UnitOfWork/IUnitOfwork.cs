@@ -1,7 +1,5 @@
 ﻿using PlayDiscGolf.Infrastructure.Repository.Specific.Interface;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PlayDiscGolf.Infrastructure.UnitOfWork
 {
@@ -12,7 +10,6 @@ namespace PlayDiscGolf.Infrastructure.UnitOfWork
         IHoleRepository Holes { get; }
         IPlayerCardRepository PlayerCards { get; }
         IScoreCardRepository ScoreCards { get; }
-
         IFriendRepository Friends { get; }
         int Complete();
     }

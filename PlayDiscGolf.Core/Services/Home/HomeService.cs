@@ -11,7 +11,6 @@ namespace PlayDiscGolf.Core.Services.Home
 {
     public class HomeService : IHomeService
     {
-
         private readonly IUnitOfwork _unitOfWork;
         private readonly IMapper _mapper;
 

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Infrastructure.Repository.Generic
 {
@@ -43,18 +42,21 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
         public virtual bool Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
+
             return true;
         }
 
         public virtual bool Edit(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
+
             return true;
         }
 
         public virtual bool Save()
         {
             _context.SaveChanges();
+
             return true;
         }
 
@@ -66,6 +68,7 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
         public bool AddRange(List<T> entities)
         {
             _context.Set<T>().AddRange(entities);
+
             return true;
         }
     }

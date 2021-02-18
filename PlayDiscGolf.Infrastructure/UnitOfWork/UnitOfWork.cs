@@ -1,9 +1,6 @@
 ﻿using PlayDiscGolf.Infrastructure.Repository.Specific;
 using PlayDiscGolf.Infrastructure.Repository.Specific.Interface;
 using PlayDiscGolf.Models.Models.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PlayDiscGolf.Infrastructure.UnitOfWork
 {
@@ -22,15 +19,10 @@ namespace PlayDiscGolf.Infrastructure.UnitOfWork
         }
 
         public IHoleCardRepository HoleCards { get; private set; }
-
         public IHoleRepository Holes { get; private set; }
-
         public IPlayerCardRepository PlayerCards { get; private set; }
-
         public IScoreCardRepository ScoreCards { get; private set; }
-
         public ICourseRepository Courses { get; private set; }
-
         public IFriendRepository Friends { get; private set; }
 
         public int Complete()

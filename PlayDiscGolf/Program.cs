@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using PlayDiscGolf.Models.Models.DataModels;
-using PlayDiscGolf.Models.Models;
+using PlayDiscGolf.Core.Services.SaveLocationData;
 
 namespace PlayDiscGolf
 {
@@ -31,6 +26,18 @@ namespace PlayDiscGolf
                 var db = new DatabaseInitializer();
                 db.Initialize(context);
                 db.InitializePlayDiscGolf(context, services.GetRequiredService<UserManager<IdentityUser>>());
+                CheckIfLocationDataNeedToBeSeeded(context, services.GetRequiredService<ISaveLocationDataService>());
+            }
+        }
+
+        private static void CheckIfLocationDataNeedToBeSeeded(DataBaseContext context, ISaveLocationDataService saveLocationDataService)
+        {
+            var courses = context.Courses.Any(x => x.Country == "Sweden");
+            if(!courses)
+            {
+                var root = saveLocationDataService.ReadLocationDataToRoot();
+                var locations = saveLocationDataService.AddValidLocationFromRoot(root);
+                saveLocationDataService.SaveLocationsToDataBase(locations);
             }
         }
 

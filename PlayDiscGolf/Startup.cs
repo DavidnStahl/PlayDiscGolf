@@ -18,14 +18,12 @@ using PlayDiscGolf.Core.Services.Account;
 using PlayDiscGolf.Core.Services.Admin;
 using PlayDiscGolf.Core.Services.CoursePage;
 using PlayDiscGolf.Core.Services.Home;
+using PlayDiscGolf.Core.Services.SaveLocationData;
 using PlayDiscGolf.Core.Services.Score;
 using PlayDiscGolf.Core.Services.User;
 using PlayDiscGolf.Infrastructure.Repository.Generic;
-using PlayDiscGolf.Infrastructure.Repository.Specific;
-using PlayDiscGolf.Infrastructure.Repository.Specific.Interface;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
-using PlayDiscGolf.ViewModels.ScoreCard;
 
 namespace PlayDiscGolf
 {
@@ -69,6 +67,7 @@ namespace PlayDiscGolf
             services.AddScoped<ICoursePageService, CoursePageService>();
             services.AddScoped<IScoreCardService, ScoreCardService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISaveLocationDataService, SaveLocationDataService>();
 
 
             services.AddScoped<ISessionStorage<ScoreCardDto>, SessionStorageScoreCardDto>();
@@ -82,6 +81,7 @@ namespace PlayDiscGolf
 
             services.AddScoped<IScoreCardCalculation, ScoreCardCalculation>();
             services.AddScoped<ICreateHolesCalculation, CreateHolesCalculation>();
+            services.AddSingleton(Configuration);
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

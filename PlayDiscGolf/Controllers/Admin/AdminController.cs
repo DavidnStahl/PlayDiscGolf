@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Models.ViewModels;
-using PlayDiscGolf.Models.ViewModels.PostModels;
 using Microsoft.AspNetCore.Authorization;
 using PlayDiscGolf.Core.Services.Admin;
-using PlayDiscGolf.Core.Dtos.PostModels;
 using PlayDiscGolf.Core.Dtos.AdminCourse;
 using PlayDiscGolf.Core.Dtos.Entities;
 using PlayDiscGolf.ViewModels.Home;
@@ -17,7 +15,7 @@ using System.Linq;
 
 namespace PlayDiscGolf.Controllers
 {
-    
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
@@ -30,8 +28,7 @@ namespace PlayDiscGolf.Controllers
             _homeService = homeService;
             _mapper = mapper;
         }
-
-        [Authorize(Roles = "Admin")]
+        
         public IActionResult Index()
         {
             var model = SetCountriesAndTypesViewModel();
@@ -39,14 +36,6 @@ namespace PlayDiscGolf.Controllers
 
             return View(model);
         }
-
-        /*public IActionResult Search([FromQuery] SearchViewModel searchModel) 
-        {
-            var dto = _adminService.GetCoursesBySearch(_mapper.Map<SearchDto>(searchModel));
-            var model = _mapper.Map<List<SearchCourseItemViewModel>>(dto);
-
-            return PartialView("_CourseSearchResult", model);
-        }*/
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -5,7 +5,6 @@ using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Core.Services.User
@@ -50,14 +49,12 @@ namespace PlayDiscGolf.Core.Services.User
             var username = _accountService.GetUserName();
             var user = await _accountService.GetUserByQueryAsync(username);
             var friendRequests = _unitOfWork.Friends.FindAllBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false);
-
             var friendDto = new List<FriendDto>();
 
             foreach (var request in friendRequests)
             {
                 var requestedUsername = await _accountService.GetUserByIDAsync(request.UserID.ToString());
                 request.UserName = requestedUsername.UserName;
-
                 friendDto.Add(_mapper.Map<FriendDto>(request));
             }
 
@@ -68,7 +65,6 @@ namespace PlayDiscGolf.Core.Services.User
         {
             var inloggedUsername = _accountService.GetUserName();
             var inloggedUser = await _accountService.GetUserByQueryAsync(inloggedUsername);
-
             var friend = _unitOfWork.Friends.FindSingleBy(x => x.UserID == userRemovedFriendUserID && x.FriendUserID == Guid.Parse(inloggedUser.Id));
 
             _unitOfWork.Friends.Delete(friend);
@@ -114,6 +110,10 @@ namespace PlayDiscGolf.Core.Services.User
         public async Task<string> SearchUsersAsync(string query)
         {
             var user = await _accountService.GetUserByQueryAsync(query);
+
+            if(user == null)
+                return null;
+
             var inloggedUserID = await _accountService.GetInloggedUserIDAsync();
 
             if (user.Id == inloggedUserID)

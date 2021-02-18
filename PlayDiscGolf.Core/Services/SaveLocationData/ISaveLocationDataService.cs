@@ -1,14 +1,16 @@
 ﻿using PlayDiscGolf.Models.Models;
 using PlayDiscGolf.Models.Models.DataModels;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayDiscGolf.SaveLocationData.Services
+namespace PlayDiscGolf.Core.Services.SaveLocationData
 {
     public interface ISaveLocationDataService
     {
         public List<Course> AddValidLocationFromRoot(Root root);
         public Root ReadLocationDataToRoot();
-        public Task SaveLocationsToDataBase(List<Course> locations);
+        public void SaveLocationsToDataBase(List<Course> locations);
     }
 }
