@@ -120,7 +120,7 @@ namespace PlayDiscGolf.Core.Services.Score
             };
         }
 
-        private ScoreCard CheckIfAnyPlayerIsFriend(ScoreCard scorecard)
+        /*private ScoreCard CheckIfAnyPlayerIsFriend(ScoreCard scorecard)
         {
             var players = scorecard.PlayerCards.Select(x => x.UserName).ToList();
 
@@ -132,14 +132,14 @@ namespace PlayDiscGolf.Core.Services.Score
             }
 
             return scorecard;
-        }
+        }*/
 
         private ScoreCard CreateScoreCard()
         {
             var cachedScoreCard = _sessionStorage.Get(_sessionKey);
             var scoreCard = _mapper.Map<ScoreCard>(cachedScoreCard);
 
-            _unitOfWork.ScoreCards.Add(CheckIfAnyPlayerIsFriend(scoreCard));
+            _unitOfWork.ScoreCards.Add(scoreCard);
             _unitOfWork.Complete();
 
             return scoreCard;

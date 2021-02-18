@@ -55,8 +55,7 @@ namespace PlayDiscGolf.Core.Services.Admin
         public CourseFormDto GetCourseByID(Guid id)
         {
             var course = _unitOfWork.Courses.GetCourseByIDAndIncludeHoles(id);
-            var x = MapCourse(course);
-            return x;
+            return MapCourse(course);
         }
 
         public List<CourseDto> GetCoursesBySearch(SearchDto model)
@@ -78,7 +77,8 @@ namespace PlayDiscGolf.Core.Services.Admin
         public List<HoleDto> GetCoursesHoles(Guid id)
         {
             var holes = _unitOfWork.Holes.FindAllBy(x => x.CourseID == id);
-            return _mapper.Map<List<HoleDto>>(holes);
+            var orderedHoles = holes.OrderByDescending(x => x.HoleNumber).ToList();
+            return _mapper.Map<List<HoleDto>>(orderedHoles);
         }
 
         public CreateHolesDto ManageNumberOfHolesFromForm(CreateHolesDto model)

@@ -7,16 +7,14 @@ namespace PlayDiscGolf.Models.Models.DataModels
 {
     public class DataBaseContext : IdentityDbContext
     {
-        private readonly IConfiguration _configuration;
 
         public DataBaseContext()
         {
         }
 
-        public DataBaseContext(DbContextOptions<DataBaseContext> options, IConfiguration configuration)
+        public DataBaseContext(DbContextOptions<DataBaseContext> options)
             : base(options)
         {
-            _configuration = configuration;
         }
 
         public DbSet<Hole> Holes { get; set; }
@@ -25,16 +23,6 @@ namespace PlayDiscGolf.Models.Models.DataModels
         public DbSet<PlayerCard> PlayerCards { get; set; }
         public DbSet<HoleCard> HoleCards { get; set; }
         public DbSet<Friend> Friends { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                string connectionString = _configuration.GetConnectionString("DefaultConnection");
-
-                optionsBuilder.UseSqlServer(connectionString);
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

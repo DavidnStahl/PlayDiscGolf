@@ -41,7 +41,7 @@ namespace PlayDiscGolf.Controllers.ScoreCard
                 ScoreCardID = dto.ScoreCardID,
                 UserName = dto.UserName,
                 Friends = userFriends.Select(x => x.UserName).ToList(),
-                CourseName = _scoreCardService.GetCourseName(dto.CourseID)
+                CourseName = _scoreCardService.GetCourseName(dto.CourseID)                
             };
 
             return View(model);

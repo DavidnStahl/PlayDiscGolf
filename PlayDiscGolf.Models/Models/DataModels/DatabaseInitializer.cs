@@ -23,7 +23,6 @@ namespace PlayDiscGolf.Models.Models.DataModels
         {
             AddRoleIfNotExists(context, "Admin");
             AddRoleIfNotExists(context, "User");
-
             AddIfNotExists(userManager, "DavidStahl", "Admin");
 
         }
