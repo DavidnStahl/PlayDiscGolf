@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Core.Services.Score;
 using PlayDiscGolf.Core.Services.User;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace PlayDiscGolf.Controllers.ScoreCard
 {
+    [Authorize]
     public class ScoreCardController : Controller
     {
 

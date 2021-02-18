@@ -13,7 +13,6 @@ namespace PlayDiscGolf.Core.Services.SaveLocationData
     public class SaveLocationDataService : ISaveLocationDataService
     {
         private readonly IUnitOfwork _unitOfwork;
-
         public SaveLocationDataService(IUnitOfwork unitOfwork)
         {
             _unitOfwork = unitOfwork;
@@ -53,13 +52,14 @@ namespace PlayDiscGolf.Core.Services.SaveLocationData
                     locations.Add(validLocaction);
                 }
             }
+
             return locations;
         }
 
         public Root ReadLocationDataToRoot()
         {
             var root = new Root();
-            //string path = @"C:\source\Examensarbete\PlayDiscGolf.SaveLocationData\LocationData.json";
+
             using (StreamReader read = new StreamReader("LocationData.json"))
             {
                 string json = read.ReadToEnd();

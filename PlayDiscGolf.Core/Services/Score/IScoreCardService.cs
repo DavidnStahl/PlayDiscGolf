@@ -9,14 +9,10 @@ namespace PlayDiscGolf.Core.Services.Score
     {
         ScoreCardDto GetScoreCardCreateInformation(string courseID);
         Task<List<PlayerCardDto>> AddPlayerToSessionAndReturnUpdatedPlayersAsync(string newName);
-
         List<PlayerCardDto> RemovePlayerFromSessionAndReturnUpdatedPlayers(string removePlayer);
-
         ScoreCardGameOnDto StartGame();
-
         ScoreCardGameOnDto UpdateScore(string scoreCardID, string holeNumber, string addOrRemove, string userName);
         ScoreCardGameOnDto OpenScoreCard(string scoreCardID);
-
         string GetCourseName(Guid courseID);
     }
 }

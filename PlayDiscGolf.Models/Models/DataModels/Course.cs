@@ -16,7 +16,6 @@ namespace PlayDiscGolf.Models.Models.DataModels
 
         [Required]
         public string ApiID { get; set; }
-
         public string ApiParentID { get; set; }
         [Required]
         public string CountryCode{ get; set; }
@@ -38,10 +37,7 @@ namespace PlayDiscGolf.Models.Models.DataModels
         [StringLength(maximumLength: 100)]
         public string Area { get; set; }
 
-
         public int HolesTotal { get; set; }
-
-
         public int TotalParValue { get; set; }
 
         public int TotalDistance { get; set; }

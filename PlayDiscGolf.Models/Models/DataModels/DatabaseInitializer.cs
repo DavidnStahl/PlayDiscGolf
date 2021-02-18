@@ -51,7 +51,5 @@ namespace PlayDiscGolf.Models.Models.DataModels
                 }
             }
         }
-
-
     }
 }

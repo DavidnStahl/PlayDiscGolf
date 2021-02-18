@@ -47,7 +47,6 @@ namespace PlayDiscGolf.Core.Services.CoursePage
                 .Select(x => x.Scorecard)
                 .OrderByDescending(x => x.StartDate)
                 .ToList();
-
         }
         public async Task<CourseInfoDto> GetCoursePageInformation(Guid courseID)
         {
@@ -71,9 +70,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
                 BestRound = scoreCards.Count > 0 ? _scoreCardCalculation.BestRound(scoreCards, userID).ToString() : EnumHelper.BestRound.None.ToString(),
                 AverageRound = scoreCards.Count > 0 ? _scoreCardCalculation.AverageRound(scoreCards, userID).ToString() : EnumHelper.AverageRound.None.ToString(),
                 Latitude = course.Latitude,
-                Longitude = course.Longitude
-                
-           
+                Longitude = course.Longitude                           
             };
         }        
     }

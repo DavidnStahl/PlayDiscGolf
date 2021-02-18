@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayDiscGolf.Core.Services.CoursePage;
 using PlayDiscGolf.ViewModels.Course;
@@ -10,6 +10,7 @@ using PlayDiscGolf.ViewModels.ScoreCard;
 
 namespace PlayDiscGolf.Controllers.CoursePage
 {
+    [Authorize]
     public class CourseController : Controller
     {
         private readonly ICoursePageService _coursePageService;

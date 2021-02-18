@@ -91,9 +91,6 @@ body {
     
 }
 
-.nav-link:hover {
-    background-color: rgba(186,58,68,0.3);
-}
 
 @media only screen and (max-width: 600px) {
     .pagination a {

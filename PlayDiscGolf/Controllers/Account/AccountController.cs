@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using PlayDiscGolf.Models.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
-using PlayDiscGolf.Dtos;
 using PlayDiscGolf.Core.Services.Account;
 using AutoMapper;
 using PlayDiscGolf.Core.Dtos.Account;

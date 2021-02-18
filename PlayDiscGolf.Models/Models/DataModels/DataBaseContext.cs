@@ -7,7 +7,6 @@ namespace PlayDiscGolf.Models.Models.DataModels
 {
     public class DataBaseContext : IdentityDbContext
     {
-
         public DataBaseContext()
         {
         }
@@ -26,7 +25,6 @@ namespace PlayDiscGolf.Models.Models.DataModels
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Configure domain classes using modelBuilder here..
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -96,12 +96,12 @@ namespace PlayDiscGolf.Core.Services.Admin
 
         private CourseFormDto MapCourse(Course course)
         {
-            var x = _mapper.Map<CourseFormDto>(course);
-            x.CreateHoles.CourseID = x.CourseID;
-            x.CreateHoles.NumberOfHoles = x.HolesTotal;
-            x.Holes = _mapper.Map<List<CourseHolesDto>>(x.Holes);
+            var model = _mapper.Map<CourseFormDto>(course);
+            model.CreateHoles.CourseID = model.CourseID;
+            model.CreateHoles.NumberOfHoles = model.HolesTotal;
+            model.Holes = _mapper.Map<List<CourseHolesDto>>(model.Holes);
 
-            return x;
+            return model;
         }
     }
 }
