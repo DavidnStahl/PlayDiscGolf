@@ -88,10 +88,7 @@ namespace PlayDiscGolf.Core.Services.Account
         private async Task<RegisterUserDto> SignInUserAfterRegisterAsync(IdentityUser user, RegisterUserDto registerUserDtos)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
-
-            _userManager.AddToRoleAsync(user, (new DataBaseContext()).Roles.OrderBy(r => r.Name)
-                .FirstOrDefault(r => r.Name == EnumHelper.UserManager.User.ToString()).Name.ToString()).Wait();
-
+            await _userManager.AddToRoleAsync(user, "User");
             registerUserDtos.CreateUserSucceded = true;
 
             return registerUserDtos;

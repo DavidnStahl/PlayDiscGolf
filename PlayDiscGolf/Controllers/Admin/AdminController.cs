@@ -107,12 +107,14 @@ namespace PlayDiscGolf.Controllers
         [HttpPost]
         public IActionResult EditCourse(CourseFormViewModel model)
         {
-            if(!ModelState.IsValid) 
-                View("Index", new AdminSearchViewModel { Course = model });
+            if(!ModelState.IsValid)
+            {
+                return PartialView("_CourseForm", model);
+            }
 
             MapAndSaveCourse(model);
 
-            return RedirectToAction("Index");
+            return PartialView("_CourseForm", model);
         }
 
         public IActionResult GetHoles(string holes, string courseID)
@@ -124,7 +126,6 @@ namespace PlayDiscGolf.Controllers
                 Holes = _mapper.Map<List<CourseFormViewModel.CourseHolesViewModel>>(_adminService.GetCoursesHoles(Guid.Parse(courseID)))
             };
 
-            //Mappning behöver fixas
             var dto = _adminService.ManageNumberOfHolesFromForm(_mapper.Map<CreateHolesDto>(model));
 
             model.NumberOfHoles = dto.NumberOfHoles;

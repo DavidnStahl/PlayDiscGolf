@@ -48,6 +48,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
                 .OrderByDescending(x => x.StartDate)
                 .ToList();
         }
+
         public async Task<CourseInfoDto> GetCoursePageInformation(Guid courseID)
         {
             var course = _unitOfWork.Courses.FindById(courseID);

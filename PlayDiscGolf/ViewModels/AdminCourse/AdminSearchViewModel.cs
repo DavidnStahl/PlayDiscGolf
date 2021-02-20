@@ -16,11 +16,8 @@ namespace PlayDiscGolf.Models.ViewModels
         public string Query { get; set; }
         public List<SelectListItem> Types = new List<SelectListItem>();
         public List<SelectListItem> Countries = new List<SelectListItem>();
-
-        public CourseFormViewModel Course = new CourseFormViewModel();
+        public CourseFormViewModel Course { get; set; }
         public List<SearchResultAjaxFormViewModel> SearchResultAjaxFormViewModel = new List<SearchResultAjaxFormViewModel>();
-
-        //public List<SearchCourseItemViewModel> SearchCourseItemViewModels = new List<SearchCourseItemViewModel>();
 
     }
 }

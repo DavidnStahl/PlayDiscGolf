@@ -4,12 +4,11 @@
 
 @{
     Layout = null;
-    var meter = "m";
     var currentPage = Model.Hole.HoleNumber;
     var numberofHoleslooped = 0;
     var leftArrowHoleNumber = Model.Hole.HoleNumber - 1;
     var rightArrowHoleNumber = 0;
-    var players = Model.ScoreCard.PlayerCards.OrderBy(x => x.TotalScore).ThenBy(x => x.UserID).ToList();
+    var players = Model.ScoreCard.PlayerCards;
 
 
     if (Model.Hole.HoleNumber != 1)
@@ -92,20 +91,21 @@
                 @{
                     var startpage = currentPage;
 
-                    if(Model.ScoreCard.PlayerCards[0].HoleCards.Count > 5)
+                    if(Model.ScoreCard.PlayerCards[0].HoleCards != null)
                     {
-                        if (Model.Hole.HoleNumber + 1 == Model.ScoreCard.PlayerCards[0].HoleCards.Count)
+                        if (Model.ScoreCard.PlayerCards[0].HoleCards.Count > 5)
                         {
-                            startpage = startpage - 1;
-                        }
+                            if (Model.Hole.HoleNumber + 1 == Model.ScoreCard.PlayerCards[0].HoleCards.Count)
+                            {
+                                startpage = startpage - 1;
+                            }
 
-                        if (Model.Hole.HoleNumber == Model.ScoreCard.PlayerCards[0].HoleCards.Count)
-                        {
-                            startpage = startpage - 2;
+                            if (Model.Hole.HoleNumber == Model.ScoreCard.PlayerCards[0].HoleCards.Count)
+                            {
+                                startpage = startpage - 2;
+                            }
                         }
                     }
-
-
                 }
                 
                 @for (int i = startpage; i < Model.ScoreCard.PlayerCards[0].HoleCards.Count + 1; i++)

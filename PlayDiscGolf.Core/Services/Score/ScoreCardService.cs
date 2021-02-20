@@ -104,14 +104,31 @@ namespace PlayDiscGolf.Core.Services.Score
             return sessionModel.PlayerCards;
         }
 
+        private ScoreCardDto OrderPlayercards(ScoreCardDto scoreCard)
+        {
+            var owner = scoreCard.PlayerCards.SingleOrDefault(x => x.UserName == scoreCard.UserName);
+            var orderedPlayercards = scoreCard.PlayerCards.OrderBy(x => x.UserID).ToList();
+            scoreCard.PlayerCards = orderedPlayercards;
+            scoreCard.PlayerCards.Remove(owner);
+            scoreCard.PlayerCards.Insert(0, owner);
+
+            return scoreCard;
+        }
+
         public ScoreCardGameOnDto StartGame()
         {
-            var scoreCard = CreateScoreCard();
+            var scoreCard = _mapper.Map<ScoreCardDto>(CreateScoreCard());
+
+            if (scoreCard.PlayerCards != null)
+            {
+                scoreCard = OrderPlayercards(scoreCard);
+
+            }
 
             return new ScoreCardGameOnDto
             {
                 Hole = _mapper.Map<HoleDto>(_unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1)),
-                ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
+                ScoreCard = scoreCard
             };
         }
         private ScoreCard CreateScoreCard()
@@ -131,45 +148,48 @@ namespace PlayDiscGolf.Core.Services.Score
 
             if (addOrRemove != null)
                 UpdateScoreCard(userName, holeNumber, hole, addOrRemove, scoreCard);
-       
+
+            var scoreCardDto = _mapper.Map<ScoreCardDto>(scoreCard);
+            scoreCardDto = OrderPlayercards(scoreCardDto);
+
             return new ScoreCardGameOnDto 
             {
                 Hole = _mapper.Map<HoleDto>(hole),
-                ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
+                ScoreCard = scoreCardDto
             };
         }
 
         private void UpdateScoreCard(string userName, string holeNumber, Hole hole, string addOrRemove, ScoreCard scoreCard)
         {
-            var playerCard = scoreCard.PlayerCards.Where(x => x.UserName == userName);
-            var holeCard = playerCard.SelectMany(x => x.HoleCards).Where(x => x.HoleNumber == Convert.ToInt32(holeNumber));
+            var playerCard = scoreCard.PlayerCards.SingleOrDefault(x => x.UserName == userName);
+            var holeCard = playerCard.HoleCards.Where(x => x.HoleNumber == Convert.ToInt32(holeNumber)).ToList();
 
             if (addOrRemove == EnumHelper.PlusAndMinus.Plus.ToString()) IncreaseScoreOnHoleCard(holeCard, scoreCard, playerCard, hole);
             else DecreaseScoreOnHoleCard(holeCard, scoreCard, playerCard, hole);
         }
 
-        private void UpdatePlayerTotalScore(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard)
+        private void UpdatePlayerTotalScore(ScoreCard scoreCard, PlayerCard playerCard)
         {
-            var playerTotalThrowsFromStartedHoles = playerCard
-                .SelectMany(x => x.HoleCards)
+            var playerTotalThrowsFromStartedHoles = playerCard.HoleCards
                 .Where(x => x.Score > 0)
                 .Select(x => x.Score)
                 .Sum();
 
-            var totalParValueFromStartedHoles = _unitOfWork.Holes.FindAllBy(x => x.CourseID == scoreCard.CourseID)
-                .Where(x => holeCard
-                            .Where(y => y.Score > 0)
-                            .Select(y => y.HoleNumber)
-                            .Contains(x.HoleNumber))
-                .Select(x => x.ParValue).Sum();
+            var totalParValueFromStartedHoles = _unitOfWork.Courses.GetCourseByIDAndIncludeHoles(scoreCard.CourseID).Holes
+                .Where(hole => playerCard.HoleCards.
+                              Where(r => r.Score > 0)
+                              .Select(x => x.HoleNumber)
+                              .Contains(hole.HoleNumber))
+                .Select(hole => hole.ParValue)
+                .Sum();
 
-            var playerItem = playerCard.SingleOrDefault();
-            playerItem.TotalScore = playerTotalThrowsFromStartedHoles - totalParValueFromStartedHoles;
-            _unitOfWork.PlayerCards.Edit(playerItem);
+
+            playerCard.TotalScore = playerTotalThrowsFromStartedHoles - totalParValueFromStartedHoles;
+            _unitOfWork.PlayerCards.Edit(playerCard);
             _unitOfWork.Complete();
         }
 
-        private void IncreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard, Hole hole)
+        private void IncreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, PlayerCard playerCard, Hole hole)
         {
             if (holeCard.SingleOrDefault().Score == 0)
             {
@@ -185,10 +205,10 @@ namespace PlayDiscGolf.Core.Services.Score
             }
 
             _unitOfWork.Complete();
-            UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
+            UpdatePlayerTotalScore(scoreCard, playerCard);
         }
 
-        private void DecreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, IEnumerable<PlayerCard> playerCard, Hole hole)
+        private void DecreaseScoreOnHoleCard(IEnumerable<HoleCard> holeCard, ScoreCard scoreCard, PlayerCard playerCard, Hole hole)
         {
             if (holeCard.SingleOrDefault().Score != 0)
             {
@@ -196,7 +216,7 @@ namespace PlayDiscGolf.Core.Services.Score
                 item.Score--;
                 _unitOfWork.HoleCards.Edit(item);
                 _unitOfWork.Complete();
-                UpdatePlayerTotalScore(holeCard, scoreCard, playerCard);
+                UpdatePlayerTotalScore(scoreCard, playerCard);
             }   
         }
 
@@ -205,10 +225,13 @@ namespace PlayDiscGolf.Core.Services.Score
             var scoreCard = _unitOfWork.ScoreCards.GetSingleScoreCardAndIncludePlayerCardAndHoleCardBy(x => x.ScoreCardID == Guid.Parse(scoreCardID));
             var hole = _unitOfWork.Holes.GetCourseHole(scoreCard.CourseID, 1);
 
+            var scoreCardDto = _mapper.Map<ScoreCardDto>(scoreCard);
+            scoreCardDto = OrderPlayercards(scoreCardDto);
+
             var model = new ScoreCardGameOnDto
             {
                 Hole = _mapper.Map<HoleDto>(hole),
-                ScoreCard = _mapper.Map<ScoreCardDto>(scoreCard)
+                ScoreCard = scoreCardDto
             };
 
             return model;

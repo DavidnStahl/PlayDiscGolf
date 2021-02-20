@@ -8,6 +8,9 @@
     {
         Model.Holes[i].CourseID = Model.CourseID;
 
+        var parvalueID = @Model.Holes[i].HoleNumber + "id";
+        var distanceID = @Model.Holes[i].HoleNumber + "idistance";
+
         <div class="card card-body">
             <input hidden class="form-control" maxlength="5" asp-for="@Model.NumberOfHoles" />
             <input hidden class="form-control" maxlength="5" asp-for="@Model.CourseID" />
@@ -20,14 +23,14 @@
                         <span class="text-warning" asp-validation-for="@Model.Holes[i].HoleNumber"></span>
                         <label class="col-sm-4 col-form-label" asp-for="@Model.Holes[i].HoleNumber"></label>
                         <div class="col-sm-7">
-                            <input readonly type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].HoleNumber" />
+                            <input readonly id="@Model.Holes[i].HoleNumber" type="number" pattern="[0-9]{10}" min="0" class="form-control editHolesCheck" maxlength="5" asp-for="@Model.Holes[i].HoleNumber" />
                         </div>
                     </div>
                     <div class="form-group row mt-2">
                         <span class="text-warning" asp-validation-for="@Model.Holes[i].ParValue"></span>
                         <label class="col-sm-4 col-form-label" type="number" asp-for="@Model.Holes[i].ParValue"></label>
                         <div class="col-sm-7">
-                            <input type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].ParValue" />
+                            <input type="number" id="@parvalueID" pattern="[0-9]{10}" min="0" class="form-control editHolesCheck" maxlength="5" asp-for="@Model.Holes[i].ParValue" />
                         </div>
 
                     </div>
@@ -35,7 +38,7 @@
                         <span class="text-warning" asp-validation-for="@Model.Holes[i].Distance"></span>
                         <label class="col-sm-4 col-form-label" asp-for="@Model.Holes[i].Distance"></label>
                         <div class="col-sm-7">
-                            <input type="number" class="form-control" maxlength="5" asp-for="@Model.Holes[i].Distance" />
+                            <input type="number" id="@distanceID" pattern="[0-9]{10}" min="0" class="form-control editHolesCheck" maxlength="5" asp-for="@Model.Holes[i].Distance" />
                         </div>
                     </div>
                 </div>
@@ -44,3 +47,5 @@
     }
 </div>
 }
+
+<script src="~/js/site.js" asp-append-version="true"></script>

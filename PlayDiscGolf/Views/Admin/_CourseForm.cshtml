@@ -8,10 +8,104 @@
 @if (Model != null)
 {
 
-    @await Html.PartialAsync("_CourseFormPartial", Model)
+
+    
+        var holeCount = 0;
+
+        if (Model.Holes == null || Model.Holes.Count < 1)
+        {
+            holeCount = 0;
+        }
+        else if (Model.Holes.Count > 0)
+        {
+            holeCount = Model.HolesTotal;
+        }
+    
+
+
+        <div class="container-fluid p-0 m-0">
+            <div class="row pt-5 m-auto row justify-content-md-center">
+                <div class="col-md-6 col-lg-6 pb-3">
+                    <div class="card card-custom border-primary border-0 bg-white text-primary" style="min-height:600px;">
+                        <div class="card-body">
+                            <form id="EditCourse" asp-action="EditCourse" asp-controller="Admin" onsubmit="return jQueryAjaxPost(this);">
+                                @Html.AntiForgeryToken()
+                                <input hidden asp-for="@Model.CreateHoles" value="@Model.CreateHoles">
+                                @if (Model.CreateHoles != null)
+                                {
+                                    <input hidden asp-for="@Model.CreateHoles.CourseID" value="@Model.CreateHoles.CourseID">
+                                    <input hidden asp-for="@Model.CreateHoles.Holes" value="@Model.CreateHoles.Holes">
+                                }
+                                <input hidden asp-for="@Model.CourseID" value="@Model.CourseID">
+                                <input hidden asp-for="@Model.ApiID" value="@Model.ApiID">
+                                <input hidden asp-for="@Model.ApiParentID" value="@Model.ApiParentID">
+                                <input hidden asp-for="@Model.FullName" value="@Model.FullName">
+                                <input hidden asp-for="@Model.CountryCode" value="@Model.CountryCode">
+                                <input hidden asp-for="@Model.Longitude" value="@Model.Longitude">
+                                <input hidden asp-for="@Model.Latitude" value="@Model.Latitude">
+                                <input id="courseID" type="text" hidden value="@Model.CourseID.ToString()">
+
+                                <div class="form-group mt-5">
+
+                                    <label asp-for="@Model.Area"></label>
+                                    <input asp-for="@Model.Area" type="text" class="form-control" id="areaInput" aria-describedby="areaInput" placeholder="">
+                                    <span class="text-danger" asp-validation-for="@Model.Area"></span>
+                                </div>
+                                <div class="form-group">
+
+                                    <label asp-for="@Model.Name"></label>
+                                    <input asp-for="@Model.Name" type="text" class="form-control" id="nameInput" aria-describedby="nameInput" placeholder="">
+                                    <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="@Model.Main" type="checkbox" class="form-check-input" id="exampleCheck1">
+                                    <label asp-for="@Model.Main" class="form-check-label"></label>
+                                </div>
+
+                                <div class="form-group mt-4">
+
+                                    <label asp-for="@Model.HolesTotal"></label>
+                                    <input asp-for="@Model.HolesTotal" min="0" pattern="[0-9]{10}" type="number" class="form-control editHolesCheck" id="editHoles" aria-describedby="holesInput" placeholder="">
+                                    <span class="text-danger" asp-validation-for="@Model.HolesTotal"></span>
+                                </div>
+                                @if (holeCount >= 0)
+                                {
+                                    <p>
+                                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#partialHoles" aria-expanded="false" aria-controls="partialHoles">
+                                            Show Holes
+                                        </button>
+                                    </p>
+                                    <div class="collapse" id="partialHoles">
+                                        @await Html.PartialAsync("_createHoles", Model.CreateHoles)
+                                    </div>
+                                }
+                                <div class="form-group">
+
+                                    <label asp-for="@Model.TotalParValue"></label>
+                                    <input asp-for="@Model.TotalParValue" type="number" pattern="[0-9]{10}" min="0" class="form-control editHolesCheck" id="parvalueInput" aria-describedby="parvalueInput" placeholder="">
+                                    <span class="text-danger" asp-validation-for="@Model.TotalParValue"></span>
+                                </div>
+                                <div class="form-group">
+
+                                    <label asp-for="@Model.TotalDistance"></label>
+                                    <input asp-for="@Model.TotalDistance" type="number" pattern="[0-9]{10}" min="0" class="form-control editHolesCheck" id="distanceInput" aria-describedby="distanceInput" placeholder="">
+                                    <span class="text-danger" asp-validation-for="@Model.TotalDistance"></span>
+                                </div>
+                                <input type="submit" class="btn btn-primary mb-5" value="Submit" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    
+
 
 }
 
+<script src="~/js/site.js" asp-append-version="true"></script>
 
 
 

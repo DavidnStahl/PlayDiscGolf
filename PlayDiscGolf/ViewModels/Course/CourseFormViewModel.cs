@@ -19,6 +19,7 @@ namespace PlayDiscGolf.Models.ViewModels
 
         [StringLength(maximumLength: 100, ErrorMessage = "Maximum 100 character")]
         [Display(Name = "Area")]
+        [Required(ErrorMessage = "Required")]
         public string Area { get; set; }
         public string ApiID { get; set; }
 
@@ -26,7 +27,7 @@ namespace PlayDiscGolf.Models.ViewModels
         [StringLength(maximumLength: 100, ErrorMessage = "Maximum 100 character")]
         [Display(Name = "Course name")]
         public string Name { get; set; }
-
+        
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Required")]
