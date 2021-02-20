@@ -11,6 +11,10 @@
                 contentType: false,
                 processData: false,
                 success: function (res) { 
+                    if (form.id === "EditCourse") {
+
+                        $("#courseform").empty().append(res);
+                    }
                     if (form.id === "SearchFormAjax") {
 
                         $("#searchFormHome").empty().append(res);
@@ -71,7 +75,6 @@
             },
             error: function (result) {
                 $("#partialError").empty().append(result);
-                console.log(result);
              }
 
         });
@@ -103,7 +106,6 @@
                 newName: $("#selectFriend").children("option:selected").val()
             },
             success: function (result) {
-                console.log(result)
                 $("#playersInScoreCard").empty().append(result);
 
             }
@@ -133,6 +135,22 @@
             document.getElementById("addPlayerAjax").hidden = true;
         }
     });
+
+    $("#editHoles").on('input', function () {
+        var e = $("#editHoles").val()
+        var y = e < Number(e.min) || e > Number(e.max) ? '' : e;
+        var x = parseInt(y)
+        $("#editHoles").val(x)
+    });
+
+    $(".editHolesCheck").on('input', function () {
+        var e = $(this).val()
+        var y = e < Number(e.min) || e > Number(e.max) ? '' : e;
+        var x = parseInt(y)
+        $(this).val(x)
+    });
+
+
 
     $("#editHoles").on('keyup change',function () {
         CreateHoles();

@@ -15,5 +15,7 @@ namespace PlayDiscGolf.Infrastructure.Repository.Specific
         {
             _context = context;
         }
+
+
     }
 }

@@ -68,7 +68,13 @@
                         <h4 class="card-title">Game: @gamesCount</h4>
                         <p class="card-text">Start: @scoreCard.StartDate</p>
                         <p class="card-text">Holes played: @scoreCard.PlayerCards.SelectMany(r => r.HoleCards).Where(c => c.Score > 0).Select(r => r.HoleNumber).Distinct().Count() / @Model.TotalHoles</p>
-                        @foreach (var playerCard in scoreCard.PlayerCards)
+                        @{ 
+                            var owner = scoreCard.PlayerCards.FirstOrDefault(x => x.UserName == scoreCard.UserName);
+                            var playerlist = scoreCard.PlayerCards;
+                            playerlist.Remove(owner);
+                            playerlist.Insert(0, owner);
+                        }
+                        @foreach (var playerCard in playerlist)
                         {
                             <p class="card-text">Name: @playerCard.UserName</p>
                             @if (playerCard.TotalScore > 0)
