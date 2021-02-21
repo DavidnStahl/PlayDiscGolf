@@ -11,6 +11,7 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
         T FindSingleBy(Expression<Func<T, bool>> predicate);
         bool Add(T entity);
         bool AddRange(List<T> entities);
+        bool EditRange(List<T> entities);
         bool Delete(T entity);
         bool Edit(T entity);
         bool Save();
