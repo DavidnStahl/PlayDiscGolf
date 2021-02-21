@@ -20,5 +20,6 @@ namespace PlayDiscGolf.Core.Services.Account
         Task ChangeUserNameAsync(string newUserName);
         Task<bool> IsEmailTakenAsync(string email);
         Task<bool> IsUserNameTakenAsync(string userName);
+        string GetUserID();
     }
 }

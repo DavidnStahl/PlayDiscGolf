@@ -23,7 +23,7 @@ namespace PlayDiscGolf.Models.Models.DataModels
         {
             AddRoleIfNotExists(context, "Admin");
             AddRoleIfNotExists(context, "User");
-            AddIfNotExists(userManager, "DavidStahl", "Admin");
+            AddIfNotExists(userManager, "DavidStahl", "Admin", context);
 
         }
         private void AddRoleIfNotExists(DataBaseContext context, string role)
@@ -33,9 +33,11 @@ namespace PlayDiscGolf.Models.Models.DataModels
             context.SaveChanges();
         }
 
-        private void AddIfNotExists(UserManager<IdentityUser> userManager, string user, string role)
+        private void AddIfNotExists(UserManager<IdentityUser> userManager, string user, string role, DataBaseContext context)
         {
-            if (userManager.FindByEmailAsync(user).Result == null)
+            var adminRoles = context.Roles.FirstOrDefault(x => x.Name == role);
+            var IsAdminAdded = context.UserRoles.FirstOrDefault(x => x.RoleId == adminRoles.Id) == null;
+            if (IsAdminAdded)
             {
                 var u = new IdentityUser
                 {

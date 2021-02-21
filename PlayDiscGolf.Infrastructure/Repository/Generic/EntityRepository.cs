@@ -22,7 +22,9 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
 
         public List<T> FindAllBy(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where(predicate).ToList();
+            IQueryable<T> entities = _context.Set<T>().Where(predicate);
+
+            return entities.ToList();
 
         }
 

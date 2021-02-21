@@ -47,8 +47,9 @@ namespace PlayDiscGolf.Core.Services.User
         public async Task<List<FriendDto>> GetFriendRequestsAsync()
         {
             var username = _accountService.GetUserName();
-            var user = await _accountService.GetUserByQueryAsync(username);
-            var friendRequests = _unitOfWork.Friends.FindAllBy(x => x.FriendUserID == Guid.Parse(user.Id) && x.FriendRequestAccepted == false);
+            var userID = _accountService.GetUserID();
+
+            var friendRequests = _unitOfWork.Friends.FindAllBy(x => x.FriendUserID == Guid.Parse(userID) && x.FriendRequestAccepted == false);
             var friendDto = new List<FriendDto>();
 
             foreach (var request in friendRequests)
