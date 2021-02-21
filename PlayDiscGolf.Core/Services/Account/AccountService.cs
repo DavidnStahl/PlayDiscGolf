@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using PlayDiscGolf.Core.Dtos.Account;
 using PlayDiscGolf.Core.Enums;
 using PlayDiscGolf.Dtos;
+using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models.DataModels;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +15,15 @@ namespace PlayDiscGolf.Core.Services.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUnitOfwork _unitOfWork;
+
         public AccountService(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
+            UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, IUnitOfwork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<bool> CheckIfCredentialsIsValidAsync(string username, string password)
@@ -128,7 +132,20 @@ namespace PlayDiscGolf.Core.Services.Account
             var result = await _userManager.UpdateAsync(user);
 
             if(result.Succeeded)
+            {
                 await _signInManager.RefreshSignInAsync(user);
+                var scoreCards = _unitOfWork.ScoreCards.GetAllScoreCardAndIncludePlayerCardAndHoleCardBy(x => x.UserID == user.Id);
+
+                foreach (var scoreCard in scoreCards)
+                {
+                    scoreCard.UserName = newUserName;
+                    scoreCard.PlayerCards.FirstOrDefault(x => x.UserID == user.Id).UserName = newUserName;
+                    _unitOfWork.ScoreCards.Edit(scoreCard);
+
+                }
+
+                _unitOfWork.Complete();               
+            }
         }
 
         public async Task<IdentityUser> GetUserByQueryAsync(string query)
@@ -136,6 +153,11 @@ namespace PlayDiscGolf.Core.Services.Account
             var user = await _userManager.FindByNameAsync(query);
 
             return user;
+        }
+
+        public string GetUserID()
+        {
+            return _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
         }
 
         public async Task<IdentityUser> GetUserByIDAsync(string userID)
