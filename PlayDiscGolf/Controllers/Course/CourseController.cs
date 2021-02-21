@@ -43,7 +43,7 @@ namespace PlayDiscGolf.Controllers.CoursePage
                 Latitude = dto.Latitude,
                 Longitude = dto.Longitude
 
-            };
+            };  
 
             return View(model);
         }
