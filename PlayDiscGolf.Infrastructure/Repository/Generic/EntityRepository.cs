@@ -73,5 +73,12 @@ namespace PlayDiscGolf.Infrastructure.Repository.Generic
 
             return true;
         }
+
+        public bool EditRange(List<T> entities)
+        {
+            _context.Set<T>().UpdateRange(entities);
+
+            return true;
+        }
     }
 }

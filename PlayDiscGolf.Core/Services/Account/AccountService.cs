@@ -127,6 +127,7 @@ namespace PlayDiscGolf.Core.Services.Account
         public async Task ChangeUserNameAsync(string newUserName)
         {
             var user = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+            var oldUsername = _httpContextAccessor.HttpContext.User.Identity.Name;
             user.UserName = newUserName;
             user.NormalizedUserName = newUserName;
             var result = await _userManager.UpdateAsync(user);
@@ -135,15 +136,21 @@ namespace PlayDiscGolf.Core.Services.Account
             {
                 await _signInManager.RefreshSignInAsync(user);
                 var scoreCards = _unitOfWork.ScoreCards.GetAllScoreCardAndIncludePlayerCardAndHoleCardBy(x => x.UserID == user.Id);
+                var friendItems = _unitOfWork.Friends.FindAllBy(x => x.UserName == oldUsername);
+                
+
+                foreach (var item in friendItems)
+                {
+                    item.UserName = newUserName;
+                }
+                _unitOfWork.Friends.EditRange(friendItems);
 
                 foreach (var scoreCard in scoreCards)
                 {
                     scoreCard.UserName = newUserName;
                     scoreCard.PlayerCards.FirstOrDefault(x => x.UserID == user.Id).UserName = newUserName;
-                    _unitOfWork.ScoreCards.Edit(scoreCard);
-
                 }
-
+                _unitOfWork.ScoreCards.EditRange(scoreCards.ToList());
                 _unitOfWork.Complete();               
             }
         }
