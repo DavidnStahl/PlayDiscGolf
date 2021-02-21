@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using PlayDiscGolf.Infrastructure.UnitOfWork;
 using PlayDiscGolf.Models.Models;
 using PlayDiscGolf.Models.Models.DataModels;
@@ -13,9 +14,12 @@ namespace PlayDiscGolf.Core.Services.SaveLocationData
     public class SaveLocationDataService : ISaveLocationDataService
     {
         private readonly IUnitOfwork _unitOfwork;
-        public SaveLocationDataService(IUnitOfwork unitOfwork)
+        private readonly IHttpContextAccessor _accessor;
+
+        public SaveLocationDataService(IUnitOfwork unitOfwork, IHttpContextAccessor accessor)
         {
             _unitOfwork = unitOfwork;
+            _accessor = accessor;
         }
         public List<Course> AddValidLocationFromRoot(Root root)
         {
@@ -59,7 +63,6 @@ namespace PlayDiscGolf.Core.Services.SaveLocationData
         public Root ReadLocationDataToRoot()
         {
             var root = new Root();
-
             using (StreamReader read = new StreamReader("LocationData.json"))
             {
                 string json = read.ReadToEnd();

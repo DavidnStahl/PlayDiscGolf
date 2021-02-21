@@ -88,7 +88,7 @@ namespace PlayDiscGolf.Controllers.ScoreCard
         }
 
 
-        public IActionResult OpenScoreCard(string scoreCardID, int HoleNumber)
+        public IActionResult OpenScoreCard(string scoreCardID, int HoleNumber = 1)
         {
             var model = _mapper.Map<ScoreCardGameOnViewModel>(_scoreCardService.OpenScoreCard(scoreCardID));
             model.Hole.HoleNumber = HoleNumber;

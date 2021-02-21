@@ -57,7 +57,7 @@ namespace PlayDiscGolf.Core.Services.CoursePage
             var holesEntity = _unitOfWork.Holes.FindAllBy(x => x.CourseID == courseID);
             var holes = _mapper.Map<List<HoleDto>>(holesEntity);
 
-            return new CourseInfoDto
+                return new CourseInfoDto
             {
                 CourseID = courseID,
                 TotalDistance = course.TotalDistance,

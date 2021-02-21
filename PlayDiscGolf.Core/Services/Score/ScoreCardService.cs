@@ -70,7 +70,7 @@ namespace PlayDiscGolf.Core.Services.Score
                 UserName = _httpContext.HttpContext.User.Identity.Name,
                 UserID = _userManager.GetUserId(_httpContext.HttpContext.User),
                 ScoreCardID = scoreCardID,
-                StartDate = DateTime.Now,
+                StartDate = DateTime.Now.AddHours(1),
                 PlayerCards = new List<PlayerCardDto> {
                     new PlayerCardDto {
                         UserID = _userManager.GetUserId(_httpContext.HttpContext.User),

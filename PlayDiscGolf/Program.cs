@@ -22,11 +22,11 @@ namespace PlayDiscGolf
             using (var scope = iHost.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var context = services.GetRequiredService<DataBaseContext>();
+                var context = services.GetRequiredService<DataBaseContext>();               
                 var db = new DatabaseInitializer();
                 db.Initialize(context);
-                db.InitializePlayDiscGolf(context, services.GetRequiredService<UserManager<IdentityUser>>());
-                CheckIfLocationDataNeedToBeSeeded(context, services.GetRequiredService<ISaveLocationDataService>());
+                db.InitializePlayDiscGolf(context, services.GetRequiredService<UserManager<IdentityUser>>());                
+                //CheckIfLocationDataNeedToBeSeeded(context, services.GetRequiredService<ISaveLocationDataService>());
             }
         }
 

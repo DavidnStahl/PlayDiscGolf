@@ -35,7 +35,7 @@ namespace PlayDiscGolf
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider => Configuration);
+            //services.AddSingleton(provider => Configuration);
             services.AddDbContext<DataBaseContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -81,7 +81,7 @@ namespace PlayDiscGolf
 
             services.AddScoped<IScoreCardCalculation, ScoreCardCalculation>();
             services.AddScoped<ICreateHolesCalculation, CreateHolesCalculation>();
-            //services.AddSingleton(Configuration);
+            services.AddSingleton(Configuration);
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
